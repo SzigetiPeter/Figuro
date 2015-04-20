@@ -5,17 +5,14 @@
  */
 package com.figuro.engine;
 
-import com.figuro.game.Game;
-import com.figuro.player.IPlayer;
-
 /**
  * @author Aszalos Gyorgy
  */
 public interface IEngineHandler {
     public void start();
-    public void addPlayer(IPlayer player);
-    public void addSpectator(IPlayer player);
+    public void addPlayer(String playerType);
+    public void addSpectator(String playerType);
     public void removePlayers();
-    public void runGame(Game game);
+    public void runGame(String gameType);
     public void exit();
 }

@@ -5,12 +5,18 @@
  */
 package com.figuro.engine.persistancy;
 
-import com.figuro.engine.IEngineHandler;
+import java.util.List;
+
+import com.figuro.common.BoardState;
 
 /**
  * @author Aszalos Gyorgy
  */
 public interface IPersistency {
-    public void save(IEngineHandler engine);
-    public IEngineHandler load();
+    public void save(String game, List<String> players, BoardState state);
+    public boolean load();
+    public boolean isGameSaved();
+    public String getGame();
+    public List<String> getPlayers();
+    public BoardState getBoardState();
 }

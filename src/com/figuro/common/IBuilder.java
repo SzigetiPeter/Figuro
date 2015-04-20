@@ -12,6 +12,12 @@ import com.figuro.player.IPlayer;
  * @author Aszalos Gyorgy
  */
 public interface IBuilder {
+	public static final String NET_PLAYER = "player.net";
+	public static final String ALPHABETA_PLAYER = "player.alphabeta";
+	public static final String UI_PLAYER = "player.ui";
+	
+	public static final String CHECKERS_GAME = 	"game.checkers";
+	
     public Game createGame(String type);
     public IPlayer createPlayer(String type);
 }
