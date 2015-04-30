@@ -12,6 +12,8 @@ import com.figuro.engine.IMoveComplete;
  * @author Aszalos Gyorgy
  */
 public interface IPlayer {
+    public int getId();
+    public void setId(int id);
     public void setInitialState(BoardState board);
     public void move(IMoveComplete callback);
     public void wrongMoveResetTo(BoardState board);
