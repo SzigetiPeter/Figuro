@@ -13,6 +13,10 @@ public interface IEngineHandler {
     public void addPlayer(String playerType);
     public void addSpectator(String playerType);
     public void removePlayers();
-    public void runGame(String gameType);
+    public void runGame(String gameType, IGameoverCallback callback);
+    
+    public boolean isGameResumable();
+    public void resumeGame(IGameoverCallback callback);
+    
     public void exit();
 }

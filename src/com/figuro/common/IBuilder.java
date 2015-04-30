@@ -5,6 +5,7 @@
  */
 package com.figuro.common;
 
+import java.util.List;
 import com.figuro.game.Game;
 import com.figuro.player.IPlayer;
 
@@ -18,6 +19,11 @@ public interface IBuilder {
 	
 	public static final String CHECKERS_GAME = 	"game.checkers";
 	
+	public List<String> getGameTypes();
     public Game createGame(String type);
+
+	public List<String> getPlayerTypes();
     public IPlayer createPlayer(String type);
+    
+    public void free();
 }
