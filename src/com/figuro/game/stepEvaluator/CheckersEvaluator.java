@@ -9,7 +9,7 @@ import com.figuro.common.BoardState;
 import com.figuro.common.Evaluation;
 import com.figuro.common.ICell;
 import com.figuro.common.IUnit;
-import com.figuro.common.Unit;
+import com.figuro.common.UnitEnum;
 
 /**
  *
@@ -47,11 +47,11 @@ public class CheckersEvaluator implements IStepEvaluator {
                     
                     if (unit.getOwnerId() == player)
                     {
-                        if (unit.getType() == Unit.PEASANT)
+                        if (unit.getType() == UnitEnum.PEASANT)
                         {
                             score += 1;
                         }
-                        else if (unit.getType() == Unit.KING)
+                        else if (unit.getType() == UnitEnum.KING)
                         {
                             score += 3;
                         }

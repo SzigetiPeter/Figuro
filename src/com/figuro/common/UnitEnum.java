@@ -9,7 +9,6 @@ package com.figuro.common;
  *
  * @author Isti
  */
-public interface IUnit {
-    public UnitEnum getType();
-    public int getOwnerId(); // player id
+public enum UnitEnum {
+    PEASANT, KING
 }

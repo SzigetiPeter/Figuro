@@ -10,6 +10,9 @@ import java.awt.Point;
 public class BoardState {
 
     private ICell[][] board;
+    
+    private static Point blackPlayerRightClosestCell = new Point(7, 7);
+    private static Point whitePlayerRightClosestCell = new Point(0, 0);
 
     private Point lastMove = null;
     private Point lastMoveFrom = null;
@@ -21,12 +24,12 @@ public class BoardState {
     }
 
     public BoardState(int height, int width) {
-        board = new ICell[height][width];
+        board = new Cell[height][width];
     }
 
     public BoardState(BoardState state) {
         ICell[][] cells = state.getBoard();
-        this.board = new ICell[cells.length][cells[0].length];
+        this.board = new Cell[cells.length][cells[0].length];
 
         for (int i = 0; i < cells.length; ++i) {
             for (int j = 0; j < cells[0].length; ++j) {
@@ -98,5 +101,49 @@ public class BoardState {
      */
     public Point getLastMoveFrom() {
         return lastMoveFrom;
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+       if (!(obj instanceof BoardState))
+            return false;
+        if (obj == this)
+            return true;
+
+        boolean isEqual = false;
+        BoardState state = (BoardState) obj;
+        ICell[][] cells = state.getBoard();
+        
+        if (this.board.length == cells.length)
+        {
+            for (int i = 0; i < cells.length; ++i) {
+                for (int j = 0; j < cells[0].length; ++j) {
+                    ICell cell = cells[i][j];
+                    ICell cell2 = board[i][j];
+                    if (cell.hasUnit() && cell2.hasUnit())
+                    {
+                        IUnit unit = cell.getUnit();
+                        IUnit unit2 = cell2.getUnit();
+                        
+                        if (unit.getOwnerId() == unit2.getOwnerId())
+                        {
+                            if (unit.getType() == unit2.getType())
+                            {
+                                isEqual = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return isEqual;
+    }
+    
+    public static Point getBlackPlayerRightClosestCell() {
+        return blackPlayerRightClosestCell;
+    }
+    public static Point getWhitePlayerRightClosestCell() {
+        return whitePlayerRightClosestCell;
     }
 }

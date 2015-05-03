@@ -6,23 +6,23 @@
 package com.figuro.game.rules;
 
 import com.figuro.common.IUnit;
-import com.figuro.common.Unit;
+import com.figuro.common.UnitEnum;
 
 /**
  *
  * @author Isti
  */
 public class CheckersUnit implements IUnit {
-    private Unit unit;
+    private UnitEnum unit;
     private int ownerId;
     
-    public CheckersUnit(Unit unit, int ownerId)
+    public CheckersUnit(UnitEnum unit, int ownerId)
     {
         this.unit = unit;
     }
     
     @Override
-    public Unit getType() {
+    public UnitEnum getType() {
         return unit;
     }
 

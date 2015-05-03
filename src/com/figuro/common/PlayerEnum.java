@@ -9,6 +9,6 @@ package com.figuro.common;
  *
  * @author Isti
  */
-public enum Unit {
-    PEASANT, KING
+public enum PlayerEnum {
+    BLACK, WHITE
 }
