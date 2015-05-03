@@ -53,6 +53,13 @@ public interface IPlayer {
     public void wrongMoveResetTo(BoardState board);
     
     /**
+     * Notifies the player that a new move has been made by the adversary.
+     * 
+     * @param counterMove
+     * */
+    public void notify(BoardState counterMove);
+    
+    /**
      * @return boolean if UI can call setup()
      */
     public boolean needsSetup();

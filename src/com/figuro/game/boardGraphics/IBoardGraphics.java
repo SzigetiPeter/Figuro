@@ -5,12 +5,13 @@
  */
 package com.figuro.game.boardGraphics;
 
-import javafx.scene.Scene;
+import com.figuro.common.IUnit;
 
 /**
  * @author Aszalos Gyorgy
  */
 public interface IBoardGraphics {
-    public Scene getFigureGraphic(int figureId);
-    public Scene getBoardGraphic();
+    public IPip getFigureGraphic(IUnit iUnit);
+    public IBoard getBoardGraphic();
+    public IAnimation getAnimation();
 }
