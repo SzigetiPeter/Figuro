@@ -25,9 +25,7 @@ import com.figuro.common.IMessageSender;
 import com.figuro.engine.IMoveComplete;
 
 
-public class NetPlayer implements IPlayer, IMessageSender, IMoveComplete{
-
-	public static final int PORT_NUMBER = 1001;
+public class NetPlayer implements IPlayer, IMessageSender, IMoveComplete {
 	
 	protected BoardState mBoardState;
 	protected String mGameStatus;
@@ -221,6 +219,13 @@ public class NetPlayer implements IPlayer, IMessageSender, IMoveComplete{
 
 	        
 		}
+		
+	}
+
+	@Override
+	public void notify(BoardState counterMove) {
+		//TODO
+		mBoardState = counterMove;
 		
 	}
 
