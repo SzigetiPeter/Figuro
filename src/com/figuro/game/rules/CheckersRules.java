@@ -10,7 +10,6 @@ import com.figuro.common.ICell;
 import com.figuro.common.IUnit;
 import com.figuro.common.PlayerConverter;
 import com.figuro.common.PlayerEnum;
-import com.figuro.common.UnitEnum;
 import java.awt.Point;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
@@ -342,6 +341,11 @@ public class CheckersRules implements IGameRules {
         }
         
         return winnerPlayerId;
+    }
+
+    @Override
+    public int getNextPlayer(BoardState oldState, BoardState newState, int player) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

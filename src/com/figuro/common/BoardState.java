@@ -1,5 +1,6 @@
 package com.figuro.common;
 
+import com.figuro.game.rules.Cell;
 import java.awt.Point;
 
 /**

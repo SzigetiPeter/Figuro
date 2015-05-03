@@ -6,7 +6,6 @@
 package com.figuro.game.rules;
 
 import com.figuro.common.BoardState;
-import com.figuro.common.Cell;
 import com.figuro.common.ICell;
 
 /**
