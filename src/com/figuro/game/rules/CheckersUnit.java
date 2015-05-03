@@ -6,7 +6,6 @@
 package com.figuro.game.rules;
 
 import com.figuro.common.IUnit;
-import com.figuro.common.UnitEnum;
 
 /**
  *
@@ -19,6 +18,7 @@ public class CheckersUnit implements IUnit {
     public CheckersUnit(UnitEnum unit, int ownerId)
     {
         this.unit = unit;
+        this.ownerId = ownerId;
     }
     
     @Override
