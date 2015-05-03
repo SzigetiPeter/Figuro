@@ -26,6 +26,7 @@ public class PlayerConverter {
         return player;
     }
     
+    
     public static int PlayerEnumToPlayerId(PlayerEnum player)
     {
         int playerId = 0;
