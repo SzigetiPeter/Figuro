@@ -18,4 +18,5 @@ public interface IGameRules {
     public List<BoardState> getPossibleMoves(BoardState state, int player);
     public boolean isGameOver(BoardState state, int player);
     public int getFinalState(BoardState state, int player);
+    public int getNextPlayer(BoardState oldState, BoardState newState, int player);
 }

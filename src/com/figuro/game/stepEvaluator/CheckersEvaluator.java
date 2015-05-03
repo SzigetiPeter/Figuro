@@ -9,7 +9,7 @@ import com.figuro.common.BoardState;
 import com.figuro.common.Evaluation;
 import com.figuro.common.ICell;
 import com.figuro.common.IUnit;
-import com.figuro.common.UnitEnum;
+import com.figuro.game.rules.UnitEnum;
 
 /**
  *

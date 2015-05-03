@@ -5,6 +5,8 @@
  */
 package com.figuro.common;
 
+import com.figuro.game.rules.UnitEnum;
+
 /**
  *
  * @author Isti
