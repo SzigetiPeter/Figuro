@@ -76,8 +76,13 @@ public class CheckersRules implements IGameRules {
     
     private void getMoveEndPoints(ICell[][] oldCells, ICell[][] newCells, int player, Point beginPoint, Point endPoint)
     {
-        beginPoint = getChange(oldCells, newCells, player);
-        endPoint = getChange(newCells, oldCells, player);
+        Point temp = getChange(oldCells, newCells, player);
+        beginPoint.x = temp.x;
+        beginPoint.y = temp.y;
+        
+        temp = getChange(newCells, oldCells, player);
+        endPoint.x = temp.x;
+        endPoint.y = temp.y;
     }
     
     private Point getChange(ICell[][] cells1, ICell[][] cells2, int player)

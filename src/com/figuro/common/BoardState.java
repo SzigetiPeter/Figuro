@@ -111,7 +111,7 @@ public class BoardState {
         if (obj == this)
             return true;
 
-        boolean isEqual = false;
+        boolean isEqual = true;
         BoardState state = (BoardState) obj;
         ICell[][] cells = state.getBoard();
         
@@ -121,18 +121,10 @@ public class BoardState {
                 for (int j = 0; j < cells[0].length; ++j) {
                     ICell cell = cells[i][j];
                     ICell cell2 = board[i][j];
-                    if ((cell != null && cell.hasUnit()) && (cell2 != null && cell2.hasUnit()))
+                    
+                    if (!cell.equals(cell2))
                     {
-                        IUnit unit = cell.getUnit();
-                        IUnit unit2 = cell2.getUnit();
-                        
-                        if (unit.getOwnerId() == unit2.getOwnerId())
-                        {
-                            if (unit.getType() == unit2.getType())
-                            {
-                                isEqual = true;
-                            }
-                        }
+                        return false;
                     }
                 }
             }

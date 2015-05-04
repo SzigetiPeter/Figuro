@@ -224,20 +224,6 @@ public class CheckersBoardInitializer implements IBoardInitializer {
         cell.setUnit(unit);
         state.set(point, cell);
         
-    // initialize the rest with empty cells
-        
-        ICell[][] cells = state.getBoard();
-        for (int i = 0; i < cells.length; ++i)
-        {
-            for (int j = 0; j < cells[0].length; ++j)
-            {
-                if (cells[i][j] == null)
-                {
-                    cells[i][j] = new Cell();
-                }
-            }
-        }
-        
         return state;
     }
     
