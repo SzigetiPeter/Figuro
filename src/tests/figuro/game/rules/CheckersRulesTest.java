@@ -6,6 +6,9 @@
 package com.figuro.game.rules;
 
 import com.figuro.common.BoardState;
+import com.figuro.common.ICell;
+import com.figuro.common.IUnit;
+import java.awt.Point;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -46,11 +49,221 @@ public class CheckersRulesTest {
     public void testGetInitialState() {
         System.out.println("getInitialState");
         CheckersRules instance = new CheckersRules();
+        
         BoardState expResult = null;
+        
+        expResult = new BoardState(8, 8);
+        int blackPlayerId = 1;
+        int whitePlayerId = 2;
+        
+        ICell cell = null;
+        Point point = null;
+        IUnit unit = null;
+        
+    //initialize black
+        
+        //--1. row
+        cell = new Cell();
+        point = new Point();
+        point.x = 1;
+        point.y = 7;
+        unit = new CheckersUnit(UnitEnum.PEASANT, blackPlayerId);
+        cell.setUnit(unit);
+        expResult.set(point, cell);
+        
+        cell = new Cell();
+        point = new Point();
+        point.x = 3;
+        point.y = 7;
+        unit = new CheckersUnit(UnitEnum.PEASANT, blackPlayerId);
+        cell.setUnit(unit);
+        expResult.set(point, cell);
+        
+        cell = new Cell();
+        point = new Point();
+        point.x = 5;
+        point.y = 7;
+        unit = new CheckersUnit(UnitEnum.PEASANT, blackPlayerId);
+        cell.setUnit(unit);
+        expResult.set(point, cell);
+        
+        cell = new Cell();
+        point = new Point();
+        point.x = 7;
+        point.y = 7;
+        unit = new CheckersUnit(UnitEnum.PEASANT, blackPlayerId);
+        cell.setUnit(unit);
+        expResult.set(point, cell);
+        
+        //--2. row
+        cell = new Cell();
+        point = new Point();
+        point.x = 0;
+        point.y = 6;
+        unit = new CheckersUnit(UnitEnum.PEASANT, blackPlayerId);
+        cell.setUnit(unit);
+        expResult.set(point, cell);
+        
+        cell = new Cell();
+        point = new Point();
+        point.x = 2;
+        point.y = 6;
+        unit = new CheckersUnit(UnitEnum.PEASANT, blackPlayerId);
+        cell.setUnit(unit);
+        expResult.set(point, cell);
+        
+        cell = new Cell();
+        point = new Point();
+        point.x = 4;
+        point.y = 6;
+        unit = new CheckersUnit(UnitEnum.PEASANT, blackPlayerId);
+        cell.setUnit(unit);
+        expResult.set(point, cell);
+        
+        cell = new Cell();
+        point = new Point();
+        point.x = 6;
+        point.y = 6;
+        unit = new CheckersUnit(UnitEnum.PEASANT, blackPlayerId);
+        cell.setUnit(unit);
+        expResult.set(point, cell);
+        
+        //--3. row
+        cell = new Cell();
+        point = new Point();
+        point.x = 1;
+        point.y = 5;
+        unit = new CheckersUnit(UnitEnum.PEASANT, blackPlayerId);
+        cell.setUnit(unit);
+        expResult.set(point, cell);
+        
+        cell = new Cell();
+        point = new Point();
+        point.x = 3;
+        point.y = 5;
+        unit = new CheckersUnit(UnitEnum.PEASANT, blackPlayerId);
+        cell.setUnit(unit);
+        expResult.set(point, cell);
+        
+        cell = new Cell();
+        point = new Point();
+        point.x = 5;
+        point.y = 5;
+        unit = new CheckersUnit(UnitEnum.PEASANT, blackPlayerId);
+        cell.setUnit(unit);
+        expResult.set(point, cell);
+        
+        cell = new Cell();
+        point = new Point();
+        point.x = 7;
+        point.y = 5;
+        unit = new CheckersUnit(UnitEnum.PEASANT, blackPlayerId);
+        cell.setUnit(unit);
+        expResult.set(point, cell);
+        
+    //initialize while
+        
+        //--1. row
+        cell = new Cell();
+        point = new Point();
+        point.x = 0;
+        point.y = 0;
+        unit = new CheckersUnit(UnitEnum.PEASANT, whitePlayerId);
+        cell.setUnit(unit);
+        expResult.set(point, cell);
+        
+        cell = new Cell();
+        point = new Point();
+        point.x = 2;
+        point.y = 0;
+        unit = new CheckersUnit(UnitEnum.PEASANT, whitePlayerId);
+        cell.setUnit(unit);
+        expResult.set(point, cell);
+        
+        cell = new Cell();
+        point = new Point();
+        point.x = 4;
+        point.y = 0;
+        unit = new CheckersUnit(UnitEnum.PEASANT, whitePlayerId);
+        cell.setUnit(unit);
+        expResult.set(point, cell);
+        
+        cell = new Cell();
+        point = new Point();
+        point.x = 6;
+        point.y = 0;
+        unit = new CheckersUnit(UnitEnum.PEASANT, whitePlayerId);
+        cell.setUnit(unit);
+        expResult.set(point, cell);
+        
+        //--2. row
+        cell = new Cell();
+        point = new Point();
+        point.x = 1;
+        point.y = 1;
+        unit = new CheckersUnit(UnitEnum.PEASANT, whitePlayerId);
+        cell.setUnit(unit);
+        expResult.set(point, cell);
+        
+        cell = new Cell();
+        point = new Point();
+        point.x = 3;
+        point.y = 1;
+        unit = new CheckersUnit(UnitEnum.PEASANT, whitePlayerId);
+        cell.setUnit(unit);
+        expResult.set(point, cell);
+        
+        cell = new Cell();
+        point = new Point();
+        point.x = 5;
+        point.y = 1;
+        unit = new CheckersUnit(UnitEnum.PEASANT, whitePlayerId);
+        cell.setUnit(unit);
+        expResult.set(point, cell);
+        
+        cell = new Cell();
+        point = new Point();
+        point.x = 7;
+        point.y = 1;
+        unit = new CheckersUnit(UnitEnum.PEASANT, whitePlayerId);
+        cell.setUnit(unit);
+        expResult.set(point, cell);
+        
+        //--3. row
+        cell = new Cell();
+        point = new Point();
+        point.x = 0;
+        point.y = 2;
+        unit = new CheckersUnit(UnitEnum.PEASANT, whitePlayerId);
+        cell.setUnit(unit);
+        expResult.set(point, cell);
+        
+        cell = new Cell();
+        point = new Point();
+        point.x = 2;
+        point.y = 2;
+        unit = new CheckersUnit(UnitEnum.PEASANT, whitePlayerId);
+        cell.setUnit(unit);
+        expResult.set(point, cell);
+        
+        cell = new Cell();
+        point = new Point();
+        point.x = 4;
+        point.y = 2;
+        unit = new CheckersUnit(UnitEnum.PEASANT, whitePlayerId);
+        cell.setUnit(unit);
+        expResult.set(point, cell);
+        
+        cell = new Cell();
+        point = new Point();
+        point.x = 6;
+        point.y = 2;
+        unit = new CheckersUnit(UnitEnum.PEASANT, whitePlayerId);
+        cell.setUnit(unit);
+        expResult.set(point, cell);
+        
         BoardState result = instance.getInitialState();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -66,8 +279,6 @@ public class CheckersRulesTest {
         boolean expResult = false;
         boolean result = instance.isValidMove(oldState, newState, player);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -82,8 +293,6 @@ public class CheckersRulesTest {
         List<BoardState> expResult = null;
         List<BoardState> result = instance.getPossibleMoves(state, player);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -92,14 +301,12 @@ public class CheckersRulesTest {
     @Test
     public void testIsGameOver() {
         System.out.println("isGameOver");
-        BoardState state = null;
-        int player = 0;
         CheckersRules instance = new CheckersRules();
+        BoardState state = instance.getInitialState();
+        int player = 1;
         boolean expResult = false;
         boolean result = instance.isGameOver(state, player);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -114,8 +321,6 @@ public class CheckersRulesTest {
         int expResult = 0;
         int result = instance.getFinalState(state, player);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -131,8 +336,6 @@ public class CheckersRulesTest {
         int expResult = 0;
         int result = instance.getNextPlayer(oldState, newState, player);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
     
 }

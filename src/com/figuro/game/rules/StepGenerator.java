@@ -17,42 +17,38 @@ import java.util.List;
  * @author Isti
  */
 public class StepGenerator implements IStepGenerator {
-    IGameRules gameRules = null;
-    
-    public StepGenerator()
-    {
-        gameRules = new CheckersRules();
-    }
     
     @Override
     public List<BoardState> getSteps(BoardState state, int player) {
-        List<BoardState> steps = new ArrayList<BoardState>();
+        
+        if (state == null)
+            return null;
+        if (player == 0)
+            return null;
+        
         ICell[][] cells = state.getBoard();
+        if (cells == null)
+            return null;
+        
+        List<BoardState> steps = new ArrayList<BoardState>();
         
         for (int i = 0; i < cells.length; ++i) {
             for (int j = 0; j < cells[0].length; ++j) {
                 ICell cell = cells[i][j];
-                if (cell.hasUnit())
+                if (cell != null && cell.hasUnit())
                 {
                     IUnit unit = cell.getUnit();
                     if(unit.getOwnerId() == player)
                     {
                         Point point = new Point(i, j);
                         List<BoardState> partialStates = getStepInAllDirection(state, point);
-                        steps.addAll(partialStates);
+                        
+                        if (partialStates != null)
+                        {
+                            steps.addAll(partialStates);
+                        }
                     }
                 }
-            }
-        }
-        
-        //validate all steps
-        for(int i =0; i< steps.size(); ++i)
-        {
-            BoardState currentState = steps.get(i);
-            
-            if (!gameRules.isValidMove(state, currentState, player))
-            {
-                steps.remove(i);
             }
         }
         
@@ -64,7 +60,7 @@ public class StepGenerator implements IStepGenerator {
     private List<BoardState> getStepInAllDirection(BoardState state, Point actualPosition)
     {
         ICell actualCell = state.get(actualPosition);
-        if (!actualCell.hasUnit())
+        if (actualCell == null || !actualCell.hasUnit())
         {
             return null;
         }
@@ -74,7 +70,7 @@ public class StepGenerator implements IStepGenerator {
         ICell neighbourCell = null;
         ICell temp = null;
         
-        Point leftUp = new Point(actualPosition.x - 1, actualPosition.y - 1);
+        Point leftUp = new Point(actualPosition.x - 1, actualPosition.y + 1);
         neighbourCell = state.get(leftUp);
         if (neighbourCell != null && !neighbourCell.hasUnit())
         {
@@ -84,7 +80,7 @@ public class StepGenerator implements IStepGenerator {
             steps.add(newState);
         }
         
-        Point centerUp = new Point(actualPosition.x, actualPosition.y - 1);
+        Point centerUp = new Point(actualPosition.x, actualPosition.y + 1);
         neighbourCell = state.get(centerUp);
         if (neighbourCell != null && !neighbourCell.hasUnit())
         {
@@ -94,7 +90,7 @@ public class StepGenerator implements IStepGenerator {
             steps.add(newState);
         }
         
-        Point rightUp = new Point(actualPosition.x + 1, actualPosition.y - 1);
+        Point rightUp = new Point(actualPosition.x + 1, actualPosition.y + 1);
         neighbourCell = state.get(rightUp);
         if (neighbourCell != null && !neighbourCell.hasUnit())
         {
@@ -124,7 +120,7 @@ public class StepGenerator implements IStepGenerator {
             steps.add(newState);
         }
         
-        Point leftBottom = new Point(actualPosition.x - 1, actualPosition.y + 1);
+        Point leftBottom = new Point(actualPosition.x - 1, actualPosition.y - 1);
         neighbourCell = state.get(leftBottom);
         if (neighbourCell != null && !neighbourCell.hasUnit())
         {
@@ -134,7 +130,7 @@ public class StepGenerator implements IStepGenerator {
             steps.add(newState);
         }
         
-        Point centerBottom = new Point(actualPosition.x, actualPosition.y + 1);
+        Point centerBottom = new Point(actualPosition.x, actualPosition.y - 1);
         neighbourCell = state.get(centerBottom);
         if (neighbourCell != null && !neighbourCell.hasUnit())
         {
@@ -144,7 +140,7 @@ public class StepGenerator implements IStepGenerator {
             steps.add(newState);
         }
         
-        Point rightBottom = new Point(actualPosition.x + 1, actualPosition.y + 1);
+        Point rightBottom = new Point(actualPosition.x + 1, actualPosition.y - 1);
         neighbourCell = state.get(rightBottom);
         if (neighbourCell != null && !neighbourCell.hasUnit())
         {
