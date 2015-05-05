@@ -56,11 +56,9 @@ public class NetPlayerTest {
 			});
 			
 			NetPlayer netPlayer = new NetPlayer(this, this);
-			netPlayer.setId(1);
 			netPlayer.setup(new Group());
 
 			NetPlayer netPlayer2 = new NetPlayer(this, this);
-			netPlayer2.setId(2);
 			netPlayer2.setup(new Group());
 			
 		}

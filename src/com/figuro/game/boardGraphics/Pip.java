@@ -10,7 +10,7 @@ import javafx.scene.shape.StrokeType;
 import com.figuro.common.IUnit;
 import com.figuro.common.PlayerConverter;
 import com.figuro.common.PlayerEnum;
-import com.figuro.common.UnitEnum;
+import com.figuro.game.rules.UnitEnum;
 
 /**
  *

@@ -4,7 +4,6 @@ package com.figuro.player.netplayer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
@@ -13,7 +12,6 @@ import java.net.UnknownHostException;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -42,12 +40,14 @@ public class NetPlayer implements IPlayer {
 	private int enemyPort;
 
 	private ListenDialog mListenDialog;
-	private ConnectDialog mConnectDialog;
-	private ServerSocket mSocket;
-	private Socket enemySocket;
+	private ServerSocket mServerSocket;
+	private Socket mClientSocket;
 
 	private IMoveComplete  mComplete;
 	private IMessageSender mSender;
+
+	private Thread serverThread;
+	private Thread clientThread;
 
 	public NetPlayer(IMessageSender sender, IMoveComplete complete) {
 
@@ -154,85 +154,8 @@ public class NetPlayer implements IPlayer {
 		return 0;
 	}
 
-	Thread serverThread = new Thread(new Runnable() {
-
-		@Override
-		public void run() {
-			try {
-				mSocket = new ServerSocket(0);
-
-				mPort = mSocket.getLocalPort();
-
-				Platform.runLater(new Runnable() {
-
-					@Override
-					public void run() {
-
-						System.out.println("Listening on: " + mIP + " port: " + mPort);
-						mListenDialog.startedListening(mPort);
-
-					}
-				});
-
-				enemySocket = mSocket.accept();
-				enemyIP = enemySocket.getInetAddress().getHostAddress();
-				enemyPort = enemySocket.getPort();
-
-
-				Platform.runLater(new Runnable() {
-
-					@Override
-					public void run() {
-						mListenDialog.connectedToPlayer();
-						System.out.println("Incoming connection from: " + enemyIP + " port " + enemyPort);				
-					}
-				});
-
-
-			} catch (UnknownHostException e) {
-
-				e.printStackTrace();
-				mSender.displayMessage("Could not create connection [E2]");
-				return;
-
-			} catch (IOException e) {
-
-				e.printStackTrace();
-				mSender.displayMessage("Could not create connection [E3]");
-				return;
-			}
-
-		}
-	});
-
-	Thread clientThread = new Thread(new Runnable() {
-
-		@Override
-		public void run() {
-			try {
-
-				Socket s = new Socket(enemyIP, enemyPort);
-
-				Platform.runLater(new Runnable() {
-
-					@Override
-					public void run() {
-						System.out.println("Created socket " + s.getInetAddress().getHostAddress() + " port " + s.getPort());
-						mConnectDialog.connectedToPlayer(enemyIP, enemyPort);				
-					}
-				});
-
-				s.close();
-
-			} catch (Exception e) {
-				System.out.println("ConnectTo error" + e.getMessage());
-				e.printStackTrace();
-			}
-		}
-
-	});
-
 	public void startListening() {
+		serverThread = new Thread(new ServerThread());
 		serverThread.start();
 	}
 
@@ -240,10 +163,12 @@ public class NetPlayer implements IPlayer {
 
 		try {
 
-			serverThread.interrupt();
+			if (serverThread != null) {
+				serverThread.interrupt();
+			}
 
-			if (mSocket != null) {
-				mSocket.close();
+			if (mServerSocket != null) {
+				mServerSocket.close();
 			}
 
 		} catch (IOException e) {
@@ -253,90 +178,15 @@ public class NetPlayer implements IPlayer {
 		}
 	}
 
-	public void connectToPlayer() {
+	public void connectToPlayer(String ipString, int portNumber) {
 
+		enemyIP = ipString;
+		enemyPort = portNumber;
+		
+		clientThread = new Thread(new ClientThread());
 		clientThread.start();
 
 	}
-
-	class ConnectDialog extends Stage {
-		protected GridPane gridPane;
-		protected Label ipLbl, ipFld, portLbl, portFld;
-		protected Button listenButton;
-
-		public ConnectDialog(Group owner) {
-			super();
-			setTitle("Setup");
-			initModality(Modality.NONE);
-			setResizable(false);
-
-			setScene(new Scene(owner, 400, 200));
-
-			gridPane = new GridPane();
-			gridPane.setPadding(new Insets(5));
-			gridPane.setHgap(5);
-			gridPane.setVgap(5);
-
-
-			ipLbl = new Label("Player IP: ");
-			gridPane.add(ipLbl, 0, 1);
-
-			ipFld = new Label("");
-			gridPane.add(ipFld, 1, 1);
-
-			portLbl = new Label("Player port: ");
-			gridPane.add(portLbl, 0, 2);
-
-			portFld = new Label();
-			portFld.setText("0");
-			gridPane.add(portFld, 1, 2);
-
-			listenButton = new Button("Find");
-			listenButton.setOnAction(new EventHandler<ActionEvent>() {
-
-				@Override
-				public void handle(ActionEvent event) {
-					connectToPlayer();
-				}
-
-			});
-
-			GridPane.setHalignment(listenButton, HPos.CENTER);
-			gridPane.add(listenButton, 0, 3);
-
-			owner.getChildren().add(gridPane);
-
-			setOnCloseRequest(new EventHandler<WindowEvent>() {
-
-				@Override
-				public void handle(WindowEvent event) {
-					System.out.println("Dialog closed");
-					stopListening();
-				}
-			});
-		}
-
-		public void playerFound(String ipString, int portNumber) {
-			ipFld.setText(ipString);
-			portFld.setText(Integer.toString(portNumber));
-
-			listenButton.setText("Connect");
-		}
-
-		public void connectedToPlayer(String ipString, int portNumber) {
-			gridPane.getChildren().removeAll(listenButton);
-
-			ipLbl.setText("Connected to: ");
-			ipFld.setText(ipString);
-
-			portLbl.setText("On port: ");
-			portFld.setText(Integer.toString(portNumber));
-
-		}
-
-	}
-
-
 
 	class ListenDialog extends Stage {
 
@@ -394,19 +244,35 @@ public class NetPlayer implements IPlayer {
 				@Override
 				public void handle(ActionEvent event) {
 
-					System.out.println("Connect 1");
+					if (enemyIpFld != null && enemyIpFld.isVisible()) {
 
-					stopListening();
+						//TODO check if ip and port is valid
+						
+						String ipString = enemyIpFld.getText();
+						int portNumber  = Integer.parseInt(enemyPortFld.getText());
+						
+						connectToPlayer(ipString, portNumber);
+						
+					} else {
 
-					enemyIpLbl = new Label("Player IP: ");
-					gridPane.add(enemyIpLbl, 0, 3);
-					enemyIpFld = new TextField();
-					gridPane.add(enemyIpFld, 1, 3);
-					enemyPortLbl = new Label("Player port: ");
-					gridPane.add(enemyPortLbl, 0, 4);
-					enemyPortFld = new TextField();
-					gridPane.add(enemyPortFld, 1, 4);
+						System.out.println("Connect 1");
 
+						mPort = 0;
+						portFld.setText("0");
+
+						stopListening();
+
+						enemyIpLbl = new Label("Player IP: ");
+						gridPane.add(enemyIpLbl, 0, 3);
+						enemyIpFld = new TextField();
+						gridPane.add(enemyIpFld, 1, 3);
+						enemyPortLbl = new Label("Player port: ");
+						gridPane.add(enemyPortLbl, 0, 4);
+						enemyPortFld = new TextField();
+						gridPane.add(enemyPortFld, 1, 4);
+
+						listenButton.setDisable(false);
+					}
 				}
 			});
 			gridPane.add(connectButton, 1, 5);
@@ -428,12 +294,17 @@ public class NetPlayer implements IPlayer {
 			listenButton.setDisable(true);
 		}
 
-		public void connectedToPlayer() {
-			gridPane.getChildren().removeAll(portLbl, portFld, listenButton);
+		public void connectedToPlayer(String ipString, int portNumber) {
+			
+			gridPane.getChildren().removeAll(listenButton, connectButton, enemyIpLbl, enemyIpFld, enemyPortLbl, enemyPortFld);
 
 			ipLbl.setText("Connected to: ");
-			ipFld.setText(enemyIP);
+			ipFld.setText(ipString);
 
+			portLbl.setText("On port: ");
+			portFld.setText(Integer.toString(portNumber));
+			
+			
 		}
 	}
 
@@ -443,4 +314,81 @@ public class NetPlayer implements IPlayer {
 
 	}
 
+
+	public class ServerThread implements Runnable {
+
+		@Override
+		public void run() {
+			try {
+				mServerSocket = new ServerSocket(0);
+
+				mPort = mServerSocket.getLocalPort();
+
+				Platform.runLater(new Runnable() {
+
+					@Override
+					public void run() {
+
+						System.out.println("Listening on: " + mIP + " port: " + mPort);
+						mListenDialog.startedListening(mPort);
+
+					}
+				});
+
+				mClientSocket = mServerSocket.accept();
+				enemyIP = mClientSocket.getInetAddress().getHostAddress();
+				enemyPort = mClientSocket.getPort();
+
+
+				Platform.runLater(new Runnable() {
+
+					@Override
+					public void run() {
+						mListenDialog.connectedToPlayer(enemyIP, enemyPort);
+						System.out.println("Incoming connection from: " + enemyIP + " port " + enemyPort);				
+					}
+				});
+
+
+			} catch (UnknownHostException e) {
+
+				e.printStackTrace();
+				mSender.displayMessage("Could not create connection [E2]");
+				return;
+
+			} catch (IOException e) {
+
+				//e.printStackTrace();
+				mSender.displayMessage("Could not create connection [E3]");
+				return;
+			}
+		}
+	}
+	
+	public class ClientThread implements Runnable {
+		
+		@Override
+		public void run() {
+			try {
+
+				mClientSocket = new Socket(enemyIP, enemyPort);
+
+				Platform.runLater(new Runnable() {
+
+					@Override
+					public void run() {
+						mListenDialog.connectedToPlayer(enemyIP, enemyPort);
+						System.out.println("Created socket " + mClientSocket.getInetAddress().getHostAddress() + " port " + mClientSocket.getPort());
+
+					}
+				});
+
+				mClientSocket.close();
+
+			} catch (Exception e) {
+				System.out.println("ConnectTo error" + e.getMessage());
+				e.printStackTrace();
+			}
+		}
+	}
 }

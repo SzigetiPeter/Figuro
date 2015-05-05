@@ -3,18 +3,25 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.figuro.game.rules;
+package tests.figuro.game.rules;
 
 import com.figuro.common.BoardState;
 import com.figuro.common.ICell;
 import com.figuro.common.IUnit;
+import com.figuro.game.rules.Cell;
+import com.figuro.game.rules.CheckersRules;
+import com.figuro.game.rules.CheckersUnit;
+import com.figuro.game.rules.UnitEnum;
+
 import java.awt.Point;
 import java.util.List;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 /**
