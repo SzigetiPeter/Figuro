@@ -1,4 +1,4 @@
-package tests.figuro.player;
+package tests.figuro.player.netplayer;
 
 import java.util.concurrent.CountDownLatch;
 
