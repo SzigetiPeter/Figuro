@@ -2,26 +2,19 @@ package com.figuro.player.netplayer;
 
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import com.figuro.common.BoardState;
 import com.figuro.common.IMessageSender;
@@ -29,7 +22,7 @@ import com.figuro.engine.IMoveComplete;
 import com.figuro.player.IPlayer;
 
 
-public class NetPlayer implements IPlayer {
+public class NetPlayer implements IPlayer, IDialogDelegate {
 
 	protected BoardState mBoardState;
 	protected int mId;
@@ -39,15 +32,20 @@ public class NetPlayer implements IPlayer {
 	private String enemyIP;
 	private int enemyPort;
 
-	private ListenDialog mListenDialog;
+	private SetupDialog mSetupDialog;
+
 	private ServerSocket mServerSocket;
 	private Socket mClientSocket;
 
 	private IMoveComplete  mComplete;
 	private IMessageSender mSender;
 
-	private Thread serverThread;
-	private Thread clientThread;
+	private ServerThread serverThread;
+	private ClientThread clientThread;
+
+	private String lineString;
+	
+	private int mPrefferedOrder = 0;
 
 	public NetPlayer(IMessageSender sender, IMoveComplete complete) {
 
@@ -143,19 +141,19 @@ public class NetPlayer implements IPlayer {
 
 		}
 
-		mListenDialog = new ListenDialog(parent, mIP);
-		mListenDialog.sizeToScene();
-		mListenDialog.show();
+		mSetupDialog = new SetupDialog(parent, this, mIP);
+		mSetupDialog.sizeToScene();
+		mSetupDialog.show();
 	} 
 
 	@Override
 	public int getPrefferedOrder() {
 
-		return 0;
+		return mPrefferedOrder;
 	}
 
 	public void startListening() {
-		serverThread = new Thread(new ServerThread());
+		serverThread = new ServerThread();
 		serverThread.start();
 	}
 
@@ -182,131 +180,13 @@ public class NetPlayer implements IPlayer {
 
 		enemyIP = ipString;
 		enemyPort = portNumber;
-		
-		clientThread = new Thread(new ClientThread());
+
+		clientThread = new ClientThread();
 		clientThread.start();
 
 	}
 
-	class ListenDialog extends Stage {
 
-		protected Label ipLbl, ipFld, portLbl, portFld;
-		protected Button listenButton, connectButton;
-		protected Label enemyIpLbl, enemyPortLbl;
-		protected TextField enemyIpFld, enemyPortFld;
-
-		protected GridPane gridPane;
-
-		public ListenDialog(Group owner, String ipString) {
-			super();
-			setTitle("Setup");
-			initModality(Modality.NONE);
-			setResizable(false);
-
-			setScene(new Scene(owner, 500, 300));
-
-			gridPane = new GridPane();
-			gridPane.setPadding(new Insets(5));
-			gridPane.setHgap(5);
-			gridPane.setVgap(5);
-
-
-			ipLbl = new Label("My IP: ");
-			gridPane.add(ipLbl, 0, 1);
-
-			ipFld = new Label(ipString);
-			gridPane.add(ipFld, 1, 1);
-
-			portLbl = new Label("Port: ");
-			gridPane.add(portLbl, 0, 2);
-
-			portFld = new Label();
-			portFld.setText("0");
-			gridPane.add(portFld, 1, 2);
-
-			listenButton = new Button("Listen");
-			listenButton.setOnAction(new EventHandler<ActionEvent>() {
-
-				@Override
-				public void handle(ActionEvent event) {
-					System.out.println("Listen 1");
-
-					gridPane.getChildren().removeAll(enemyIpLbl, enemyIpFld, enemyPortLbl, enemyPortFld);
-					startListening();
-				}
-
-			});
-			gridPane.add(listenButton, 0, 5);
-
-			connectButton = new Button("Connect");
-			connectButton.setOnAction(new EventHandler<ActionEvent>() {
-
-				@Override
-				public void handle(ActionEvent event) {
-
-					if (enemyIpFld != null && enemyIpFld.isVisible()) {
-
-						//TODO check if ip and port is valid
-						
-						String ipString = enemyIpFld.getText();
-						int portNumber  = Integer.parseInt(enemyPortFld.getText());
-						
-						connectToPlayer(ipString, portNumber);
-						
-					} else {
-
-						System.out.println("Connect 1");
-
-						mPort = 0;
-						portFld.setText("0");
-
-						stopListening();
-
-						enemyIpLbl = new Label("Player IP: ");
-						gridPane.add(enemyIpLbl, 0, 3);
-						enemyIpFld = new TextField();
-						gridPane.add(enemyIpFld, 1, 3);
-						enemyPortLbl = new Label("Player port: ");
-						gridPane.add(enemyPortLbl, 0, 4);
-						enemyPortFld = new TextField();
-						gridPane.add(enemyPortFld, 1, 4);
-
-						listenButton.setDisable(false);
-					}
-				}
-			});
-			gridPane.add(connectButton, 1, 5);
-
-			owner.getChildren().add(gridPane);
-
-			setOnCloseRequest(new EventHandler<WindowEvent>() {
-
-				@Override
-				public void handle(WindowEvent event) {
-					System.out.println("Dialog closed");
-					stopListening();
-				}
-			});
-		}
-
-		public void startedListening(int portNumber) {
-			portFld.setText(Integer.toString(portNumber));
-			listenButton.setDisable(true);
-		}
-
-		public void connectedToPlayer(String ipString, int portNumber) {
-			
-			gridPane.getChildren().removeAll(listenButton, connectButton, enemyIpLbl, enemyIpFld, enemyPortLbl, enemyPortFld);
-
-			ipLbl.setText("Connected to: ");
-			ipFld.setText(ipString);
-
-			portLbl.setText("On port: ");
-			portFld.setText(Integer.toString(portNumber));
-			
-			
-		}
-	}
 
 	@Override
 	public void notify(BoardState counterMove) {
@@ -315,8 +195,8 @@ public class NetPlayer implements IPlayer {
 	}
 
 
-	public class ServerThread implements Runnable {
-
+	public class ServerThread extends Thread {
+	
 		@Override
 		public void run() {
 			try {
@@ -330,7 +210,7 @@ public class NetPlayer implements IPlayer {
 					public void run() {
 
 						System.out.println("Listening on: " + mIP + " port: " + mPort);
-						mListenDialog.startedListening(mPort);
+						mSetupDialog.startedListening(mPort);
 
 					}
 				});
@@ -339,16 +219,16 @@ public class NetPlayer implements IPlayer {
 				enemyIP = mClientSocket.getInetAddress().getHostAddress();
 				enemyPort = mClientSocket.getPort();
 
-
 				Platform.runLater(new Runnable() {
 
 					@Override
 					public void run() {
-						mListenDialog.connectedToPlayer(enemyIP, enemyPort);
+						mSetupDialog.connectedToPlayer(enemyIP, enemyPort);
 						System.out.println("Incoming connection from: " + enemyIP + " port " + enemyPort);				
 					}
 				});
 
+				(new GetMessage(mClientSocket)).start();
 
 			} catch (UnknownHostException e) {
 
@@ -359,13 +239,13 @@ public class NetPlayer implements IPlayer {
 			} catch (IOException e) {
 
 				//e.printStackTrace();
-				mSender.displayMessage("Could not create connection [E3]");
+				mSender.displayMessage("Socket closed");
 				return;
 			}
 		}
 	}
-	
-	public class ClientThread implements Runnable {
+
+	public class ClientThread extends Thread {
 		
 		@Override
 		public void run() {
@@ -377,13 +257,13 @@ public class NetPlayer implements IPlayer {
 
 					@Override
 					public void run() {
-						mListenDialog.connectedToPlayer(enemyIP, enemyPort);
+						mSetupDialog.connectedToPlayer(enemyIP, enemyPort);
 						System.out.println("Created socket " + mClientSocket.getInetAddress().getHostAddress() + " port " + mClientSocket.getPort());
 
 					}
-				});
+				});		
 
-				mClientSocket.close();
+				(new GetMessage(mClientSocket)).start();
 
 			} catch (Exception e) {
 				System.out.println("ConnectTo error" + e.getMessage());
@@ -391,4 +271,109 @@ public class NetPlayer implements IPlayer {
 			}
 		}
 	}
+
+	private class GetMessage extends Thread {
+		
+		private Socket mSocket;
+		
+		public GetMessage(Socket socket) {
+			mSocket = socket;
+		}
+		
+		public void run() {
+			Scanner sc;
+			try {
+				sc = new Scanner(mSocket.getInputStream());
+				
+				while (sc.hasNextLine()) {
+					
+					lineString = sc.nextLine();
+					Platform.runLater(new Runnable() {
+
+						@Override
+						public void run() {
+							System.out.println(lineString);
+
+							if (lineString.startsWith("player ")) {
+								
+								int index = Integer.parseInt(lineString.substring(7));
+								mSetupDialog.playerOrderRequestReceived(index);
+								
+							} else if (lineString.startsWith("OK")) {
+								
+								mSetupDialog.startGame();
+								
+							} else if (lineString.startsWith("CANCEL")) {
+								
+								mSetupDialog.connectedToPlayer(enemyIP, enemyPort);
+								
+							}
+						}
+					});
+				}
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			
+		}
+	}
+	
+	
+	private static class SendMessage extends Thread {
+
+		private Socket mSocket;
+		private String mMessage;
+
+		public SendMessage(Socket socket, String message)  {
+			mSocket = socket;
+			mMessage = message;
+		}
+
+		public void run() {
+			PrintWriter pw;
+
+			try {
+
+				pw = new PrintWriter(mSocket.getOutputStream(), true);
+				pw.println(mMessage);
+				pw.flush();
+				System.out.println("Message sent: " + mMessage);
+				
+				
+			} catch (IOException e) {
+
+				e.printStackTrace();
+				System.out.println("Message send error: " + mMessage);
+
+			}
+
+		}
+	}
+
+
+	@Override
+	public void playerOrderRequest(int order) {
+	
+		(new SendMessage(mClientSocket, "player " + order)).start();
+
+	}
+
+	@Override
+	public void playerOrderOK() {
+		
+		mPrefferedOrder = 1;
+		(new SendMessage(mClientSocket, "OK")).start();
+		mSetupDialog.startGame();
+		
+	}
+
+	@Override
+	public void playerOrderCancel() {
+		
+		(new SendMessage(mClientSocket, "CANCEL")).start();
+		
+	}
+
 }
