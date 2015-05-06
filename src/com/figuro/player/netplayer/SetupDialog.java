@@ -153,7 +153,6 @@ class SetupDialog extends Stage {
 			public void handle(ActionEvent event) {
 				player1.setDisable(true);
 				player2.setDisable(true);
-				//player1.setEffect(new DropShadow());
 				
 				waitLabel = new Label("Waiting for player 2...");
 				gridPane.add(waitLabel, 0, 4);
@@ -169,7 +168,6 @@ class SetupDialog extends Stage {
 			public void handle(ActionEvent event) {
 				player1.setDisable(true);
 				player2.setDisable(true);
-				//player2.setEffect(new DropShadow());
 				
 				waitLabel = new Label("Waiting for player 1...");
 				gridPane.add(waitLabel, 0, 4);
@@ -197,7 +195,6 @@ class SetupDialog extends Stage {
 
 			@Override
 			public void handle(ActionEvent event) {
-				//okButton.setEffect(new DropShadow());
 				okButton.setDisable(true);
 				cancelButton.setDisable(true);
 				
