@@ -19,10 +19,9 @@ public interface IBuilder {
 	
 	public static final String CHECKERS_GAME = 	"game.checkers";
 	
-	public List<String> getGameTypes();
+	public String[] getGameTypes();
     public Game createGame(String type);
 
-	public List<String> getPlayerTypes();
     public IPlayer createPlayer(String type);
     
     public void free();
