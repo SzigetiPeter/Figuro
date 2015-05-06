@@ -56,10 +56,10 @@ public class NetPlayerTest {
 				}
 			});
 			
-			NetPlayer netPlayer = new NetPlayer(this, this);
+			NetPlayer netPlayer = new NetPlayer(this);
 			netPlayer.setup(new Group(), new Button());
 
-			NetPlayer netPlayer2 = new NetPlayer(this, this);
+			NetPlayer netPlayer2 = new NetPlayer(this);
 			netPlayer2.setup(new Group(), new Button());
 			
 		}
