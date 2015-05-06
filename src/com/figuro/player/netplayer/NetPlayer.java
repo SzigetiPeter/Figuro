@@ -15,6 +15,7 @@ import java.util.Scanner;
 
 import javafx.application.Platform;
 import javafx.scene.Group;
+import javafx.scene.control.Button;
 
 import com.figuro.common.BoardState;
 import com.figuro.common.IMessageSender;
@@ -127,7 +128,7 @@ public class NetPlayer implements IPlayer, IDialogDelegate {
 
 
 	@Override
-	public void setup(Group parent) {
+	public void setup(Group parent, Button okButton) {
 		try {
 
 			mIP = getIp();

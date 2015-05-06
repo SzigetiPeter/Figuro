@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -56,10 +57,10 @@ public class NetPlayerTest {
 			});
 			
 			NetPlayer netPlayer = new NetPlayer(this, this);
-			netPlayer.setup(new Group());
+			netPlayer.setup(new Group(), new Button());
 
 			NetPlayer netPlayer2 = new NetPlayer(this, this);
-			netPlayer2.setup(new Group());
+			netPlayer2.setup(new Group(), new Button());
 			
 		}
 

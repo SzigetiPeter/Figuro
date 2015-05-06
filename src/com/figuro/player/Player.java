@@ -1,6 +1,7 @@
 package com.figuro.player;
 
 import javafx.scene.Group;
+import javafx.scene.control.Button;
 
 import com.figuro.common.BoardState;
 
@@ -34,7 +35,7 @@ public abstract class Player implements IPlayer {
     }
 
     @Override
-    public void setup(Group parent) {
+    public void setup(Group parent, Button okButton) {
         // do nothing
     }
 
