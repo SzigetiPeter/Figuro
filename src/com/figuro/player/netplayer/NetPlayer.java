@@ -38,7 +38,6 @@ public class NetPlayer implements IPlayer, IDialogDelegate {
 	private ServerSocket mServerSocket;
 	private Socket mClientSocket;
 
-	private IMoveComplete  mComplete;
 	private IMessageSender mSender;
 
 	private ServerThread serverThread;
@@ -46,11 +45,11 @@ public class NetPlayer implements IPlayer, IDialogDelegate {
 
 	private String lineString;
 	
+	private int orderTemp = 0;
 	private int mPrefferedOrder = 0;
 
-	public NetPlayer(IMessageSender sender, IMoveComplete complete) {
+	public NetPlayer(IMessageSender sender) {
 
-		mComplete = complete;
 		mSender = sender;
 	}
 
@@ -298,6 +297,8 @@ public class NetPlayer implements IPlayer, IDialogDelegate {
 							if (lineString.startsWith("player ")) {
 								
 								int index = Integer.parseInt(lineString.substring(7));
+								orderTemp = (index == 1? 2 : 1);
+								
 								mSetupDialog.playerOrderRequestReceived(index);
 								
 							} else if (lineString.startsWith("OK")) {
@@ -356,7 +357,8 @@ public class NetPlayer implements IPlayer, IDialogDelegate {
 
 	@Override
 	public void playerOrderRequest(int order) {
-	
+		
+		orderTemp = order;
 		(new SendMessage(mClientSocket, "player " + order)).start();
 
 	}
@@ -364,7 +366,7 @@ public class NetPlayer implements IPlayer, IDialogDelegate {
 	@Override
 	public void playerOrderOK() {
 		
-		mPrefferedOrder = 1;
+		mPrefferedOrder = orderTemp;
 		(new SendMessage(mClientSocket, "OK")).start();
 		mSetupDialog.startGame();
 		
@@ -373,6 +375,7 @@ public class NetPlayer implements IPlayer, IDialogDelegate {
 	@Override
 	public void playerOrderCancel() {
 		
+		orderTemp = 0;
 		(new SendMessage(mClientSocket, "CANCEL")).start();
 		
 	}
