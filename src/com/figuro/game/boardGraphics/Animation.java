@@ -14,9 +14,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 
 import com.figuro.common.BoardState;
-import com.figuro.common.Cell;
 import com.figuro.common.IUnit;
 import com.figuro.engine.IMoveComplete;
+import com.figuro.game.rules.Cell;
 
 /**
  *

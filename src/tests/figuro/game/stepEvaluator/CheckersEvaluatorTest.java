@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.figuro.game.stepEvaluator;
+package tests.figuro.game.stepEvaluator;
 
 import com.figuro.common.BoardState;
 import com.figuro.game.rules.Cell;
@@ -12,11 +12,14 @@ import com.figuro.common.ICell;
 import com.figuro.common.IUnit;
 import com.figuro.game.rules.UnitEnum;
 import com.figuro.game.rules.CheckersUnit;
+import com.figuro.game.stepEvaluator.CheckersEvaluator;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 /**

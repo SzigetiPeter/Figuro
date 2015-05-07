@@ -6,6 +6,7 @@
 package com.figuro.player;
 
 import javafx.scene.Group;
+import javafx.scene.control.Button;
 
 import com.figuro.common.BoardState;
 import com.figuro.engine.IMoveComplete;
@@ -76,7 +77,7 @@ public interface IPlayer {
      * @param parent An object inside which
      * you should place your controls
      */
-    public void setup(Group parent);
+    public void setup(Group parent, Button okButton);
     
     /**
      * Get the preferred order in the game

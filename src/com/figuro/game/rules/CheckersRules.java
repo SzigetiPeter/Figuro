@@ -76,8 +76,13 @@ public class CheckersRules implements IGameRules {
     
     private void getMoveEndPoints(ICell[][] oldCells, ICell[][] newCells, int player, Point beginPoint, Point endPoint)
     {
-        beginPoint = getChange(oldCells, newCells, player);
-        endPoint = getChange(newCells, oldCells, player);
+        Point temp = getChange(oldCells, newCells, player);
+        beginPoint.x = temp.x;
+        beginPoint.y = temp.y;
+        
+        temp = getChange(newCells, oldCells, player);
+        endPoint.x = temp.x;
+        endPoint.y = temp.y;
     }
     
     private Point getChange(ICell[][] cells1, ICell[][] cells2, int player)
@@ -299,12 +304,40 @@ public class CheckersRules implements IGameRules {
 
     @Override
     public List<BoardState> getPossibleMoves(BoardState state, int player) {
-        return stepGenerator.getSteps(state, player);
+        if (state == null)
+            return null;
+        if (player == 0)
+            return null;
+        
+        List<BoardState> boardStateCandidates = stepGenerator.getSteps(state, player);
+        
+        if (boardStateCandidates == null)
+            return null;
+        
+        //validate all steps
+        for(int i =0; i< boardStateCandidates.size(); ++i)
+        {
+            BoardState currentState = boardStateCandidates.get(i);
+            
+            if (!this.isValidMove(state, currentState, player))
+            {
+                boardStateCandidates.remove(i);
+            }
+        }
+        
+        return boardStateCandidates;
     }
 
     @Override
     public boolean isGameOver(BoardState state, int player) {
-        if (getPossibleMoves(state, player).size() > 0)
+        if (state == null)
+            return true;
+        if (player == 0)
+            return true;
+        
+        List<BoardState> possibleMoves = getPossibleMoves(state, player);
+        
+        if (possibleMoves != null && possibleMoves.size() > 0)
         {
             return false;
         }
@@ -345,7 +378,41 @@ public class CheckersRules implements IGameRules {
 
     @Override
     public int getNextPlayer(BoardState oldState, BoardState newState, int player) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (oldState == null)
+            return 0;
+        if (newState == null)
+            return 0;
+        if (player == 0)
+            return 0;
+        
+        int nextPlayerId = 0;
+        Point beginPoint = new Point();
+        Point endPoint = new Point();
+        ICell[][] oldCells = oldState.getBoard();
+        ICell[][] newCells = newState.getBoard();
+        getMoveEndPoints(oldCells, newCells, player, beginPoint, endPoint);
+
+        int distance = getDistance(beginPoint, endPoint);
+
+        if (distance == 1)
+        {
+            PlayerEnum playerEnum = PlayerConverter.PlayerIdToPlayerEnum(player);
+            
+            if (playerEnum == PlayerEnum.BLACK)
+            {
+                nextPlayerId = PlayerConverter.PlayerEnumToPlayerId(PlayerEnum.WHITE);
+            }
+            else if (playerEnum == PlayerEnum.WHITE)
+            {
+                nextPlayerId = PlayerConverter.PlayerEnumToPlayerId(PlayerEnum.BLACK);
+            }
+        }
+        else
+        {
+            nextPlayerId = player;
+        }
+
+        return nextPlayerId;
     }
     
 }

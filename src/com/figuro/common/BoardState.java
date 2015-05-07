@@ -12,8 +12,8 @@ public class BoardState {
 
     private ICell[][] board;
     
-    private static Point blackPlayerRightClosestCell = new Point(7, 7);
-    private static Point whitePlayerRightClosestCell = new Point(0, 0);
+    private static Point blackPlayerRightClosestCell = new Point(0, 7);
+    private static Point whitePlayerRightClosestCell = new Point(7, 0);
 
     private Point lastMove = null;
     private Point lastMoveFrom = null;
@@ -47,11 +47,11 @@ public class BoardState {
     }
 
     public ICell get(Point position) {
-        if (position.x < board.length || position.x > board.length) {
+        if (position.x < 0 || position.x >= board.length) {
             return null;
         }
 
-        if (position.y < board[0].length || position.y > board[0].length) {
+        if (position.y < 0 || position.y >= board[0].length) {
             return null;
         }
 
@@ -111,7 +111,7 @@ public class BoardState {
         if (obj == this)
             return true;
 
-        boolean isEqual = false;
+        boolean isEqual = true;
         BoardState state = (BoardState) obj;
         ICell[][] cells = state.getBoard();
         
@@ -121,18 +121,10 @@ public class BoardState {
                 for (int j = 0; j < cells[0].length; ++j) {
                     ICell cell = cells[i][j];
                     ICell cell2 = board[i][j];
-                    if (cell.hasUnit() && cell2.hasUnit())
+                    
+                    if (!cell.equals(cell2))
                     {
-                        IUnit unit = cell.getUnit();
-                        IUnit unit2 = cell2.getUnit();
-                        
-                        if (unit.getOwnerId() == unit2.getOwnerId())
-                        {
-                            if (unit.getType() == unit2.getType())
-                            {
-                                isEqual = true;
-                            }
-                        }
+                        return false;
                     }
                 }
             }
