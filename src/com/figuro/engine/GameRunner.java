@@ -37,24 +37,28 @@ public class GameRunner implements IEngineHandler {
 	}
 	
 	@Override
-    public void addPlayer(String playerType) 
+    public IPlayer addPlayer(String playerType) 
     {
     	//Hozzáad egy játékost a játékhoz
     	IPlayer player = builder.createPlayer(playerType);
     	
     	try {
 			job.addPlayer(player);
+			return player;
 		} catch (Exception e) {	
 			message.displayMessage(e.getMessage());
-		}   	
+		}
+    	
+    	return null;
     }
     
 	@Override
-    public void addSpectator(String playerType) 
+    public IPlayer addSpectator(String playerType) 
     {
     	//Hozzáad egy figyelőt a játékhoz. hasznos abban az esetben ha pl. két Bot játékos játszik és egy UIPlayer a megfigyelő    	
     	IPlayer spectator = builder.createPlayer(playerType);
     	job.addSpectator(spectator);
+    	return spectator;
     }
     
 	@Override
