@@ -56,11 +56,20 @@ public class NetPlayerTest {
 				}
 			});
 			
+			
+			Group parent = new Group();
+			Stage newStage = new Stage();
+			newStage.setScene(new Scene(parent, 300, 200));
 			NetPlayer netPlayer = new NetPlayer(this);
-			netPlayer.setup(new Group(), new Button());
-
+			netPlayer.setup(parent, new Button());
+			newStage.show();
+			
+			Group newGroup2 = new Group();
+			Stage newStage2 = new Stage();
+			newStage2.setScene(new Scene(newGroup2, 300, 200));
 			NetPlayer netPlayer2 = new NetPlayer(this);
-			netPlayer2.setup(new Group(), new Button());
+			netPlayer2.setup(newGroup2, new Button());
+			newStage2.show();
 			
 		}
 

@@ -14,7 +14,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-class SetupDialog extends Stage {
+class SetupDialog extends Group {
 
 	private Label ipLbl, ipFld, portLbl, portFld, confirmLabel, waitLabel;
 	private Button listenButton, connectButton, okButton, cancelButton;
@@ -33,13 +33,7 @@ class SetupDialog extends Stage {
 		super();
 		
 		mDelegate = delegate;
-		
-		setTitle("Setup");
-		initModality(Modality.NONE);
-		setResizable(false);
-
-		setScene(new Scene(owner, 500, 300));
-
+				
 		gridPane = new GridPane();
 		gridPane.setPadding(new Insets(5));
 		gridPane.setHgap(5);
@@ -115,14 +109,15 @@ class SetupDialog extends Stage {
 
 		owner.getChildren().add(gridPane);
 
-		setOnCloseRequest(new EventHandler<WindowEvent>() {
+		/*setOnCloseRequest(new EventHandler<WindowEvent>() {
 
 			@Override
 			public void handle(WindowEvent event) {
 				System.out.println("Dialog closed");
 				mDelegate.stopListening();
 			}
-		});
+		}); */
+		
 	}
 
 	public void startedListening(int portNumber) {
