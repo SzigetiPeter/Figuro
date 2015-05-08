@@ -14,4 +14,7 @@ import com.figuro.common.Evaluation;
 public interface IStepEvaluator {
     public Evaluation evaluate(BoardState state, int player);
     public Evaluation min(Evaluation a, Evaluation b, int player);
+    
+    public Evaluation getMinimum();
+    public Evaluation getMaximum();
 }

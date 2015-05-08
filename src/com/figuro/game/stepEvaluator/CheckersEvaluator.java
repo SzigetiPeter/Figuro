@@ -71,4 +71,15 @@ public class CheckersEvaluator implements IStepEvaluator {
         return minimumCalculator.min(a, b, player);
     }
     
+    @Override
+    public Evaluation getMinimum() {
+    	// TODO: return the minimum
+    	return null;
+    }
+    
+    @Override
+    public Evaluation getMaximum() {
+    	// TODO: return the maximum
+    	return null;
+    }
 }
