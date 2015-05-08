@@ -8,20 +8,13 @@ package tests.figuro.game.rules;
 import com.figuro.common.BoardState;
 import com.figuro.common.ICell;
 import com.figuro.common.IUnit;
-import com.figuro.game.rules.Cell;
-import com.figuro.game.rules.CheckersRules;
-import com.figuro.game.rules.CheckersUnit;
-import com.figuro.game.rules.UnitEnum;
-
 import java.awt.Point;
 import java.util.List;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 import static org.junit.Assert.*;
 
 /**
@@ -59,7 +52,7 @@ public class CheckersRulesTest {
         
         BoardState expResult = null;
         
-        expResult = new BoardState(8, 8);
+        expResult = new ChessBoardGenerator().getInitialBoard();
         int blackPlayerId = 1;
         int whitePlayerId = 2;
         
@@ -269,6 +262,7 @@ public class CheckersRulesTest {
         cell.setUnit(unit);
         expResult.set(point, cell);
         
+        
         BoardState result = instance.getInitialState();
         assertEquals(expResult, result);
     }
@@ -315,6 +309,37 @@ public class CheckersRulesTest {
         boolean result = instance.isGameOver(state, player);
         assertEquals(expResult, result);
     }
+    
+    /**
+     * Test of isGameOver method, of class CheckersRules.
+     */
+    @Test
+    public void testIsGameOver2() {
+        System.out.println("isGameOver2");
+        CheckersRules instance = new CheckersRules();
+        ChessBoardGenerator boardGenerator = new ChessBoardGenerator();
+        BoardState state = boardGenerator.getInitialBoard();
+        int player = 1;
+        boolean expResult = true;
+        boolean result = instance.isGameOver(state, player);
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of isGameOver method, of class CheckersRules.
+     */
+    @Test
+    public void testIsGameOver3() {
+        System.out.println("isGameOver3");
+        CheckersRules instance = new CheckersRules();
+        ChessBoardGenerator boardGenerator = new ChessBoardGenerator();
+        BoardState state = boardGenerator.getInitialBoard();
+        state.set(new Point(5,5), new Cell(new CheckersUnit(UnitEnum.PEASANT, 2)));
+        int player = 2;
+        boolean expResult = false;
+        boolean result = instance.isGameOver(state, player);
+        assertEquals(expResult, result);
+    }
 
     /**
      * Test of getFinalState method, of class CheckersRules.
@@ -322,10 +347,13 @@ public class CheckersRulesTest {
     @Test
     public void testGetFinalState() {
         System.out.println("getFinalState");
-        BoardState state = null;
-        int player = 0;
         CheckersRules instance = new CheckersRules();
-        int expResult = 0;
+        ChessBoardGenerator boardGenerator = new ChessBoardGenerator();
+        BoardState state = boardGenerator.getInitialBoard();
+        state.set(new Point(5,5), new Cell(new CheckersUnit(UnitEnum.PEASANT, 2)));
+        int player = 1;
+        
+        int expResult = 2;
         int result = instance.getFinalState(state, player);
         assertEquals(expResult, result);
     }
@@ -336,11 +364,18 @@ public class CheckersRulesTest {
     @Test
     public void testGetNextPlayer() {
         System.out.println("getNextPlayer");
-        BoardState oldState = null;
-        BoardState newState = null;
-        int player = 0;
         CheckersRules instance = new CheckersRules();
-        int expResult = 0;
+        BoardState oldState = instance.getInitialState();
+        BoardState newState = instance.getInitialState();
+        
+        Point beginPoint = new Point(1, 5);
+        Point endPoint = new Point(0, 4);
+        ICell cell = newState.get(beginPoint);
+        newState.set(beginPoint, new Cell());
+        newState.set(endPoint, cell);
+        int player = 1;
+        
+        int expResult = 2;
         int result = instance.getNextPlayer(oldState, newState, player);
         assertEquals(expResult, result);
     }
