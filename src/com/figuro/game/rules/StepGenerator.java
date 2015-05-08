@@ -70,6 +70,7 @@ public class StepGenerator implements IStepGenerator {
         ICell neighbourCell = null;
         ICell temp = null;
         
+    // 1 step distance
         Point leftUp = new Point(actualPosition.x - 1, actualPosition.y + 1);
         neighbourCell = state.get(leftUp);
         if (neighbourCell != null && !neighbourCell.hasUnit())
@@ -148,7 +149,181 @@ public class StepGenerator implements IStepGenerator {
             newState.set(actualPosition, emptyCell);
             newState.set(rightBottom, actualCell);
             steps.add(newState);
-        }        
+        }
+        
+        
+    // 2 steps distance
+        Point point = null;
+        
+        // Top
+        
+        point = new Point(actualPosition.x - 2, actualPosition.y + 2);
+        neighbourCell = state.get(point);
+        if (neighbourCell != null && !neighbourCell.hasUnit())
+        {
+            BoardState newState = new BoardState(state);
+            newState.set(actualPosition, emptyCell);
+            newState.set(point, actualCell);
+            steps.add(newState);
+        }
+        
+        point = new Point(actualPosition.x - 1, actualPosition.y + 2);
+        neighbourCell = state.get(point);
+        if (neighbourCell != null && !neighbourCell.hasUnit())
+        {
+            BoardState newState = new BoardState(state);
+            newState.set(actualPosition, emptyCell);
+            newState.set(point, actualCell);
+            steps.add(newState);
+        }
+        
+        point = new Point(actualPosition.x, actualPosition.y + 2);
+        neighbourCell = state.get(point);
+        if (neighbourCell != null && !neighbourCell.hasUnit())
+        {
+            BoardState newState = new BoardState(state);
+            newState.set(actualPosition, emptyCell);
+            newState.set(point, actualCell);
+            steps.add(newState);
+        }
+        
+        point = new Point(actualPosition.x + 1, actualPosition.y + 2);
+        neighbourCell = state.get(point);
+        if (neighbourCell != null && !neighbourCell.hasUnit())
+        {
+            BoardState newState = new BoardState(state);
+            newState.set(actualPosition, emptyCell);
+            newState.set(point, actualCell);
+            steps.add(newState);
+        }
+        
+        point = new Point(actualPosition.x + 2, actualPosition.y + 2);
+        neighbourCell = state.get(point);
+        if (neighbourCell != null && !neighbourCell.hasUnit())
+        {
+            BoardState newState = new BoardState(state);
+            newState.set(actualPosition, emptyCell);
+            newState.set(point, actualCell);
+            steps.add(newState);
+        }
+        
+        //
+        
+        point = new Point(actualPosition.x - 2, actualPosition.y + 1);
+        neighbourCell = state.get(point);
+        if (neighbourCell != null && !neighbourCell.hasUnit())
+        {
+            BoardState newState = new BoardState(state);
+            newState.set(actualPosition, emptyCell);
+            newState.set(point, actualCell);
+            steps.add(newState);
+        }
+        
+        point = new Point(actualPosition.x + 2, actualPosition.y + 1);
+        neighbourCell = state.get(point);
+        if (neighbourCell != null && !neighbourCell.hasUnit())
+        {
+            BoardState newState = new BoardState(state);
+            newState.set(actualPosition, emptyCell);
+            newState.set(point, actualCell);
+            steps.add(newState);
+        }
+        
+        // Middle
+        
+        point = new Point(actualPosition.x - 2, actualPosition.y);
+        neighbourCell = state.get(point);
+        if (neighbourCell != null && !neighbourCell.hasUnit())
+        {
+            BoardState newState = new BoardState(state);
+            newState.set(actualPosition, emptyCell);
+            newState.set(point, actualCell);
+            steps.add(newState);
+        }
+        
+        point = new Point(actualPosition.x - 1, actualPosition.y);
+        neighbourCell = state.get(point);
+        if (neighbourCell != null && !neighbourCell.hasUnit())
+        {
+            BoardState newState = new BoardState(state);
+            newState.set(actualPosition, emptyCell);
+            newState.set(point, actualCell);
+            steps.add(newState);
+        }
+        
+        //
+        
+        point = new Point(actualPosition.x - 2, actualPosition.y - 1);
+        neighbourCell = state.get(point);
+        if (neighbourCell != null && !neighbourCell.hasUnit())
+        {
+            BoardState newState = new BoardState(state);
+            newState.set(actualPosition, emptyCell);
+            newState.set(point, actualCell);
+            steps.add(newState);
+        }
+        
+        point = new Point(actualPosition.x + 2, actualPosition.y - 1);
+        neighbourCell = state.get(point);
+        if (neighbourCell != null && !neighbourCell.hasUnit())
+        {
+            BoardState newState = new BoardState(state);
+            newState.set(actualPosition, emptyCell);
+            newState.set(point, actualCell);
+            steps.add(newState);
+        }
+        
+        // Bottom
+        
+        point = new Point(actualPosition.x - 2, actualPosition.y - 2);
+        neighbourCell = state.get(point);
+        if (neighbourCell != null && !neighbourCell.hasUnit())
+        {
+            BoardState newState = new BoardState(state);
+            newState.set(actualPosition, emptyCell);
+            newState.set(point, actualCell);
+            steps.add(newState);
+        }
+        
+        point = new Point(actualPosition.x - 1, actualPosition.y - 2);
+        neighbourCell = state.get(point);
+        if (neighbourCell != null && !neighbourCell.hasUnit())
+        {
+            BoardState newState = new BoardState(state);
+            newState.set(actualPosition, emptyCell);
+            newState.set(point, actualCell);
+            steps.add(newState);
+        }
+        
+        point = new Point(actualPosition.x, actualPosition.y - 2);
+        neighbourCell = state.get(point);
+        if (neighbourCell != null && !neighbourCell.hasUnit())
+        {
+            BoardState newState = new BoardState(state);
+            newState.set(actualPosition, emptyCell);
+            newState.set(point, actualCell);
+            steps.add(newState);
+        }
+        
+        point = new Point(actualPosition.x + 1, actualPosition.y - 2);
+        neighbourCell = state.get(point);
+        if (neighbourCell != null && !neighbourCell.hasUnit())
+        {
+            BoardState newState = new BoardState(state);
+            newState.set(actualPosition, emptyCell);
+            newState.set(point, actualCell);
+            steps.add(newState);
+        }
+        
+        point = new Point(actualPosition.x + 2, actualPosition.y - 2);
+        neighbourCell = state.get(point);
+        if (neighbourCell != null && !neighbourCell.hasUnit())
+        {
+            BoardState newState = new BoardState(state);
+            newState.set(actualPosition, emptyCell);
+            newState.set(point, actualCell);
+            steps.add(newState);
+        }
         
         return steps;
     }

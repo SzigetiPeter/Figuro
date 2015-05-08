@@ -8,6 +8,7 @@ package com.figuro.game.rules;
 import com.figuro.common.ICell;
 import com.figuro.common.IUnit;
 import com.sun.glass.ui.Window;
+import java.util.Objects;
 
 /**
  *
@@ -40,5 +41,29 @@ public class Cell implements ICell {
     public void setUnit(IUnit unit) {
         this.unit = unit;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 47 * hash + Objects.hashCode(this.unit);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Cell other = (Cell) obj;
+        if (!Objects.equals(this.unit, other.unit)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
     
 }

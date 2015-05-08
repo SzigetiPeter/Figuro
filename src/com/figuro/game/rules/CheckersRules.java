@@ -379,7 +379,7 @@ public class CheckersRules implements IGameRules {
     @Override
     public int getNextPlayer(BoardState oldState, BoardState newState, int player) {
         if (oldState == null)
-            return 0;
+            return PlayerConverter.PlayerEnumToPlayerId(PlayerEnum.BLACK);;
         if (newState == null)
             return 0;
         if (player == 0)
