@@ -2,6 +2,10 @@ package com.figuro.engine;
 
 import com.figuro.common.BoardState;
 
+/**
+ * @author Dalyay Kinga
+ */
+
 public class MoveComplete implements IMoveComplete {
 
 	private BoardState state = null;

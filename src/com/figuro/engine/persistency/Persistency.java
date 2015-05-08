@@ -12,13 +12,18 @@ import java.util.List;
 import com.figuro.common.BoardState;
 import com.figuro.common.IMessageSender;
 
+/**
+ * @author Dalyay Kinga
+ */
+
 public class Persistency implements IPersistency, Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	String game;
 	List<String> players;
 	BoardState boardState;
 	
-	String fileName = "/tmp/gameData.ser";
+	String fileName = "gameData.ser";
 	
 	IMessageSender messageSender;
 	
@@ -32,8 +37,7 @@ public class Persistency implements IPersistency, Serializable {
 		GameData gameData = new GameData(game, players, state);
 		try
 	    {
-			FileOutputStream fileOut =
-	        new FileOutputStream(fileName);
+			FileOutputStream fileOut = new FileOutputStream(fileName);
 	        ObjectOutputStream out = new ObjectOutputStream(fileOut);
 	        out.writeObject(gameData);
 	        out.close();
@@ -49,7 +53,7 @@ public class Persistency implements IPersistency, Serializable {
 	public boolean load() {
 		GameData gameData = null;
 		try
-		{
+		{	
 			FileInputStream fileIn = new FileInputStream(fileName);
 			ObjectInputStream in = new ObjectInputStream(fileIn);
 			gameData = (GameData) in.readObject();
@@ -61,9 +65,8 @@ public class Persistency implements IPersistency, Serializable {
 			this.boardState = gameData.boardState;
 			
 			try
-			{				 
+			{		
 				File file = new File(fileName);
-	 
 	    		if(!file.delete())
 	    		{	    			
 	    			messageSender.displayMessage("Delete operation is failed!");

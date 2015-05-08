@@ -1,5 +1,9 @@
 package com.figuro.engine;
 
+/**
+ * @author Dalyay Kinga
+ */
+
 public class RunningStateHolder {
 	private boolean running = true;
 	

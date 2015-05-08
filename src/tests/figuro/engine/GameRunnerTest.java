@@ -1,15 +1,17 @@
 package tests.figuro.engine;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.Matchers.*;
-
 import org.junit.Test;
 
 import com.figuro.common.IBuilder;
 import com.figuro.engine.GameJob;
 import com.figuro.engine.GameRunner;
+import com.figuro.engine.IGameoverCallback;
 import com.figuro.player.IPlayer;
+
+/**
+ * @author Dalyay Kinga
+ */
 
 public class GameRunnerTest {
 	
@@ -26,5 +28,13 @@ public class GameRunnerTest {
 		gr.addPlayer("testPlayer");
 		
 		verify(gameJob).addPlayer(thePlayer); 
+	}
+	
+	@Test
+	public void runGameMethod() {		
+		GameRunner gameRunner = mock(GameRunner.class);
+		IGameoverCallback callback = mock(IGameoverCallback.class);		
+	
+		gameRunner.runGame("Checkers", callback);		
 	}
 }

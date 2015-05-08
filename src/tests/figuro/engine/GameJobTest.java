@@ -1,46 +1,27 @@
 package tests.figuro.engine;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-
+import static org.mockito.Mockito.*;
 import org.junit.Test;
 
 import com.figuro.engine.GameJob;
-import com.figuro.engine.IGameoverCallback;
-import com.figuro.game.Game;
+import com.figuro.engine.persistency.IPersistency;
 import com.figuro.player.IPlayer;
-import com.figuro.player.Player;
-import com.figuro.player.uiplayer.UIPlayer;
+
+/**
+ * @author Dalyay Kinga
+ */
 
 public class GameJobTest {
 
-	@Test
-	public void testAddPlayerMethodToAddTwoPlayers() throws Exception {
-		GameJob gameJob = new GameJob();
-		
-		IPlayer thePlayer = mock(IPlayer.class);
-		
-		gameJob.addPlayer(thePlayer);
-		gameJob.addPlayer(thePlayer);
-	}
-
 	@Test(expected=Exception.class)
-	public void testAddPlayerMethodToAddThreePlayersShouldThrowException() throws Exception {
-		GameJob gameJob = new GameJob();
+	public void addPlayerMethodToAddThreePlayersShouldThrowException() throws Exception {
+		IPersistency persistency = mock(IPersistency.class);
+		GameJob gameJob = new GameJob(persistency);
 		
 		IPlayer thePlayer = mock(IPlayer.class);
 		
 		gameJob.addPlayer(thePlayer);		
 		gameJob.addPlayer(thePlayer);		
 		gameJob.addPlayer(thePlayer);
-	}
-	
-	@Test
-	public void testRunMethodRunGame() {
-		GameJob gameJob = new GameJob();
-		
-		IPlayer thePlayer = mock(IPlayer.class);
-		
-		
 	}
 }

@@ -1,14 +1,16 @@
 package com.figuro.common;
 
 import com.figuro.game.rules.Cell;
+
 import java.awt.Point;
+import java.io.Serializable;
 
 /**
  * @author Mathe E. Botond
  *
  * Represents a state in the game.
  */
-public class BoardState {
+public class BoardState implements Serializable {
 
     private ICell[][] board;
     
