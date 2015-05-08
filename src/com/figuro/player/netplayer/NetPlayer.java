@@ -2,18 +2,11 @@ package com.figuro.player.netplayer;
 
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
-import java.net.UnknownHostException;
-import java.util.Scanner;
 
-import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 
@@ -23,19 +16,15 @@ import com.figuro.engine.IMoveComplete;
 import com.figuro.player.IPlayer;
 
 
-public class NetPlayer implements IPlayer, IDialogDelegate {
+public class NetPlayer implements IPlayer, IDialogDelegate, IThreadDelegate {
 
 	protected BoardState mBoardState;
 	protected int mId;
 	private String mIP;
 	private int mPort;
 
-	private String enemyIP;
-	private int enemyPort;
-
 	private SetupDialog mSetupDialog;
 
-	private ServerSocket mServerSocket;
 	private Socket mClientSocket;
 
 	private IMessageSender mSender;
@@ -43,8 +32,6 @@ public class NetPlayer implements IPlayer, IDialogDelegate {
 	private ServerThread serverThread;
 	private ClientThread clientThread;
 
-	private String lineString;
-	
 	private int orderTemp = 0;
 	private int mPrefferedOrder = 0;
 
@@ -153,40 +140,23 @@ public class NetPlayer implements IPlayer, IDialogDelegate {
 	}
 
 	public void startListening() {
-		serverThread = new ServerThread();
+		serverThread = new ServerThread(this, mSetupDialog, mSender);
 		serverThread.start();
 	}
 
 	public void stopListening() {
 
-		try {
-
-			if (serverThread != null) {
-				serverThread.interrupt();
-			}
-
-			if (mServerSocket != null) {
-				mServerSocket.close();
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-			mSender.displayMessage("Could not close connection [E4]");
-			return;
+		if (serverThread != null) {
+			serverThread.closeSocket();
 		}
 	}
 
 	public void connectToPlayer(String ipString, int portNumber) {
 
-		enemyIP = ipString;
-		enemyPort = portNumber;
-
-		clientThread = new ClientThread();
+		clientThread = new ClientThread(this, ipString, portNumber, mSetupDialog);
 		clientThread.start();
 
 	}
-
-
 
 	@Override
 	public void notify(BoardState counterMove) {
@@ -195,169 +165,9 @@ public class NetPlayer implements IPlayer, IDialogDelegate {
 	}
 
 
-	public class ServerThread extends Thread {
-	
-		@Override
-		public void run() {
-			try {
-				mServerSocket = new ServerSocket(0);
-
-				mPort = mServerSocket.getLocalPort();
-
-				Platform.runLater(new Runnable() {
-
-					@Override
-					public void run() {
-
-						System.out.println("Listening on: " + mIP + " port: " + mPort);
-						mSetupDialog.startedListening(mPort);
-
-					}
-				});
-
-				mClientSocket = mServerSocket.accept();
-				enemyIP = mClientSocket.getInetAddress().getHostAddress();
-				enemyPort = mClientSocket.getPort();
-
-				Platform.runLater(new Runnable() {
-
-					@Override
-					public void run() {
-						mSetupDialog.connectedToPlayer(enemyIP, enemyPort);
-						System.out.println("Incoming connection from: " + enemyIP + " port " + enemyPort);				
-					}
-				});
-
-				(new GetMessage(mClientSocket)).start();
-
-			} catch (UnknownHostException e) {
-
-				e.printStackTrace();
-				mSender.displayMessage("Could not create connection [E2]");
-				return;
-
-			} catch (IOException e) {
-
-				//e.printStackTrace();
-				mSender.displayMessage("Socket closed");
-				return;
-			}
-		}
-	}
-
-	public class ClientThread extends Thread {
-		
-		@Override
-		public void run() {
-			try {
-
-				mClientSocket = new Socket(enemyIP, enemyPort);
-
-				Platform.runLater(new Runnable() {
-
-					@Override
-					public void run() {
-						mSetupDialog.connectedToPlayer(enemyIP, enemyPort);
-						System.out.println("Created socket " + mClientSocket.getInetAddress().getHostAddress() + " port " + mClientSocket.getPort());
-
-					}
-				});		
-
-				(new GetMessage(mClientSocket)).start();
-
-			} catch (Exception e) {
-				System.out.println("ConnectTo error" + e.getMessage());
-				e.printStackTrace();
-			}
-		}
-	}
-
-	private class GetMessage extends Thread {
-		
-		private Socket mSocket;
-		
-		public GetMessage(Socket socket) {
-			mSocket = socket;
-		}
-		
-		public void run() {
-			Scanner sc;
-			try {
-				sc = new Scanner(mSocket.getInputStream());
-				
-				while (sc.hasNextLine()) {
-					
-					lineString = sc.nextLine();
-					Platform.runLater(new Runnable() {
-
-						@Override
-						public void run() {
-							System.out.println(lineString);
-
-							if (lineString.startsWith("player ")) {
-								
-								int index = Integer.parseInt(lineString.substring(7));
-								orderTemp = (index == 1? 2 : 1);
-								
-								mSetupDialog.playerOrderRequestReceived(index);
-								
-							} else if (lineString.startsWith("OK")) {
-								
-								mSetupDialog.startGame();
-								
-							} else if (lineString.startsWith("CANCEL")) {
-								
-								mSetupDialog.connectedToPlayer(enemyIP, enemyPort);
-								
-							}
-						}
-					});
-				}
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			
-		}
-	}
-	
-	
-	private static class SendMessage extends Thread {
-
-		private Socket mSocket;
-		private String mMessage;
-
-		public SendMessage(Socket socket, String message)  {
-			mSocket = socket;
-			mMessage = message;
-		}
-
-		public void run() {
-			PrintWriter pw;
-
-			try {
-
-				pw = new PrintWriter(mSocket.getOutputStream(), true);
-				pw.println(mMessage);
-				pw.flush();
-				System.out.println("Message sent: " + mMessage);
-				
-				
-			} catch (IOException e) {
-
-				e.printStackTrace();
-				System.out.println("Message send error: " + mMessage);
-
-			}
-
-		}
-	}
-
-
 	@Override
 	public void playerOrderRequest(int order) {
-		
+
 		orderTemp = order;
 		(new SendMessage(mClientSocket, "player " + order)).start();
 
@@ -365,19 +175,24 @@ public class NetPlayer implements IPlayer, IDialogDelegate {
 
 	@Override
 	public void playerOrderOK() {
-		
+
 		mPrefferedOrder = orderTemp;
 		(new SendMessage(mClientSocket, "OK")).start();
 		mSetupDialog.startGame();
-		
+
 	}
 
 	@Override
 	public void playerOrderCancel() {
-		
+
 		orderTemp = 0;
 		(new SendMessage(mClientSocket, "CANCEL")).start();
-		
+
+	}
+
+	@Override
+	public void setClientSocket(Socket socket) {
+		mClientSocket = socket;
 	}
 
 }
