@@ -1,7 +1,6 @@
 package com.figuro.common;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javafx.stage.Stage;
@@ -12,6 +11,9 @@ import com.figuro.game.boardGraphics.BoardGraphics;
 import com.figuro.game.rules.CheckersRules;
 import com.figuro.game.stepEvaluator.CheckersEvaluator;
 import com.figuro.player.IPlayer;
+import com.figuro.player.botplayer.AlphaBetaSearch;
+import com.figuro.player.botplayer.BotPlayer;
+import com.figuro.player.botplayer.IStepSearch;
 import com.figuro.player.netplayer.NetPlayer;
 import com.figuro.player.uiplayer.UIPlayer;
 
@@ -40,7 +42,7 @@ public class Builder implements IBuilder {
 		Game game;
 		switch (type) {
 		case IBuilder.CHECKERS_GAME:
-			game = new Checkers(new CheckersRules(), new CheckersEvaluator(), new BoardGraphics());
+			game = new Checkers(new CheckersRules(), new CheckersEvaluator(), new BoardGraphics(100,100));
 			break;
 		default:
 			return null;
@@ -61,8 +63,17 @@ public class Builder implements IBuilder {
 		case IBuilder.NET_PLAYER:
 			player = new NetPlayer(messages);
 			break;
-		//case IBuilder.ALPHABETA_PLAYER:
-		//	return new UIPlayer(stage);
+		case IBuilder.ALPHABETA_PLAYER:
+			int maxLevel = 3;
+			IStepSearch stepSearch;
+			try {
+				stepSearch = new AlphaBetaSearch(new CheckersEvaluator(), new CheckersRules(), maxLevel);
+				return new BotPlayer(stepSearch);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		default:
 			return null;
 		}

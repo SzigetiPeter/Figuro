@@ -5,7 +5,6 @@
  */
 package com.figuro.common;
 
-import java.util.List;
 import com.figuro.game.Game;
 import com.figuro.player.IPlayer;
 
