@@ -24,11 +24,11 @@ public class MinMaxSearch implements IStepSearch {
 		_maxLevel = maxLevel;
 	}
 	
-	boolean isCurrentPlayerId (int playerId) {
+	public boolean isCurrentPlayerId (int playerId) {
 		return playerId == _currentPlayerId;
 	}
 	
-	int getOtherPlayerId (int playerId) {
+	public int getOtherPlayerId (int playerId) {
 		return playerId == _currentPlayerId ? _opponentPlayerId : _currentPlayerId;
 	}
 	
@@ -45,9 +45,7 @@ public class MinMaxSearch implements IStepSearch {
 		return evaluatedState.getBoardState();
 	}
 	
-	// the visibility of the method has been changed from private to default to enhance testability, therefore the MinMaxSearchTests class is located
-	// in this same package so the test class can access methods with default access modifiers
-	EvaluatedBoardState deepSearch (BoardState current, int playerId, int level) {
+	public EvaluatedBoardState deepSearch (BoardState current, int playerId, int level) {
 		if (level == 0)
 			return new EvaluatedBoardState (null, _stepEvaluator.evaluate(current, playerId));
 		
@@ -82,7 +80,7 @@ public class MinMaxSearch implements IStepSearch {
 		return new EvaluatedBoardState (bestState, bestEvaluation);
 	}
 	
-	Evaluation evaluateGameOverState (BoardState current, int playerId) {
+	public Evaluation evaluateGameOverState (BoardState current, int playerId) {
 		Evaluation evaluation;
 		int state = _gameRules.getFinalState(current, playerId);
 		

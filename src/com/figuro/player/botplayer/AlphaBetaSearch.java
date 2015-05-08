@@ -23,14 +23,12 @@ public class AlphaBetaSearch implements IStepSearch {
 		
 		_maxLevel = maxLevel;
 	}
-	
-	// private 
-	boolean isCurrentPlayerId (int playerId) {
+	 
+	public boolean isCurrentPlayerId (int playerId) {
 		return playerId == _currentPlayerId;
 	}
 	
-	// private
-	int getOtherPlayerId (int playerId) {
+	public int getOtherPlayerId (int playerId) {
 		return playerId == _currentPlayerId ? _opponentPlayerId : _currentPlayerId;
 	}
 	
@@ -50,8 +48,7 @@ public class AlphaBetaSearch implements IStepSearch {
 		return evaluatedState.getBoardState();
 	}
 
-	// private 
-	EvaluatedBoardState deepSearch (BoardState current, int playerId, int level, Evaluation alpha, Evaluation beta) {
+	public EvaluatedBoardState deepSearch (BoardState current, int playerId, int level, Evaluation alpha, Evaluation beta) {
 		if (level == 0)
 			return new EvaluatedBoardState (null, _stepEvaluator.evaluate(current, playerId));
 		
@@ -70,30 +67,29 @@ public class AlphaBetaSearch implements IStepSearch {
 				EvaluatedBoardState evaluatedState = deepSearch (possibleState, otherPlayerId, level - 1, alpha, beta);
 				Evaluation evaluation = evaluatedState.getEvaluation();
 				
-				// MAX's turn
-				if (!isCurrentPlayerId(playerId)) {
-					if (_stepEvaluator.min(alpha, evaluation, playerId) == evaluation) {
-						alpha = evaluation;
-						bestState = evaluatedState.getBoardState();
-					}
-				}
-				// MIN's turn
-				else // isCurrentPlayerId(playerId)
+				// is MIN's turn ?
+				if (isCurrentPlayerId(playerId)) {
 					if (_stepEvaluator.min(evaluation, beta, playerId) == evaluation) {
 						beta = evaluation;
 						bestState = evaluatedState.getBoardState();
 					}
+				}
+				// is MAX's turn ?
+				else // !isCurrentPlayerId(playerId)
+					if (_stepEvaluator.min(alpha, evaluation, playerId) == alpha) {
+						alpha = evaluation;
+						bestState = evaluatedState.getBoardState();
+					}
 				
-				// alpha >= beta
+				// if alpha >= beta then we can ignore testing the remaining nodes and return the best evaluation that we've found
 				if (alpha.equals(beta) || _stepEvaluator.min(alpha, beta, playerId) == beta)
-					return new EvaluatedBoardState(bestState, alpha);
+					return new EvaluatedBoardState(bestState, evaluation);
 			}
 		
 		return new EvaluatedBoardState (bestState, playerId == _opponentPlayerId ? alpha : beta);
 	}
-		
-	// private 
-	Evaluation evaluateGameOverState (BoardState current, int playerId) {
+	
+	public Evaluation evaluateGameOverState (BoardState current, int playerId) {
 		Evaluation evaluation;
 		int state = _gameRules.getFinalState(current, playerId);
 		

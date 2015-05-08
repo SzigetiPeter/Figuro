@@ -57,13 +57,14 @@ public class BotPlayer implements IPlayer {
 
 	@Override
 	public void wrongMoveResetTo(BoardState board) {
-		// TODO Auto-generated method stub
+		_board = board;
+        setInitialState(board);
 
 	}
 
 	@Override
 	public void notify(BoardState counterMove) {
-		// TODO Auto-generated method stub
+		_board = counterMove;
 
 	}
 
