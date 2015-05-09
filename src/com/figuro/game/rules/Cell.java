@@ -23,6 +23,10 @@ public class Cell implements ICell {
 	public Cell(IUnit unit) {
 		this.unit = unit;
 	}
+	
+	public Cell( Cell oldCell) {
+		this(oldCell.unit);
+	}
 
 	@Override
 	public boolean hasUnit() {

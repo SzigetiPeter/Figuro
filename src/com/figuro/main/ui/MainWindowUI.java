@@ -12,7 +12,6 @@ import com.figuro.common.Builder;
 import com.figuro.engine.IEngineHandler;
 import com.figuro.engine.IGameoverCallback;
 import com.figuro.engine.persistency.IPersistency;
-import com.figuro.engine.persistency.Persistency;
 
 public class MainWindowUI {
 
@@ -28,8 +27,6 @@ public class MainWindowUI {
 
 	private Label messageLabel;
 
-	private IPersistency iPersistency;
-
 	public MainWindowUI(Stage primaryStage) {
 		super();
 		this.primaryStage = primaryStage;
@@ -42,7 +39,7 @@ public class MainWindowUI {
 
 		this.uiMessage = new UIMessage(messageLabel, scoreLabel);
 		builder = new Builder(primaryStage, this.uiMessage);
-		iPersistency = new Persistency(uiMessage);
+		IPersistency iPersistency = builder.getPersistency();
 
 		root = new BorderPane();
 
@@ -66,20 +63,7 @@ public class MainWindowUI {
 			public void handle(ActionEvent event) {
 
 				IEngineHandler gameRunner = builder.createEngine();
-
-				for (String player : iPersistency.getPlayers()) {
-					gameRunner.addPlayer(player);
-				}
-
-				IGameoverCallback gameoverCallback = new IGameoverCallback() {
-
-					@Override
-					public void gameFinishedWith(String score) {
-						// TODO Auto-generated method stub
-
-					}
-				};
-				gameRunner.runGame(iPersistency.getGame(), gameoverCallback);
+				gameRunner.resumeGame(new GameOverUINotification());
 				root.setCenter(new GameBoardWindowUI(messageLabel));
 			}
 		});

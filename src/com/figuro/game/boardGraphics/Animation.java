@@ -17,6 +17,7 @@ import com.figuro.common.BoardState;
 import com.figuro.common.IUnit;
 import com.figuro.engine.IMoveComplete;
 import com.figuro.game.rules.Cell;
+import com.figuro.player.uiplayer.UIPlayer;
 
 /**
  *
@@ -26,6 +27,7 @@ public class Animation implements IAnimation {
 
 	private ArrayList<IPip> pips;
 	private IBoard board;
+	private BoardState currentState;
 	private Point2D dragAnchor;
 	private double initX;
 	private double initY;
@@ -43,7 +45,8 @@ public class Animation implements IAnimation {
 	}
 
 	@Override
-	public void enableMove(IMoveComplete movedCallback) {
+	public void enableMove(BoardState currentState, IMoveComplete movedCallback) {
+		this.currentState = currentState;
 		this.board.getBoardPane().getChildren().forEach(new Consumer<Node>() {
 
 			@Override
@@ -55,7 +58,7 @@ public class Animation implements IAnimation {
 										pips.get(0).getUnit().getClass())) {
 					t.setOnMousePressed(new InitAnimation());
 					t.setOnMouseDragged(new TranzitAnimation());
-					t.setOnMouseReleased(new FinishAnimation(movedCallback));
+					t.setOnMouseReleased(new FinishAnimation(currentState, movedCallback));
 				}
 
 			}
@@ -136,9 +139,11 @@ public class Animation implements IAnimation {
 
 	class FinishAnimation implements EventHandler<MouseEvent> {
 
+		private BoardState currentState;
 		private IMoveComplete movedCallback;
 
-		public FinishAnimation(IMoveComplete movedCallback) {
+		public FinishAnimation(BoardState current, IMoveComplete movedCallback) {
+			this.currentState = current;
 			this.movedCallback = movedCallback;
 		}
 
@@ -155,8 +160,7 @@ public class Animation implements IAnimation {
 			selected.setTranslateY(finalPoint.y
 					* rectsAreaSize.divide(board.getBoardSizeY()).floatValue());
 
-			BoardState newBoardState = new BoardState(board.getBoardSizeX(),
-					board.getBoardSizeY());
+			BoardState newBoardState = new BoardState(this.currentState);
 
 			newBoardState.set(finalPoint,
 					new Cell((IUnit) selected.getUserData()));

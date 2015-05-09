@@ -5,6 +5,7 @@ import com.figuro.common.IBuilder;
 public class PlayerSetupFactory {
 	final static String NET_GAME = "net-game";
 	final static String PLAYER_VS_BOT = "player-vs-bot";
+	final static String PLAYER_VS_PLAYER = "player-vs-player";
 	final static String BOT_VS_BOT = "bot-vs-bot";
 
 	public PlayerSetupTemplate createSetup(String setupName) {
@@ -15,6 +16,9 @@ public class PlayerSetupFactory {
 		case PlayerSetupFactory.PLAYER_VS_BOT:
 			return new PlayerSetupTemplate(IBuilder.UI_PLAYER,
 					IBuilder.ALPHABETA_PLAYER);
+		case PlayerSetupFactory.PLAYER_VS_PLAYER:
+			return new PlayerSetupTemplate(IBuilder.UI_PLAYER,
+					IBuilder.UI_PLAYER);
 		case PlayerSetupFactory.BOT_VS_BOT:
 			return new PlayerSetupTemplate(IBuilder.ALPHABETA_PLAYER,
 					IBuilder.ALPHABETA_PLAYER, IBuilder.UI_PLAYER);

@@ -22,6 +22,10 @@ public class CheckersUnit implements IUnit {
 		this.ownerId = ownerId;
 	}
 
+	public CheckersUnit(CheckersUnit oldUnit) {
+		this(oldUnit.unit, oldUnit.ownerId);
+	}
+
 	@Override
 	public UnitEnum getType() {
 		return unit;

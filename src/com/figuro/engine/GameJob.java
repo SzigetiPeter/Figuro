@@ -14,7 +14,7 @@ import com.figuro.player.IPlayer;
  */
 
 public class GameJob implements Runnable {
-	private RunningStateHolder runningState;
+	private RunningState runningState;
 	private List<IPlayer> players;
 	private List<IPlayer> spectators;
 	private Game game;
@@ -31,7 +31,7 @@ public class GameJob implements Runnable {
 		players = new ArrayList<IPlayer>();
 		spectators = new ArrayList<IPlayer>();
 		playerCount = 0;
-		runningState = new RunningStateHolder();
+		runningState = new RunningState();
 		playerTypes = new ArrayList<String>();
 	}
 
@@ -80,15 +80,15 @@ public class GameJob implements Runnable {
 		setInitialState(players, state);
 		setInitialState(spectators, state);
 
-		int currentPlayer = 1, otherPlayer = 2;
+		int currentPlayerId = 1, otherPlayerId = 2;
 		MoveComplete moveCompleteCallback;
 
 		while (this.runningState.isRunning()
-				&& !rules.isGameOver(state, currentPlayer)) {
+				&& !rules.isGameOver(state, currentPlayerId)) {
 			moveCompleteCallback = new MoveComplete(this.runningState);
 
-			IPlayer player1 = players.get(currentPlayer);
-			player1.move(moveCompleteCallback);
+			IPlayer currentPlayer = players.get(currentPlayerId);
+			currentPlayer.move(moveCompleteCallback);
 			moveCompleteCallback.listen();
 
 			BoardState result = moveCompleteCallback.getResult();
@@ -97,25 +97,25 @@ public class GameJob implements Runnable {
 				continue;
 			}
 
-			if (!rules.isValidMove(state, result, currentPlayer)) {
-				player1.wrongMoveResetTo(state);
+			if (!rules.isValidMove(state, result, currentPlayerId)) {
+				currentPlayer.wrongMoveResetTo(state);
 				continue;
 			}
 
-			IPlayer player2 = players.get(otherPlayer);
-			player2.notify(result);
+			IPlayer otherPlayer = players.get(otherPlayerId);
+			otherPlayer.notify(result);
 
 			for (IPlayer player : spectators) {
 				player.notify(result);
 			}
 
-			currentPlayer = rules.getNextPlayer(state, result, currentPlayer);
+			currentPlayerId = rules.getNextPlayer(state, result, currentPlayerId);
 			state = result;
 		}
 
-		if (rules.isGameOver(state, currentPlayer)) {
+		if (rules.isGameOver(state, currentPlayerId)) {
 			String score = Integer.toString(rules.getFinalState(state,
-					currentPlayer));
+					currentPlayerId));
 			this.gameoverCallback.gameFinishedWith(score);
 		} else {
 			if (!this.runningState.isRunning()) {

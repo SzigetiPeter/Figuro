@@ -70,7 +70,10 @@ public class Builder implements IBuilder {
 
 		switch (type) {
 		case IBuilder.UI_PLAYER:
-			player = new UIPlayer(stage);
+			if (! stuff.containsKey(type)) {
+				stuff.put(type, new UIPlayer(stage));
+			}
+			player = (IPlayer)stuff.get(type);
 			break;
 		case IBuilder.NET_PLAYER:
 			player = new NetPlayer(messages);
@@ -105,5 +108,13 @@ public class Builder implements IBuilder {
 	@Override
 	public void free() {
 		stuff.clear();
+	}
+
+	public IPersistency getPersistency() {
+		String persistencyName = IPersistency.class.getName();
+		if (! stuff.containsKey(persistencyName)) {
+			stuff.put(persistencyName, new Persistency(messages));
+		}
+		return (IPersistency)stuff.get(persistencyName);
 	}
 }
