@@ -11,14 +11,19 @@ import com.figuro.player.IPlayer;
  * @author Aszalos Gyorgy
  */
 public interface IEngineHandler {
-    public void start();
-    public IPlayer addPlayer(String playerType);
-    public IPlayer addSpectator(String playerType);
-    public void removePlayers();
-    public void runGame(String gameType, IGameoverCallback callback);
-    
-    public boolean isGameResumable();
-    public void resumeGame(IGameoverCallback callback);
-    
-    public void exit();
+	public void start();
+
+	public IPlayer addPlayer(String playerType);
+
+	public IPlayer addSpectator(String playerType);
+
+	public void removePlayers();
+
+	public void runGame(String gameType, IGameoverCallback callback);
+
+	public boolean isGameResumable();
+
+	public void resumeGame(IGameoverCallback callback);
+
+	public void exit();
 }

@@ -10,5 +10,5 @@ package com.figuro.common;
  * @author Isti
  */
 public enum PlayerEnum {
-    BLACK, WHITE
+	BLACK, WHITE
 }

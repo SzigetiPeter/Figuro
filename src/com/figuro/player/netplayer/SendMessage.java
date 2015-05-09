@@ -9,7 +9,7 @@ public class SendMessage extends Thread {
 	private Socket mSocket;
 	private String mMessage;
 
-	public SendMessage(Socket socket, String message)  {
+	public SendMessage(Socket socket, String message) {
 		mSocket = socket;
 		mMessage = message;
 	}

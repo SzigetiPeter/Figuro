@@ -5,6 +5,7 @@
  */
 package com.figuro.common;
 
+import com.figuro.engine.IEngineHandler;
 import com.figuro.game.Game;
 import com.figuro.player.IPlayer;
 
@@ -15,13 +16,16 @@ public interface IBuilder {
 	public static final String NET_PLAYER = "player.net";
 	public static final String ALPHABETA_PLAYER = "player.alphabeta";
 	public static final String UI_PLAYER = "player.ui";
-	
-	public static final String CHECKERS_GAME = 	"game.checkers";
-	
-	public String[] getGameTypes();
-    public Game createGame(String type);
 
-    public IPlayer createPlayer(String type);
-    
-    public void free();
+	public static final String CHECKERS_GAME = "game.checkers";
+
+	public IEngineHandler createEngine();
+
+	public String[] getGameTypes();
+
+	public Game createGame(String type);
+
+	public IPlayer createPlayer(String type);
+
+	public void free();
 }

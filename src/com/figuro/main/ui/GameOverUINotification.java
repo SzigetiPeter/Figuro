@@ -12,12 +12,16 @@ public class GameOverUINotification implements IGameoverCallback {
 	private VBox mainScreenVBox;
 	private IBuilder builder;
 
+	public GameOverUINotification(){
+		
+	}
+	
 	public GameOverUINotification(BorderPane scene,VBox mainScreenVBox,IBuilder builder) {
 		this.scene = scene;
 		this.mainScreenVBox = mainScreenVBox;
 		this.builder = builder;
 	}
-	
+
 	@Override
 	public void gameFinishedWith(String score) {
 		//1. display dialog with message: score

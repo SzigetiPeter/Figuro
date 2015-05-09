@@ -7,17 +7,16 @@ import com.figuro.game.stepEvaluator.IStepEvaluator;
 /**
  * @author Mathe E. Botond
  *
- * A packaging class enclosing game specific components
+ *         A packaging class enclosing game specific components
  */
 public abstract class Game {
 	private IGameRules rules;
 	private IStepEvaluator evaluator;
 	private IBoardGraphics graphics;
-	
-	public Game(IGameRules rules, 
-			IStepEvaluator evaluator,
+
+	public Game(IGameRules rules, IStepEvaluator evaluator,
 			IBoardGraphics graphics) {
-		
+
 		super();
 		this.rules = rules;
 		this.evaluator = evaluator;
@@ -35,6 +34,6 @@ public abstract class Game {
 	public IBoardGraphics getGraphics() {
 		return graphics;
 	}
-	
+
 	public abstract String getGameName();
 }

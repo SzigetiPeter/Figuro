@@ -1,5 +1,8 @@
 package com.figuro.engine;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.figuro.common.BoardState;
 import com.figuro.common.IBuilder;
 import com.figuro.common.IMessageSender;
@@ -8,93 +11,104 @@ import com.figuro.game.Game;
 import com.figuro.game.rules.IGameRules;
 import com.figuro.player.IPlayer;
 
+/**
+ * @author Dalyay Kinga
+ */
+
 public class GameRunner implements IEngineHandler {
 
 	IBuilder builder;
 	IGameRules rules;
 	BoardState boardState;
 	IMessageSender message;
-	IPersistency persistancy;
-	
+	IPersistency persistency;
+	List<String> playerTypes;
+
 	Thread thread;
 	GameJob job;
-	
-	public GameRunner(GameJob job, IBuilder builder, IGameRules rules, IMessageSender message, IPersistency persistancy) {		
+
+	public GameRunner(GameJob job, IBuilder builder, IGameRules rules,
+			IMessageSender message, IPersistency persistency) {
 		this.job = job;
 		this.builder = builder;
 		this.rules = rules;
 		this.message = message;
-		this.persistancy = persistancy;
-		
+		this.persistency = persistency;
+		this.playerTypes = new ArrayList<String>();
+
 		thread = new Thread(job);
 	}
-	
+
 	@Override
-	public void start()
-	{
-		//Külön thread indítása a játéknak, amely várakozhat a háttérjátékosokra és a játék logikára
+	public void start() {
 		thread.start();
 	}
-	
+
 	@Override
-    public IPlayer addPlayer(String playerType) 
-    {
-    	//Hozzáad egy játékost a játékhoz
-    	IPlayer player = builder.createPlayer(playerType);
-    	
-    	try {
+	public IPlayer addPlayer(String playerType) {
+		playerTypes.add(playerType);
+
+		IPlayer player = builder.createPlayer(playerType);
+
+		try {
 			job.addPlayer(player);
 			return player;
-		} catch (Exception e) {	
+		} catch (Exception e) {
 			message.displayMessage(e.getMessage());
 		}
-    	
-    	return null;
-    }
-    
-	@Override
-    public IPlayer addSpectator(String playerType) 
-    {
-    	//Hozzáad egy figyelőt a játékhoz. hasznos abban az esetben ha pl. két Bot játékos játszik és egy UIPlayer a megfigyelő    	
-    	IPlayer spectator = builder.createPlayer(playerType);
-    	job.addSpectator(spectator);
-    	return spectator;
-    }
-    
-	@Override
-    public void removePlayers()
-    {
-    	//Eltávolítja a játékhoz hozzáadott játékosokat    	
-    	job.removePlayers();
-    }
-    
-	@Override
-    public void runGame(String gameType, IGameoverCallback callback)
-    {
-    	//Elindítja és ütemezi a meghatározott játékot
-    	Game game = builder.createGame(gameType);
-    	job.setGame(game, callback);
-    	thread.start();
-    }
-	
-	@Override
-	public boolean isGameResumable()
-	{		
-		return persistancy.isGameSaved();
-	}
-	
-	@Override
-    public void resumeGame(IGameoverCallback callback)
-    { 
-		if(isGameResumable())
-		{
-			persistancy.load();
-		}
-    }    
 
-    @Override
-    public void exit()
-    {
-    	job.terminate();
-    }
+		return null;
+	}
+
+	@Override
+	public IPlayer addSpectator(String playerType) {
+		IPlayer spectator = builder.createPlayer(playerType);
+		job.addSpectator(spectator);
+		return spectator;
+	}
+
+	@Override
+	public void removePlayers() {
+		job.removePlayers();
+	}
+
+	@Override
+	public void runGame(String gameType, IGameoverCallback callback) {
+		Game game = builder.createGame(gameType);
+		job.setGame(game, callback, persistency, gameType, playerTypes);
+		thread.start();
+	}
+
+	@Override
+	public boolean isGameResumable() {
+		return persistency.isGameSaved();
+	}
+
+	@Override
+	public void resumeGame(IGameoverCallback callback) {
+		if (isGameResumable()) {
+			if (persistency.load()) {
+				String gameType = persistency.getGame();
+				Game game = builder.createGame(gameType);
+				List<String> playersType = persistency.getPlayers();
+				List<IPlayer> players = new ArrayList<IPlayer>();
+
+				for (String playerType : playersType) {
+					players.add(builder.createPlayer(playerType));
+				}
+
+				BoardState boardState = persistency.getBoardState();
+
+				job.resumeGame(game, players, boardState, callback,
+						persistency, gameType, playerTypes);
+			}
+		} else {
+			message.displayMessage("Cannot resume game, it was not saved!");
+		}
+	}
+
+	@Override
+	public void exit() {
+		job.terminate();
+	}
 }

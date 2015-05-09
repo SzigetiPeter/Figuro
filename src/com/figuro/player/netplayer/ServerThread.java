@@ -5,9 +5,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import com.figuro.common.IMessageSender;
-
 import javafx.application.Platform;
+
+import com.figuro.common.IMessageSender;
 
 public class ServerThread extends Thread {
 
@@ -16,13 +16,14 @@ public class ServerThread extends Thread {
 	private IThreadDelegate mDelegate;
 	private SetupDialog mDialog;
 	private IMessageSender mSender;
-	
-	public ServerThread(IThreadDelegate delegate, SetupDialog dialog, IMessageSender sender) {
+
+	public ServerThread(IThreadDelegate delegate, SetupDialog dialog,
+			IMessageSender sender) {
 		mDelegate = delegate;
 		mDialog = dialog;
-		
+
 	}
-	
+
 	public void closeSocket() {
 		try {
 			mServerSocket.close();
@@ -30,7 +31,7 @@ public class ServerThread extends Thread {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void run() {
 		try {
@@ -42,7 +43,9 @@ public class ServerThread extends Thread {
 				@Override
 				public void run() {
 
-					System.out.println("Listening on: " + mServerSocket.getInetAddress().getHostAddress() + " port: " + mPort);
+					System.out.println("Listening on: "
+							+ mServerSocket.getInetAddress().getHostAddress()
+							+ " port: " + mPort);
 					mDialog.startedListening(mPort);
 
 				}
@@ -50,7 +53,7 @@ public class ServerThread extends Thread {
 
 			mSocket = mServerSocket.accept();
 			mDelegate.setClientSocket(mSocket);
-			
+
 			String enemyIP = mSocket.getInetAddress().getHostAddress();
 			int enemyPort = mSocket.getPort();
 
@@ -59,7 +62,8 @@ public class ServerThread extends Thread {
 				@Override
 				public void run() {
 					mDialog.connectedToPlayer(enemyIP, enemyPort);
-					System.out.println("Incoming connection from: " + enemyIP + " port " + enemyPort);				
+					System.out.println("Incoming connection from: " + enemyIP
+							+ " port " + enemyPort);
 				}
 			});
 
@@ -73,7 +77,7 @@ public class ServerThread extends Thread {
 
 		} catch (IOException e) {
 
-			//e.printStackTrace();
+			// e.printStackTrace();
 			mSender.displayMessage("Socket closed");
 			return;
 		}
