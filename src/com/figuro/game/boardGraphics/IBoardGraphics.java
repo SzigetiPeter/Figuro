@@ -11,7 +11,9 @@ import com.figuro.common.IUnit;
  * @author Aszalos Gyorgy
  */
 public interface IBoardGraphics {
-    public IPip getFigureGraphic(IUnit iUnit);
-    public IBoard getBoardGraphic();
-    public IAnimation getAnimation();
+	public IPip getFigureGraphic(IUnit iUnit);
+
+	public IBoard getBoardGraphic();
+
+	public IAnimation getAnimation();
 }

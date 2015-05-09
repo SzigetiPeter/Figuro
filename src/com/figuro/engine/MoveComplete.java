@@ -9,9 +9,9 @@ import com.figuro.common.BoardState;
 public class MoveComplete implements IMoveComplete {
 
 	private BoardState state = null;
-	
+
 	private RunningStateHolder runningState;
-	
+
 	public MoveComplete(RunningStateHolder runningState) {
 		this.runningState = runningState;
 	}
@@ -25,12 +25,12 @@ public class MoveComplete implements IMoveComplete {
 			}
 		}
 	}
-	
+
 	@Override
 	public void setResult(BoardState result) {
 		state = result;
 	}
-	
+
 	public BoardState getResult() {
 		return state;
 	}

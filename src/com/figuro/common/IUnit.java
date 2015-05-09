@@ -12,6 +12,7 @@ import com.figuro.game.rules.UnitEnum;
  * @author Isti
  */
 public interface IUnit {
-    public UnitEnum getType();
-    public int getOwnerId(); // player id
+	public UnitEnum getType();
+
+	public int getOwnerId(); // player id
 }

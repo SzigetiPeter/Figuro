@@ -10,5 +10,5 @@ package com.figuro.game.rules;
  * @author Isti
  */
 public enum UnitEnum {
-    PEASANT, KING
+	PEASANT, KING
 }

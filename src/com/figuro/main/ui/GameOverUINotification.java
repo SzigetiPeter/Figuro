@@ -1,7 +1,6 @@
 package com.figuro.main.ui;
 
 import javafx.scene.Scene;
-import javafx.scene.control.Dialog;
 
 import com.figuro.engine.IGameoverCallback;
 
@@ -11,11 +10,11 @@ public class GameOverUINotification implements IGameoverCallback {
 	public GameOverUINotification(Scene scene) {
 		this.scene = scene;
 	}
-	
+
 	@Override
 	public void gameFinishedWith(String score) {
-		//1. display dialog with message: score
-		//2. Ok button with event to showStartScreen()
+		// 1. display dialog with message: score
+		// 2. Ok button with event to showStartScreen()
 	}
 
 }

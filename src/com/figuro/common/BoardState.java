@@ -1,144 +1,145 @@
 package com.figuro.common;
 
-import com.figuro.game.rules.Cell;
-
 import java.awt.Point;
 import java.io.Serializable;
+
+import com.figuro.game.rules.Cell;
 
 /**
  * @author Mathe E. Botond
  *
- * Represents a state in the game.
+ *  Represents a state in the game.
  */
 public class BoardState implements Serializable {
 
-    private ICell[][] board;
-    
-    private static Point blackPlayerRightClosestCell = new Point(0, 7);
-    private static Point whitePlayerRightClosestCell = new Point(7, 0);
+	private static final long serialVersionUID = 2915303719032409877L;
 
-    private Point lastMove = null;
-    private Point lastMoveFrom = null;
+	private ICell[][] board;
 
-    public BoardState(ICell[][] board) {
-        if (board != null) {
-            this.board = board;
-        }
-    }
+	private static Point blackPlayerRightClosestCell = new Point(0, 7);
+	private static Point whitePlayerRightClosestCell = new Point(7, 0);
 
-    public BoardState(int height, int width) {
-        board = new Cell[height][width];
-    }
+	private Point lastMove = null;
+	private Point lastMoveFrom = null;
 
-    public BoardState(BoardState state) {
-        ICell[][] cells = state.getBoard();
-        this.board = new Cell[cells.length][cells[0].length];
+	public BoardState(ICell[][] board) {
+		if (board != null) {
+			this.board = board;
+		}
+	}
 
-        for (int i = 0; i < cells.length; ++i) {
-            for (int j = 0; j < cells[0].length; ++j) {
-                this.board[i][j] = cells[i][j];
-            }
-        }
-        
-        this.lastMove = state.lastMove;
-        this.lastMoveFrom = state.lastMoveFrom;
-    }
+	public BoardState(int height, int width) {
+		board = new Cell[height][width];
+	}
 
-    public void set(Point position, ICell value) {
-        board[position.x][position.y] = value;
-    }
+	public BoardState(BoardState state) {
+		ICell[][] cells = state.getBoard();
+		this.board = new Cell[cells.length][cells[0].length];
 
-    public ICell get(Point position) {
-        if (position.x < 0 || position.x >= board.length) {
-            return null;
-        }
+		for (int i = 0; i < cells.length; ++i) {
+			for (int j = 0; j < cells[0].length; ++j) {
+				this.board[i][j] = cells[i][j];
+			}
+		}
 
-        if (position.y < 0 || position.y >= board[0].length) {
-            return null;
-        }
+		this.lastMove = state.lastMove;
+		this.lastMoveFrom = state.lastMoveFrom;
+	}
 
-        return board[position.x][position.y];
-    }
+	public void set(Point position, ICell value) {
+		board[position.x][position.y] = value;
+	}
 
-    public void setBoard(ICell[][] board) {
-        this.board = board;
-    }
+	public ICell get(Point position) {
+		if (position.x < 0 || position.x >= board.length) {
+			return null;
+		}
 
-    public ICell[][] getBoard() {
-        return board;
-    }
+		if (position.y < 0 || position.y >= board[0].length) {
+			return null;
+		}
 
-    /**
-     * Specify where the latest moved piece ended up
-     *
-     * @param poistion
-     */
-    public void setLatestMoved(Point posistion) {
-        lastMove = posistion;
-    }
+		return board[position.x][position.y];
+	}
 
-    /**
-     * Specify where the latest moved piece came from (leave blank if a newly
-     * placed piece was put on the board)
-     *
-     * @param poistion
-     */
-    public void setLatestMovedFrom(Point position) {
-        lastMoveFrom = position;
-    }
+	public void setBoard(ICell[][] board) {
+		this.board = board;
+	}
 
-    /**
-     * Gets where the latest moved piece ended up
-     *
-     * @param poistion
-     */
-    public Point getLastMove() {
-        return lastMove;
-    }
+	public ICell[][] getBoard() {
+		return board;
+	}
 
-    /**
-     * Gets where the latest moved piece came from (value is null if a newly
-     * placed piece was put on the board)
-     *
-     * @param poistion
-     */
-    public Point getLastMoveFrom() {
-        return lastMoveFrom;
-    }
-    
-    @Override
-    public boolean equals(Object obj) {
-       if (!(obj instanceof BoardState))
-            return false;
-        if (obj == this)
-            return true;
+	/**
+	 * Specify where the latest moved piece ended up
+	 *
+	 * @param poistion
+	 */
+	public void setLatestMoved(Point posistion) {
+		lastMove = posistion;
+	}
 
-        boolean isEqual = true;
-        BoardState state = (BoardState) obj;
-        ICell[][] cells = state.getBoard();
-        
-        if (this.board.length == cells.length)
-        {
-            for (int i = 0; i < cells.length; ++i) {
-                for (int j = 0; j < cells[0].length; ++j) {
-                    ICell cell = cells[i][j];
-                    ICell cell2 = board[i][j];
-                    
-                    if (!cell.equals(cell2))
-                    {
-                        return false;
-                    }
-                }
-            }
-        }
-        
-        return isEqual;
-    }
-    
-    public static Point getBlackPlayerRightClosestCell() {
-        return blackPlayerRightClosestCell;
-    }
-    public static Point getWhitePlayerRightClosestCell() {
-        return whitePlayerRightClosestCell;
-    }
+	/**
+	 * Specify where the latest moved piece came from (leave blank if a newly
+	 * placed piece was put on the board)
+	 *
+	 * @param poistion
+	 */
+	public void setLatestMovedFrom(Point position) {
+		lastMoveFrom = position;
+	}
+
+	/**
+	 * Gets where the latest moved piece ended up
+	 *
+	 * @param poistion
+	 */
+	public Point getLastMove() {
+		return lastMove;
+	}
+
+	/**
+	 * Gets where the latest moved piece came from (value is null if a newly
+	 * placed piece was put on the board)
+	 *
+	 * @param poistion
+	 */
+	public Point getLastMoveFrom() {
+		return lastMoveFrom;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof BoardState))
+			return false;
+		if (obj == this)
+			return true;
+
+		boolean isEqual = true;
+		BoardState state = (BoardState) obj;
+		ICell[][] cells = state.getBoard();
+
+		if (this.board.length == cells.length) {
+			for (int i = 0; i < cells.length; ++i) {
+				for (int j = 0; j < cells[0].length; ++j) {
+					ICell cell = cells[i][j];
+					ICell cell2 = board[i][j];
+
+					if (!cell.equals(cell2)) {
+						return false;
+					}
+				}
+			}
+		}
+
+		return isEqual;
+	}
+
+	public static Point getBlackPlayerRightClosestCell() {
+		return blackPlayerRightClosestCell;
+	}
+
+	public static Point getWhitePlayerRightClosestCell() {
+		return whitePlayerRightClosestCell;
+	}
 }

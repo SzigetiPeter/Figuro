@@ -1,6 +1,5 @@
 package com.figuro.player.netplayer;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,7 +13,6 @@ import com.figuro.common.BoardState;
 import com.figuro.common.IMessageSender;
 import com.figuro.engine.IMoveComplete;
 import com.figuro.player.IPlayer;
-
 
 public class NetPlayer implements IPlayer, IDialogDelegate, IThreadDelegate {
 
@@ -59,9 +57,10 @@ public class NetPlayer implements IPlayer, IDialogDelegate, IThreadDelegate {
 
 	@Override
 	public void wrongMoveResetTo(BoardState board) {
-		//throw exception here, nem kene ilyen megtortenjen, hogy rossz lepes van, nem tudom lekezelni
-		//IllegalMoveException exc = new IllegalMoveException();
-		//throw exc;
+		// throw exception here, nem kene ilyen megtortenjen, hogy rossz lepes
+		// van, nem tudom lekezelni
+		// IllegalMoveException exc = new IllegalMoveException();
+		// throw exc;
 
 		mBoardState = board;
 	}
@@ -72,7 +71,7 @@ public class NetPlayer implements IPlayer, IDialogDelegate, IThreadDelegate {
 	}
 
 	@Override
-	public void setId(int id) { //ez nem fog meghivodni
+	public void setId(int id) { // ez nem fog meghivodni
 		mId = id;
 	}
 
@@ -89,9 +88,9 @@ public class NetPlayer implements IPlayer, IDialogDelegate, IThreadDelegate {
 		return true;
 	}
 
-	//helper to get external IP address
+	// helper to get external IP address
 	public static String getIp() throws Exception {
-		if (true) 
+		if (true)
 			return "127.0.0.1";
 
 		URL whatismyip = new URL("http://checkip.amazonaws.com");
@@ -112,7 +111,6 @@ public class NetPlayer implements IPlayer, IDialogDelegate, IThreadDelegate {
 		}
 	}
 
-
 	@Override
 	public void setup(Group parent, Button okButton) {
 		try {
@@ -129,9 +127,9 @@ public class NetPlayer implements IPlayer, IDialogDelegate, IThreadDelegate {
 		}
 
 		mSetupDialog = new SetupDialog(parent, this, mIP);
-		//mSetupDialog.sizeToScene();
-		//mSetupDialog.show();
-	} 
+		// mSetupDialog.sizeToScene();
+		// mSetupDialog.show();
+	}
 
 	@Override
 	public int getPrefferedOrder() {
@@ -153,7 +151,8 @@ public class NetPlayer implements IPlayer, IDialogDelegate, IThreadDelegate {
 
 	public void connectToPlayer(String ipString, int portNumber) {
 
-		clientThread = new ClientThread(this, ipString, portNumber, mSetupDialog);
+		clientThread = new ClientThread(this, ipString, portNumber,
+				mSetupDialog);
 		clientThread.start();
 
 	}
@@ -163,7 +162,6 @@ public class NetPlayer implements IPlayer, IDialogDelegate, IThreadDelegate {
 		mBoardState = counterMove;
 
 	}
-
 
 	@Override
 	public void playerOrderRequest(int order) {

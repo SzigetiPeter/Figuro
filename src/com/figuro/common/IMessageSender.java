@@ -9,6 +9,7 @@ package com.figuro.common;
  * @author Aszalos Gyorgy
  */
 public interface IMessageSender {
-    public void displayMessage(String message);
-    public void updateGameState(String gameStatus);
+	public void displayMessage(String message);
+
+	public void updateGameState(String gameStatus);
 }

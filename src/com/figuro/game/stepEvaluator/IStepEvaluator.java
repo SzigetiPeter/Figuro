@@ -12,9 +12,11 @@ import com.figuro.common.Evaluation;
  * @author Aszalos Gyorgy
  */
 public interface IStepEvaluator {
-    public Evaluation evaluate(BoardState state, int player);
-    public Evaluation min(Evaluation a, Evaluation b, int player);
-    
-    public Evaluation getMinimum();
-    public Evaluation getMaximum();
+	public Evaluation evaluate(BoardState state, int player);
+
+	public Evaluation min(Evaluation a, Evaluation b, int player);
+
+	public Evaluation getMinimum();
+
+	public Evaluation getMaximum();
 }

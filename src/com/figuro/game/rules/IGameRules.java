@@ -13,10 +13,17 @@ import com.figuro.common.BoardState;
  * @author Aszalos Gyorgy
  */
 public interface IGameRules {
-    public BoardState getInitialState();
-    public boolean isValidMove(BoardState oldState, BoardState newState, int player);
-    public List<BoardState> getPossibleMoves(BoardState state, int player);
-    public boolean isGameOver(BoardState state, int player);
-    public int getFinalState(BoardState state, int player);
-    public int getNextPlayer(BoardState oldState, BoardState newState, int player);
+	public BoardState getInitialState();
+
+	public boolean isValidMove(BoardState oldState, BoardState newState,
+			int player);
+
+	public List<BoardState> getPossibleMoves(BoardState state, int player);
+
+	public boolean isGameOver(BoardState state, int player);
+
+	public int getFinalState(BoardState state, int player);
+
+	public int getNextPlayer(BoardState oldState, BoardState newState,
+			int player);
 }

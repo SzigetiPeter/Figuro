@@ -13,60 +13,69 @@ public class AlphaBetaSearch implements IStepSearch {
 	private int _maxLevel;
 	private int _currentPlayerId; // this is MIN
 	private int _opponentPlayerId; // this is MAX
-	
-	public AlphaBetaSearch (IStepEvaluator stepEvaluator, IGameRules gameRules, int maxLevel) throws Exception {
+
+	public AlphaBetaSearch(IStepEvaluator stepEvaluator, IGameRules gameRules,
+			int maxLevel) throws Exception {
 		if (maxLevel < 1)
-			throw new Exception ("The level of the search must be larger then 0.");
-		
+			throw new Exception(
+					"The level of the search must be larger then 0.");
+
 		_stepEvaluator = stepEvaluator;
 		_gameRules = gameRules;
-		
+
 		_maxLevel = maxLevel;
 	}
-	 
-	public boolean isCurrentPlayerId (int playerId) {
+
+	public boolean isCurrentPlayerId(int playerId) {
 		return playerId == _currentPlayerId;
 	}
-	
-	public int getOtherPlayerId (int playerId) {
-		return playerId == _currentPlayerId ? _opponentPlayerId : _currentPlayerId;
+
+	public int getOtherPlayerId(int playerId) {
+		return playerId == _currentPlayerId ? _opponentPlayerId
+				: _currentPlayerId;
 	}
-	
+
 	@Override
-	public BoardState search(BoardState current, int currentPlayerId, int opponentPlayerId) throws GameOverException {
+	public BoardState search(BoardState current, int currentPlayerId,
+			int opponentPlayerId) throws GameOverException {
 		if (_gameRules.isGameOver(current, opponentPlayerId))
 			throw new GameOverException();
-		
+
 		_currentPlayerId = currentPlayerId;
 		_opponentPlayerId = opponentPlayerId;
-		
+
 		// alpha stores MAX's assured value and beta stores MIN's assured value
-		// in the beginning of the search these values should be (alpha, beta) of (-Infinity, Infinity)
-		EvaluatedBoardState evaluatedState = 
-			deepSearch (current, _currentPlayerId, _maxLevel, _stepEvaluator.getMinimum(), _stepEvaluator.getMaximum());
-		
+		// in the beginning of the search these values should be (alpha, beta)
+		// of (-Infinity, Infinity)
+		EvaluatedBoardState evaluatedState = deepSearch(current,
+				_currentPlayerId, _maxLevel, _stepEvaluator.getMinimum(),
+				_stepEvaluator.getMaximum());
+
 		return evaluatedState.getBoardState();
 	}
 
-	public EvaluatedBoardState deepSearch (BoardState current, int playerId, int level, Evaluation alpha, Evaluation beta) {
+	public EvaluatedBoardState deepSearch(BoardState current, int playerId,
+			int level, Evaluation alpha, Evaluation beta) {
 		if (level == 0)
-			return new EvaluatedBoardState (null, _stepEvaluator.evaluate(current, playerId));
-		
+			return new EvaluatedBoardState(null, _stepEvaluator.evaluate(
+					current, playerId));
+
 		int otherPlayerId = getOtherPlayerId(playerId);
-		List<BoardState> possibleStates = _gameRules.getPossibleMoves(current, playerId);
+		List<BoardState> possibleStates = _gameRules.getPossibleMoves(current,
+				playerId);
 		BoardState bestState = null;
-		
-		for (BoardState possibleState : possibleStates) 
+
+		for (BoardState possibleState : possibleStates)
 			if (_gameRules.isGameOver(possibleState, playerId)) {
-				Evaluation evaluation = evaluateGameOverState(possibleState, playerId);
-				
-				return new EvaluatedBoardState (possibleState, evaluation);
-			}
-			else
-			{		
-				EvaluatedBoardState evaluatedState = deepSearch (possibleState, otherPlayerId, level - 1, alpha, beta);
+				Evaluation evaluation = evaluateGameOverState(possibleState,
+						playerId);
+
+				return new EvaluatedBoardState(possibleState, evaluation);
+			} else {
+				EvaluatedBoardState evaluatedState = deepSearch(possibleState,
+						otherPlayerId, level - 1, alpha, beta);
 				Evaluation evaluation = evaluatedState.getEvaluation();
-				
+
 				// is MIN's turn ?
 				if (isCurrentPlayerId(playerId)) {
 					if (_stepEvaluator.min(evaluation, beta, playerId) == evaluation) {
@@ -76,33 +85,35 @@ public class AlphaBetaSearch implements IStepSearch {
 				}
 				// is MAX's turn ?
 				else // !isCurrentPlayerId(playerId)
-					if (_stepEvaluator.min(alpha, evaluation, playerId) == alpha) {
-						alpha = evaluation;
-						bestState = evaluatedState.getBoardState();
-					}
-				
-				// if alpha >= beta then we can ignore testing the remaining nodes and return the best evaluation that we've found
-				if (alpha.equals(beta) || _stepEvaluator.min(alpha, beta, playerId) == beta)
+				if (_stepEvaluator.min(alpha, evaluation, playerId) == alpha) {
+					alpha = evaluation;
+					bestState = evaluatedState.getBoardState();
+				}
+
+				// if alpha >= beta then we can ignore testing the remaining
+				// nodes and return the best evaluation that we've found
+				if (alpha.equals(beta)
+						|| _stepEvaluator.min(alpha, beta, playerId) == beta)
 					return new EvaluatedBoardState(bestState, evaluation);
 			}
-		
-		return new EvaluatedBoardState (bestState, playerId == _opponentPlayerId ? alpha : beta);
+
+		return new EvaluatedBoardState(bestState,
+				playerId == _opponentPlayerId ? alpha : beta);
 	}
-	
-	public Evaluation evaluateGameOverState (BoardState current, int playerId) {
+
+	public Evaluation evaluateGameOverState(BoardState current, int playerId) {
 		Evaluation evaluation;
 		int state = _gameRules.getFinalState(current, playerId);
-		
-		if (state != 0)
-		{
+
+		if (state != 0) {
 			if (isCurrentPlayerId(playerId))
 				evaluation = _stepEvaluator.getMinimum();
-			else // !isCurrentPlayerId(playerId)
+			else
+				// !isCurrentPlayerId(playerId)
 				evaluation = _stepEvaluator.getMaximum();
-		}
-		else
+		} else
 			evaluation = _stepEvaluator.evaluate(current, playerId);
-		
+
 		return evaluation;
 	}
 }

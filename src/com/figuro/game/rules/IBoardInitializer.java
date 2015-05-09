@@ -12,5 +12,6 @@ import com.figuro.common.BoardState;
  * @author Isti
  */
 public interface IBoardInitializer {
-    public BoardState initializeBoardStateElements(BoardState state, int blackPlayerId, int whitePlayerId);
+	public BoardState initializeBoardStateElements(BoardState state,
+			int blackPlayerId, int whitePlayerId);
 }

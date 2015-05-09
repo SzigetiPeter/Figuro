@@ -1,6 +1,7 @@
 package tests.figuro.engine;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+
 import org.junit.Test;
 
 import com.figuro.engine.GameJob;
@@ -13,15 +14,16 @@ import com.figuro.player.IPlayer;
 
 public class GameJobTest {
 
-	@Test(expected=Exception.class)
-	public void addPlayerMethodToAddThreePlayersShouldThrowException() throws Exception {
+	@Test(expected = Exception.class)
+	public void addPlayerMethodToAddThreePlayersShouldThrowException()
+			throws Exception {
 		IPersistency persistency = mock(IPersistency.class);
 		GameJob gameJob = new GameJob(persistency);
-		
+
 		IPlayer thePlayer = mock(IPlayer.class);
-		
-		gameJob.addPlayer(thePlayer);		
-		gameJob.addPlayer(thePlayer);		
+
+		gameJob.addPlayer(thePlayer);
+		gameJob.addPlayer(thePlayer);
 		gameJob.addPlayer(thePlayer);
 	}
 }

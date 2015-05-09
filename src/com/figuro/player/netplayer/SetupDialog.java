@@ -4,15 +4,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 class SetupDialog extends Group {
 
@@ -24,21 +19,20 @@ class SetupDialog extends Group {
 	private GridPane gridPane;
 	private IDialogDelegate mDelegate;
 	private boolean toConnect = false;
-	
+
 	private Button player1, player2;
-	
+
 	private int mOrder = 0;
 
 	public SetupDialog(Group owner, IDialogDelegate delegate, String ipString) {
 		super();
-		
+
 		mDelegate = delegate;
-				
+
 		gridPane = new GridPane();
 		gridPane.setPadding(new Insets(5));
 		gridPane.setHgap(5);
 		gridPane.setVgap(5);
-
 
 		ipLbl = new Label("My IP: ");
 		gridPane.add(ipLbl, 0, 1);
@@ -60,7 +54,8 @@ class SetupDialog extends Group {
 			public void handle(ActionEvent event) {
 				System.out.println("Listen 1");
 				toConnect = false;
-				gridPane.getChildren().removeAll(enemyIpLbl, enemyIpFld, enemyPortLbl, enemyPortFld);
+				gridPane.getChildren().removeAll(enemyIpLbl, enemyIpFld,
+						enemyPortLbl, enemyPortFld);
 				mDelegate.startListening();
 			}
 
@@ -75,16 +70,18 @@ class SetupDialog extends Group {
 
 				if (toConnect) {
 
-					//TODO check if ip and port is valid
-					if (enemyIpFld.getText().length() > 0 && enemyPortFld.getText().length() > 0) {
+					// TODO check if ip and port is valid
+					if (enemyIpFld.getText().length() > 0
+							&& enemyPortFld.getText().length() > 0) {
 						String ipString = enemyIpFld.getText();
-						int portNumber  = Integer.parseInt(enemyPortFld.getText());
-					
+						int portNumber = Integer.parseInt(enemyPortFld
+								.getText());
+
 						mDelegate.connectToPlayer(ipString, portNumber);
 					}
-					
+
 				} else {
-					
+
 					toConnect = true;
 					System.out.println("Connect 1");
 
@@ -109,15 +106,13 @@ class SetupDialog extends Group {
 
 		owner.getChildren().add(gridPane);
 
-		/*setOnCloseRequest(new EventHandler<WindowEvent>() {
+		/*
+		 * setOnCloseRequest(new EventHandler<WindowEvent>() {
+		 * 
+		 * @Override public void handle(WindowEvent event) {
+		 * System.out.println("Dialog closed"); mDelegate.stopListening(); } });
+		 */
 
-			@Override
-			public void handle(WindowEvent event) {
-				System.out.println("Dialog closed");
-				mDelegate.stopListening();
-			}
-		}); */
-		
 	}
 
 	public void startedListening(int portNumber) {
@@ -126,95 +121,99 @@ class SetupDialog extends Group {
 	}
 
 	public void connectedToPlayer(String ipString, int portNumber) {
-		
-		gridPane.getChildren().removeAll(player1, player2, waitLabel, confirmLabel, okButton, cancelButton, listenButton, connectButton, enemyIpLbl, enemyIpFld, enemyPortLbl, enemyPortFld);
+
+		gridPane.getChildren().removeAll(player1, player2, waitLabel,
+				confirmLabel, okButton, cancelButton, listenButton,
+				connectButton, enemyIpLbl, enemyIpFld, enemyPortLbl,
+				enemyPortFld);
 
 		ipLbl.setText("Connected to: ");
 		ipFld.setText(ipString);
 
 		portLbl.setText("On port: ");
 		portFld.setText(Integer.toString(portNumber));
-		
-		
+
 		player1 = new Button("Be player 1");
 		gridPane.add(player1, 0, 3);
-		
+
 		player2 = new Button("Be player 2");
 		gridPane.add(player2, 1, 3);
-		
+
 		player1.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
 				player1.setDisable(true);
 				player2.setDisable(true);
-				
+
 				waitLabel = new Label("Waiting for player 2...");
 				gridPane.add(waitLabel, 0, 4);
-				
+
 				mOrder = 1;
 				mDelegate.playerOrderRequest(1);
 			}
 		});
-		
+
 		player2.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
 				player1.setDisable(true);
 				player2.setDisable(true);
-				
+
 				waitLabel = new Label("Waiting for player 1...");
 				gridPane.add(waitLabel, 0, 4);
-				
+
 				mOrder = 2;
 				mDelegate.playerOrderRequest(2);
 			}
-			
+
 		});
 	}
-	
+
 	public void playerOrderRequestReceived(int order) {
 		System.out.println("Order request: " + order);
-		mOrder = (order == 1? 2 : 1);
+		mOrder = (order == 1 ? 2 : 1);
 		gridPane.getChildren().removeAll(player1, player2);
 		confirmLabel = new Label("Do you accept to be player " + mOrder + "?");
 		okButton = new Button("OK");
 		cancelButton = new Button("Cancel");
-		
+
 		gridPane.add(confirmLabel, 0, 3);
 		gridPane.add(okButton, 0, 4);
 		gridPane.add(cancelButton, 1, 4);
-		
+
 		okButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
 				okButton.setDisable(true);
 				cancelButton.setDisable(true);
-				
+
 				mDelegate.playerOrderOK();
 			}
-			
+
 		});
-		
+
 		cancelButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
-				connectedToPlayer(ipFld.getText(), Integer.parseInt(portFld.getText()));
-				
+				connectedToPlayer(ipFld.getText(),
+						Integer.parseInt(portFld.getText()));
+
 				mDelegate.playerOrderCancel();
-				
+
 			}
 		});
 	}
-	
+
 	public void startGame() {
 		System.out.println("Game can be started");
-		
-		gridPane.getChildren().removeAll(okButton, cancelButton, player1, player2, waitLabel, confirmLabel);
-		
+
+		gridPane.getChildren().removeAll(okButton, cancelButton, player1,
+				player2, waitLabel, confirmLabel);
+
 		Label startLabel = new Label("You are player " + mOrder);
 		gridPane.add(startLabel, 0, 3);
 	}

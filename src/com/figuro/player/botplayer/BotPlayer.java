@@ -11,11 +11,11 @@ public class BotPlayer implements IPlayer {
 	private BoardState _board;
 	private IStepSearch _stepSearch;
 	private int _playerId;
-	
-	public BotPlayer (IStepSearch stepSearch) {
+
+	public BotPlayer(IStepSearch stepSearch) {
 		_stepSearch = stepSearch;
 	}
-	
+
 	@Override
 	public int getId() {
 		return _playerId;
@@ -33,23 +33,11 @@ public class BotPlayer implements IPlayer {
 
 	@Override
 	public void move(IMoveComplete callback) {
-		IMoveComplete o = new IMoveComplete(){
-			private BoardState _boardState;
-			
-			@Override
-			public void setResult(BoardState result) {
-				_boardState = result;
-			}
-			
-			public BoardState getResult () {
-				return _boardState;
-			}
-		};
-		
 		try {
-			BoardState evaluatedState = _stepSearch.search(_board, getId (), getId() == 1 ? 2 : 1);
-			
-			o.setResult(evaluatedState);
+			BoardState evaluatedState = _stepSearch.search(_board, getId(),
+					getId() == 1 ? 2 : 1);
+
+			callback.setResult(evaluatedState);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -58,7 +46,7 @@ public class BotPlayer implements IPlayer {
 	@Override
 	public void wrongMoveResetTo(BoardState board) {
 		_board = board;
-        setInitialState(board);
+		setInitialState(board);
 
 	}
 
@@ -83,7 +71,7 @@ public class BotPlayer implements IPlayer {
 	@Override
 	public void setup(Group parent, Button okButton) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

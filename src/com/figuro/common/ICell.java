@@ -10,7 +10,9 @@ package com.figuro.common;
  * @author Isti
  */
 public interface ICell {
-    public boolean hasUnit();
-    public IUnit getUnit();
-    public void setUnit(IUnit unit);
+	public boolean hasUnit();
+
+	public IUnit getUnit();
+
+	public void setUnit(IUnit unit);
 }
