@@ -123,18 +123,12 @@ public class NewGameScreen extends VBox {
 					{
 						gameRunner.addSpectator(spectator);	
 					}		
-					IGameoverCallback gameoverCallback = new IGameoverCallback(){
-
-						@Override
-						public void gameFinishedWith(String score) {
-							// TODO Auto-generated method stub
-							
-						}
-					};
+					IGameoverCallback gameoverCallback = new GameOverUINotification(root, mainScreenVBox,builder);
 					gameRunner.runGame(priorityComboBox.getValue().toString(),  gameoverCallback);
+					
 					if (startGame)
 	            	{
-	            		ShowGameBoard();
+	            		ShowGameBoard();	
 	            	}
             }
     });
