@@ -93,8 +93,8 @@ public class GameJob implements Runnable {
 
 			BoardState result = moveCompleteCallback.getResult();
 
-			if (result == null) {
-				continue;
+			if (! this.runningState.isRunning()) {
+				break;
 			}
 			
 			System.out.println(result.toString());
