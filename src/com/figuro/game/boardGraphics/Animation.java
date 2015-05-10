@@ -89,7 +89,6 @@ public class Animation implements IAnimation {
             initX = selected.getTranslateX();
             initY = selected.getTranslateY();
             dragAnchor = new Point2D(event.getSceneX(), event.getSceneY());
-
         }
 
     }
@@ -139,14 +138,13 @@ public class Animation implements IAnimation {
         @Override
         public void handle(MouseEvent event) {
             Group selected = ((Group) event.getSource());
-            Point startingPoint = getCheckerCoordinate(board, initX, initY);
+            Point startingPoint = getCheckerCoordinate(board, dragAnchor.getX(), dragAnchor.getY());
             Point finalPoint = getCheckerCoordinate(board, event.getSceneX(), event.getSceneY());
             NumberBinding rectsAreaSize = Bindings.min(board.getBoardPane().heightProperty(), board.getBoardPane()
                     .widthProperty());
             selected.setTranslateX(finalPoint.x * rectsAreaSize.divide(board.getBoardSizeX()).floatValue());
             selected.setTranslateY(finalPoint.y * rectsAreaSize.divide(board.getBoardSizeY()).floatValue());
             
-            System.out.println("Point Start: " + startingPoint.toString() + " finish p " + finalPoint.toString());
             if (finalPoint.equals(startingPoint)) {
                 return;
             }
