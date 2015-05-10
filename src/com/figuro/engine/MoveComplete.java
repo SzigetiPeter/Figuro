@@ -1,5 +1,7 @@
 package com.figuro.engine;
 
+import java.util.concurrent.CountDownLatch;
+
 import com.figuro.common.BoardState;
 
 /**
@@ -9,28 +11,23 @@ import com.figuro.common.BoardState;
 public class MoveComplete implements IMoveComplete {
 
 	private BoardState state = null;
+
+	private RunningState runningState;
 	
-	private RunningStateHolder runningState;
-	
-	public MoveComplete(RunningStateHolder runningState) {
+	public MoveComplete(RunningState runningState) {
 		this.runningState = runningState;
 	}
 
 	public void listen() {
-		while (runningState.isRunning() && state == null) {
-			try {
-				wait(1000);
-			} catch (InterruptedException e) {
-				return;
-			}
-		}
+		runningState.await();
 	}
-	
+
 	@Override
 	public void setResult(BoardState result) {
 		state = result;
+		runningState.stopWaiting();
 	}
-	
+
 	public BoardState getResult() {
 		return state;
 	}

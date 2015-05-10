@@ -43,7 +43,7 @@ public class Animation implements IAnimation {
     }
 
     @Override
-    public void enableMove(IMoveComplete movedCallback) {
+    public void enableMove(BoardState currentState, IMoveComplete movedCallback) {
         this.board.getBoardPane().getChildren().forEach(new Consumer<Node>() {
 
             @Override
@@ -52,7 +52,7 @@ public class Animation implements IAnimation {
                         && t.getUserData().getClass().isAssignableFrom(pips.get(0).getUnit().getClass())) {
                     t.setOnMousePressed(new InitAnimation());
                     t.setOnMouseDragged(new TranzitAnimation());
-                    t.setOnMouseReleased(new FinishAnimation(movedCallback));
+                    t.setOnMouseReleased(new FinishAnimation(currentState, movedCallback));
                 }
 
             }
@@ -128,9 +128,11 @@ public class Animation implements IAnimation {
 
     class FinishAnimation implements EventHandler<MouseEvent> {
 
+        private BoardState currentState;
         private IMoveComplete movedCallback;
 
-        public FinishAnimation(IMoveComplete movedCallback) {
+        public FinishAnimation(BoardState current, IMoveComplete movedCallback) {
+            this.currentState = current;
             this.movedCallback = movedCallback;
         }
 
@@ -143,14 +145,18 @@ public class Animation implements IAnimation {
                     .widthProperty());
             selected.setTranslateX(finalPoint.x * rectsAreaSize.divide(board.getBoardSizeX()).floatValue());
             selected.setTranslateY(finalPoint.y * rectsAreaSize.divide(board.getBoardSizeY()).floatValue());
-
-            BoardState newBoardState = new BoardState(board.getBoardSizeX(), board.getBoardSizeY());
+            
+            System.out.println("Point Start: " + startingPoint.toString() + " finish p " + finalPoint.toString());
+            if (finalPoint.equals(startingPoint)) {
+                return;
+            }
+            BoardState newBoardState = new BoardState(this.currentState);
 
             newBoardState.set(finalPoint, new Cell((IUnit) selected.getUserData()));
             newBoardState.set(startingPoint, new Cell());
             newBoardState.setLatestMoved(finalPoint);
             newBoardState.setLatestMovedFrom(startingPoint);
-            //TODO: check if move is valid com.foguro.game.rules
+            // TODO: check if move is valid com.foguro.game.rules
             disableMove();
             movedCallback.setResult(newBoardState);
         }

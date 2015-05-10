@@ -5,13 +5,14 @@
  */
 package com.figuro.game.rules;
 
-import com.figuro.common.BoardState;
 import java.util.List;
+
+import com.figuro.common.BoardState;
 
 /**
  *
  * @author Isti
  */
 public interface IStepGenerator {
-    public List<BoardState> getSteps(BoardState state, int player);
+	public List<BoardState> getSteps(BoardState state, int player);
 }

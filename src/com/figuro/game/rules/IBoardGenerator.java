@@ -12,5 +12,5 @@ import com.figuro.common.BoardState;
  * @author Isti
  */
 public interface IBoardGenerator {
-    public BoardState getInitialBoard();
+	public BoardState getInitialBoard();
 }

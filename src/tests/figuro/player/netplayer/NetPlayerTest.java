@@ -25,20 +25,21 @@ import com.figuro.player.netplayer.NetPlayer;
  */
 public class NetPlayerTest {
 
-	//@Rule public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
+	// @Rule public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
 	static boolean stop = false;
-	
-	public static class AsNonApp extends Application implements IMessageSender, IMoveComplete {
-		
+
+	public static class AsNonApp extends Application implements IMessageSender,
+			IMoveComplete {
+
 		private String mGameStatus;
 		private BoardState mBoardState;
 		ArrayList<InetSocketAddress> listeningAddresses = new ArrayList<InetSocketAddress>();
-			
+
 		@Override
 		public void start(Stage primaryStage) throws Exception {
 			BorderPane root = new BorderPane();
-			Scene scene = new Scene(root,400,400);
-			//scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			Scene scene = new Scene(root, 400, 400);
+			// scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
 
@@ -55,28 +56,27 @@ public class NetPlayerTest {
 					}
 				}
 			});
-			
-			
+
 			Group parent = new Group();
 			Stage newStage = new Stage();
 			newStage.setScene(new Scene(parent, 300, 200));
 			NetPlayer netPlayer = new NetPlayer(this);
 			netPlayer.setup(parent, new Button());
 			newStage.show();
-			
+
 			Group newGroup2 = new Group();
 			Stage newStage2 = new Stage();
 			newStage2.setScene(new Scene(newGroup2, 300, 200));
 			NetPlayer netPlayer2 = new NetPlayer(this);
 			netPlayer2.setup(newGroup2, new Button());
 			newStage2.show();
-			
+
 		}
 
 		@Override
 		public void setResult(BoardState result) {
 			mBoardState = result;
-			
+
 		}
 
 		@Override
@@ -87,40 +87,37 @@ public class NetPlayerTest {
 		@Override
 		public void updateGameState(String gameStatus) {
 			mGameStatus = gameStatus;
-			
 		}
 	}
-	
+
 	@BeforeClass
 	public static void initJFX() throws InterruptedException {
 		Thread t = new Thread("JavaFX Init Thread") {
-	        public void run() {
-	        	try {
-	        		Application.launch(AsNonApp.class, new String[0]);	
+			public void run() {
+				try {
+					Application.launch(AsNonApp.class, new String[0]);
 				} catch (Exception e) {
 					System.out.println("End...");
 				}
-	        }
-	    };
-	    t.setDaemon(true);
-	    t.start();
-	    
-	    while (!stop) {
-	    	Thread.sleep(100);
-	    }
+			}
+		};
+		t.setDaemon(true);
+		t.start();
+
+		while (!stop) {
+			Thread.sleep(100);
+		}
 	}
-	
+
 	@Test
 	public void TestNetPlayer() {
-		
+
 		try {
 			initJFX();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
-	}
 
-	
+	}
 
 }

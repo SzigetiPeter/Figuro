@@ -10,6 +10,7 @@ public class ProcessMessages extends Thread {
 
 	private Socket mSocket;
 	private SetupDialog mDialog;
+	@SuppressWarnings("unused")
 	private int orderTemp;
 
 	public ProcessMessages(Socket socket, SetupDialog dialog) {
@@ -33,8 +34,9 @@ public class ProcessMessages extends Thread {
 
 						if (lineString.startsWith("player ")) {
 
-							int index = Integer.parseInt(lineString.substring(7));
-							orderTemp = (index == 1? 2 : 1);
+							int index = Integer.parseInt(lineString
+									.substring(7));
+							orderTemp = (index == 1 ? 2 : 1);
 
 							mDialog.playerOrderRequestReceived(index);
 
@@ -44,7 +46,8 @@ public class ProcessMessages extends Thread {
 
 						} else if (lineString.startsWith("CANCEL")) {
 
-							mDialog.connectedToPlayer(mSocket.getInetAddress().getHostAddress(), mSocket.getPort());
+							mDialog.connectedToPlayer(mSocket.getInetAddress()
+									.getHostAddress(), mSocket.getPort());
 
 						}
 					}
@@ -54,7 +57,6 @@ public class ProcessMessages extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 
 	}
 }

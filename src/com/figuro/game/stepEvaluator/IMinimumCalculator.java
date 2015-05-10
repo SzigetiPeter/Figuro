@@ -12,5 +12,5 @@ import com.figuro.common.Evaluation;
  * @author Isti
  */
 public interface IMinimumCalculator {
-    public Evaluation min(Evaluation a, Evaluation b, int player);
+	public Evaluation min(Evaluation a, Evaluation b, int player);
 }
