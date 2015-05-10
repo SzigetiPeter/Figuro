@@ -81,10 +81,11 @@ public class GameJob implements Runnable {
 		if (players.get(1).getPrefferedOrder() == 2 || players.get(2).getPrefferedOrder() == 1) {
 			IPlayer tmpPlayer = players.get(1);
 			players.put(1, players.get(2));
-			players.get(1).setId(1);
 			players.put(2, tmpPlayer);
-			players.get(2).setId(2);
 		}
+		
+		players.get(1).setId(1);
+		players.get(2).setId(2);
 	}
 
 	@Override

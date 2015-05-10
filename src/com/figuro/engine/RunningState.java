@@ -11,16 +11,15 @@ public class RunningState {
 	private CountDownLatch latch;
 	boolean isRunning = true;
 
-	public RunningState() {
-		latch = new CountDownLatch(1);	
-	}
+	public RunningState() { }
 	
 	public void await() {
 		try {
+			latch = new CountDownLatch(1);
 			latch.await();
 		} catch (InterruptedException e) {
 			//
-		}	
+		}
 	}
 	
 	public void stopWaiting() {
