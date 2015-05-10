@@ -57,7 +57,7 @@ public class UIPlayer implements IPlayer {
     @Override
     public void wrongMoveResetTo(BoardState board) {
         internalState = board;
-        setInitialState(board);
+        setBoardState(internalState);
     }
 
     @Override
