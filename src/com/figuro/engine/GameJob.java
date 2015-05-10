@@ -1,7 +1,10 @@
 package com.figuro.engine;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.figuro.common.BoardState;
 import com.figuro.engine.persistency.IPersistency;
@@ -15,7 +18,7 @@ import com.figuro.player.IPlayer;
 
 public class GameJob implements Runnable {
 	private RunningState runningState;
-	private List<IPlayer> players;
+	private Map<Integer, IPlayer> players;
 	private List<IPlayer> spectators;
 	private Game game;
 
@@ -28,17 +31,17 @@ public class GameJob implements Runnable {
 	public GameJob(IPersistency persistency) {
 		this.persistency = persistency;
 
-		players = new ArrayList<IPlayer>();
+		players = new HashMap<Integer, IPlayer>();
 		spectators = new ArrayList<IPlayer>();
 		playerCount = 0;
 		runningState = new RunningState();
 		playerTypes = new ArrayList<String>();
 	}
-
+	
 	public void addPlayer(IPlayer player) throws Exception {
 		if (playerCount < 2) {
 			playerCount += 1;
-			players.add(player);
+			players.put(playerCount, player);
 		} else {
 			throw new Exception("Player count is already 2!");
 		}
@@ -67,6 +70,22 @@ public class GameJob implements Runnable {
 			player.setInitialState(state);
 		}
 	}
+	
+	private void setInitialState(Map<Integer, IPlayer> players, BoardState state) {
+		for (Entry<Integer, IPlayer> entry : players.entrySet()) {
+			entry.getValue().setInitialState(state);
+		}
+	}
+
+	private void arrangePlayers() {
+		if (players.get(1).getPrefferedOrder() == 2 || players.get(2).getPrefferedOrder() == 1) {
+			IPlayer tmpPlayer = players.get(1);
+			players.put(1, players.get(2));
+			players.get(1).setId(1);
+			players.put(2, tmpPlayer);
+			players.get(2).setId(2);
+		}
+	}
 
 	@Override
 	public void run() {
@@ -76,7 +95,8 @@ public class GameJob implements Runnable {
 
 		IGameRules rules = game.getRules();
 		BoardState state = rules.getInitialState();
-
+		
+		arrangePlayers();
 		setInitialState(players, state);
 		setInitialState(spectators, state);
 

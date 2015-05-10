@@ -65,19 +65,15 @@ public class NewGameScreen extends VBox {
 		radio.setToggleGroup(group);
 		radio.setUserData(PlayerSetupFactory.PLAYER_VS_BOT);
 		gridGameTypes.add(radio, 0,1);
-				radio = new RadioButton("Player vs. Player");
-		radio.setToggleGroup(group);
-		radio.setUserData(PlayerSetupFactory.PLAYER_VS_PLAYER);
-		gridGameTypes.add(radio, 0, 2);
 		radio = new RadioButton("Net game");
 		radio.setToggleGroup(group);
 		radio.setUserData(PlayerSetupFactory.NET_GAME);
-		gridGameTypes.add(radio, 0, 3);
+		gridGameTypes.add(radio, 0, 2);
 		
 		radio = new RadioButton("Bot vs. Bot");
 		radio.setToggleGroup(group);
 		radio.setUserData(PlayerSetupFactory.BOT_VS_BOT);
-		gridGameTypes.add(radio, 0, 4);
+		gridGameTypes.add(radio, 0, 3);
 
 		HBox btnBox = new HBox();
 		Button backButton = new Button();
