@@ -142,4 +142,20 @@ public class BoardState implements Serializable {
 	public static Point getWhitePlayerRightClosestCell() {
 		return whitePlayerRightClosestCell;
 	}
+	
+	public String toString() {
+		String output = "";
+		for (int i = 0; i < this.board.length; ++i) {
+			for (int j = 0; j < this.board[0].length; ++j) {
+				if (this.board[i][j].hasUnit()) {
+					IUnit unit = this.board[i][j].getUnit();
+					output += "[" + unit.getOwnerId() + "-" + unit.getType().toString() + "]\t";
+				} else {
+					output += "[\t]\t";
+				}
+			}
+			output += "\n";
+		}
+		return output;
+	}
 }

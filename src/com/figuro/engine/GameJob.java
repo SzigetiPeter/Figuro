@@ -96,6 +96,8 @@ public class GameJob implements Runnable {
 			if (result == null) {
 				continue;
 			}
+			
+			System.out.println(result.toString());
 
 			if (!rules.isValidMove(state, result, currentPlayerId)) {
 				currentPlayer.wrongMoveResetTo(state);
