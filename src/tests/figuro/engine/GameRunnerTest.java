@@ -31,10 +31,29 @@ public class GameRunnerTest {
 	}
 	
 	@Test
-	public void runGameMethod() {		
+	public void runGameMethod() {
+		//GameJob gameJob = mock(GameJob.class);
+		//IBuilder builder = mock(IBuilder.class);
+		//IGameRules gameRules = mock(IGameRules.class);
+		//IMessageSender message = mock(IMessageSender.class);
+		//IPersistency persistency = mock(IPersistency.class);
+		
+		//GameRunner gr = new GameRunner (gameJob, builder, gameRules, message, persistency);
 		GameRunner gameRunner = mock(GameRunner.class);
-		IGameoverCallback callback = mock(IGameoverCallback.class);		
-	
-		gameRunner.runGame("Checkers", callback);		
+		IGameoverCallback callback = mock(IGameoverCallback.class);
+		
+		//IGameRules rules = mock(IGameRules.class); 
+		//IStepEvaluator evaluator = mock(IStepEvaluator.class);
+		//IBoardGraphics graphics = mock(IBoardGraphics.class);
+		
+	//	Game game = mock(Game.class);
+		gameRunner.runGame("Checkers", callback);
+		
+	//	boolean bla = gameRunner.isGameResumable();
+		//assertEquals(bla, false);
+		
+		//Game game;
+		
+	    //when(builder.createGame("gameType")).thenReturn(game);
 	}
 }

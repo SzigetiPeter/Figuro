@@ -58,7 +58,8 @@ public class GameJob implements Runnable {
     	playerCount = 0;
     }
 	
-	public void setGame(Game game, IGameoverCallback gameoverCallback, IPersistency persistency, String gameType, List<String> playerTypes) {			
+	public void setGame(Game game, IGameoverCallback gameoverCallback, IPersistency persistency, 
+			String gameType, List<String> playerTypes) {			
 		this.game = game;			
 		this.gameoverCallback = gameoverCallback;
 		this.gameType = gameType;

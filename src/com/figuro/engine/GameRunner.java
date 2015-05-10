@@ -19,7 +19,6 @@ public class GameRunner implements IEngineHandler {
 
 	IBuilder builder;
 	IGameRules rules;
-	BoardState boardState;
 	IMessageSender message;
 	IPersistency persistency;
 	List<String> playerTypes;
