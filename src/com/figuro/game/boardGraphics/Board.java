@@ -154,6 +154,7 @@ public class Board implements IBoard {
 				board.getChildren().add(rectangle);
 			}
 		}
+		board.setId("BOARD");
 		boarderPane.getChildren().add(board);
 		return board;
 	}
