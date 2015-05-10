@@ -32,7 +32,6 @@ public class NewGameScreen extends VBox {
 	private IBuilder builder;
 	private BorderPane root;
 	private Label messageLabel;
-	private boolean startGame = false;
 
 	public NewGameScreen(
 			BorderPane root,
@@ -110,24 +109,27 @@ public class NewGameScreen extends VBox {
 				String player1 = playerTemplate.getPlayer1();
 				String player2 = playerTemplate.getPlayer2();
 				String spectator = playerTemplate.getSpectator();
-
-				SetupPlayerIfNeeded(player1);
-				SetupPlayerIfNeeded(player2);
-
+				
+				boolean startGame = true;
+				
 				IEngineHandler gameRunner = builder.createEngine();
-				gameRunner.addPlayer(player1);
-				gameRunner.addPlayer(player2);
-
+				IGameoverCallback gameoverCallback = new GameOverUINotification(root, mainScreenVBox,builder);
+				
+				IPlayer iplayer1 = gameRunner.addPlayer(player1);
+				IPlayer iplayer2 = gameRunner.addPlayer(player2);
 				if (spectator != null) {
 					gameRunner.addSpectator(spectator);
 				}
+
+				if (SetupPlayerIfNeeded(iplayer1,gameRunner,gameoverCallback,priorityComboBox.getValue().toString()) == true)
+					startGame = false;
+			
+				if (SetupPlayerIfNeeded(iplayer2,gameRunner,gameoverCallback,priorityComboBox.getValue().toString()) == true)
+					startGame = false;
 				
-				IGameoverCallback gameoverCallback = new GameOverUINotification(root, mainScreenVBox,builder);
-				
-				gameRunner.runGame(priorityComboBox.getValue().toString(),
-						gameoverCallback);
 				if (startGame) {
-					//ShowGameBoard();
+					gameRunner.runGame(priorityComboBox.getValue().toString(),
+							gameoverCallback);
 				}
 			}
 		});
@@ -144,11 +146,8 @@ public class NewGameScreen extends VBox {
 		this.getChildren().addAll(gameTypeGroup);
 	}
 
-	private void SetupPlayerIfNeeded(String player) {
-		IPlayer playerType;
-		playerType = this.builder.createPlayer(player);
+	private boolean SetupPlayerIfNeeded(IPlayer playerType,IEngineHandler gameRunner,IGameoverCallback gameoverCallback,String gameType) {
 		if (playerType.needsSetup()) {
-			startGame = false;
 			BorderPane secondaryLayout = new BorderPane();
 			HBox hb = new HBox();
 			hb.setAlignment(Pos.CENTER);
@@ -162,7 +161,10 @@ public class NewGameScreen extends VBox {
 				@Override
 				public void handle(ActionEvent event) {
 					Stage stage = (Stage) btnAddPlayer.getScene().getWindow();
+	
 					stage.close();
+					gameRunner.runGame(gameType,
+							gameoverCallback);
 				}
 			});
 
@@ -174,14 +176,13 @@ public class NewGameScreen extends VBox {
 			Scene secondScene = new Scene(secondaryLayout, 300, 300);
 
 			Stage secondStage = new Stage();
-			secondStage.setTitle(player + " setup");
+			secondStage.setTitle("Player setup");
 			secondStage.setScene(secondScene);
 			secondStage.centerOnScreen();
 			secondStage.initModality(Modality.APPLICATION_MODAL);
 			secondStage.show();
-		} else {
-			startGame = true;
-		}
-
+			return true;
+		} 
+		return false;
 	}
 }
