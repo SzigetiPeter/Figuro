@@ -22,8 +22,8 @@ public class Board implements IBoard {
 	public Board() {
 		this.boardSizeX = 8;
 		this.boardSizeY = 8;
-		this.colorMain = Color.RED;
-		this.colorFiller = Color.BROWN;
+		this.colorMain = Color.BROWN;
+		this.colorFiller = Color.RED;
 		createBoard();
 	}
 
@@ -35,8 +35,8 @@ public class Board implements IBoard {
 	public Board(int x, int y) {
 		this.boardSizeX = x;
 		this.boardSizeY = y;
-		this.colorMain = Color.RED;
-		this.colorFiller = Color.BROWN;
+		this.colorMain = Color.BROWN;
+		this.colorFiller = Color.RED;
 		createBoard();
 	}
 
