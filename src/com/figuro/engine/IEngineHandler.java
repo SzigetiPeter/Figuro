@@ -11,8 +11,6 @@ import com.figuro.player.IPlayer;
  * @author Aszalos Gyorgy
  */
 public interface IEngineHandler {
-	public void start();
-
 	public IPlayer addPlayer(String playerType);
 
 	public IPlayer addSpectator(String playerType);

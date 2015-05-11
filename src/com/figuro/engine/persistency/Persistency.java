@@ -32,7 +32,17 @@ public class Persistency implements IPersistency, Serializable {
 	}
 
 	@Override
-	public void save(String game, List<String> players, BoardState state) {
+	public void setPlayers(List<String> players) {
+		this.players = players;
+	}
+
+	@Override
+	public void setGame(String game) {
+		this.game = game;
+	}
+	
+	@Override
+	public void save(BoardState state, int currentPlayerId) {
 		GameData gameData = new GameData(game, players, state);
 		try {
 			FileOutputStream fileOut = new FileOutputStream(fileName);

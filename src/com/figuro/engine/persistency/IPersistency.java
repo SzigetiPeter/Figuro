@@ -13,7 +13,11 @@ import com.figuro.common.BoardState;
  * @author Aszalos Gyorgy
  */
 public interface IPersistency {
-	public void save(String game, List<String> players, BoardState state);
+	public void setPlayers(List<String> players);
+	
+	public void setGame(String game);
+	
+	public void save(BoardState state, int currentPlayerId);
 
 	public boolean load();
 

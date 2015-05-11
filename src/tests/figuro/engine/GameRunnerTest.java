@@ -20,7 +20,7 @@ public class GameRunnerTest {
 		GameJob gameJob = mock(GameJob.class);
 		IBuilder builder = mock(IBuilder.class);
 		
-		GameRunner gr = new GameRunner (gameJob, builder, null, null, null);
+		GameRunner gr = new GameRunner (gameJob, builder, null, null);
 		IPlayer thePlayer = mock(IPlayer.class);
 		
 		when(builder.createPlayer("testPlayer")).thenReturn(thePlayer);

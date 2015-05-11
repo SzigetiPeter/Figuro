@@ -25,8 +25,10 @@ public class GameJob implements Runnable {
 	private int playerCount;
 	private IGameoverCallback gameoverCallback;
 	private IPersistency persistency;
-	private List<String> playerTypes;
-	private String gameType;
+	private BoardState state;
+	
+	private int currentPlayerId;
+	private int otherPlayerId;
 
 	public GameJob(IPersistency persistency) {
 		this.persistency = persistency;
@@ -35,7 +37,6 @@ public class GameJob implements Runnable {
 		spectators = new ArrayList<IPlayer>();
 		playerCount = 0;
 		runningState = new RunningState();
-		playerTypes = new ArrayList<String>();
 	}
 	
 	public void addPlayer(IPlayer player) throws Exception {
@@ -50,6 +51,15 @@ public class GameJob implements Runnable {
 	public void addSpectator(IPlayer player) {
 		spectators.add(player);
 	}
+	
+	public void setCurrentPlayer(int currentPlayerId) {
+		this.currentPlayerId = currentPlayerId;
+		otherPlayerId = (currentPlayerId == 1) ? 2 : 1;
+	}
+	
+	public int getCurrentPlayerId() {
+		return currentPlayerId;
+	}
 
 	public void removePlayers() {
 		players.clear();
@@ -57,12 +67,9 @@ public class GameJob implements Runnable {
 		playerCount = 0;
 	}
 
-	public void setGame(Game game, IGameoverCallback gameoverCallback,
-			IPersistency persistency, String gameType, List<String> playerTypes) {
+	public void setGame(Game game, IGameoverCallback gameoverCallback) {
 		this.game = game;
 		this.gameoverCallback = gameoverCallback;
-		this.gameType = gameType;
-		this.playerTypes = playerTypes;
 	}
 
 	private void setInitialState(List<IPlayer> players, BoardState state) {
@@ -78,6 +85,7 @@ public class GameJob implements Runnable {
 	}
 
 	private void arrangePlayers() {
+		System.out.println("Preffered order: 1:" + players.get(1).getPrefferedOrder() + " 2:" + players.get(2).getPrefferedOrder());
 		if (players.get(1).getPrefferedOrder() == 2 || players.get(2).getPrefferedOrder() == 1) {
 			IPlayer tmpPlayer = players.get(1);
 			players.put(1, players.get(2));
@@ -87,6 +95,10 @@ public class GameJob implements Runnable {
 		players.get(1).setId(1);
 		players.get(2).setId(2);
 	}
+	
+	public void setState(BoardState state) {
+		this.state = state;
+	}
 
 	@Override
 	public void run() {
@@ -95,13 +107,10 @@ public class GameJob implements Runnable {
 		}
 
 		IGameRules rules = game.getRules();
-		BoardState state = rules.getInitialState();
 		
 		arrangePlayers();
 		setInitialState(players, state);
 		setInitialState(spectators, state);
-
-		int currentPlayerId = 1, otherPlayerId = 2;
 		MoveComplete moveCompleteCallback;
 
 		while (this.runningState.isRunning()
@@ -118,7 +127,7 @@ public class GameJob implements Runnable {
 				break;
 			}
 			
-			System.out.println(result.toString());
+			//System.out.println(result.toString());
 
 			if (!rules.isValidMove(state, result, currentPlayerId)) {
 				currentPlayer.wrongMoveResetTo(state);
@@ -142,57 +151,7 @@ public class GameJob implements Runnable {
 			this.gameoverCallback.gameFinishedWith(score);
 		} else {
 			if (!this.runningState.isRunning()) {
-				persistency.save(this.gameType, this.playerTypes, state);
-			}
-		}
-	}
-
-	public void resumeGame(Game game, List<IPlayer> players,
-			BoardState boardState, IGameoverCallback gameoverCallback,
-			IPersistency persistency, String gameType, List<String> playerTypes) {
-		if (players.size() != 2) {
-			this.terminate();
-		}
-
-		IGameRules rules = game.getRules();
-		setInitialState(players, boardState);
-
-		int currentPlayer = 1, otherPlayer = 2;
-		MoveComplete moveCompleteCallback;
-		while (this.runningState.isRunning()
-				&& !rules.isGameOver(boardState, currentPlayer)) {
-			moveCompleteCallback = new MoveComplete(this.runningState);
-
-			IPlayer player1 = players.get(currentPlayer);
-			player1.move(moveCompleteCallback);
-			moveCompleteCallback.listen();
-
-			BoardState result = moveCompleteCallback.getResult();
-
-			if (result == null) {
-				continue;
-			}
-
-			if (!rules.isValidMove(boardState, result, currentPlayer)) {
-				player1.wrongMoveResetTo(boardState);
-				continue;
-			}
-
-			IPlayer player2 = players.get(otherPlayer);
-			player2.notify(result);
-
-			currentPlayer = rules.getNextPlayer(boardState, result,
-					currentPlayer);
-			boardState = result;
-		}
-
-		if (rules.isGameOver(boardState, currentPlayer)) {
-			String score = Integer.toString(rules.getFinalState(boardState,
-					currentPlayer));
-			this.gameoverCallback.gameFinishedWith(score);
-		} else {
-			if (!this.runningState.isRunning()) {
-				persistency.save(gameType, playerTypes, boardState);
+				persistency.save(state, currentPlayerId);
 			}
 		}
 	}

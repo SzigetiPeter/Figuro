@@ -38,7 +38,7 @@ public class Builder implements IBuilder {
 	public IEngineHandler createEngine() {
 		IPersistency persistency = new Persistency(messages);
 		GameJob gameJob = new GameJob(persistency);
-		return new GameRunner(gameJob, this, null, messages, persistency);
+		return new GameRunner(gameJob, this, messages, persistency);
 	}
 
 	@Override

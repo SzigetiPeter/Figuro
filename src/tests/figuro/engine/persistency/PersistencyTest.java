@@ -31,7 +31,9 @@ public class PersistencyTest {
 
 		BoardState state = new BoardState(8, 8);
 
-		persistency.save("Checkers", players, state);
+		persistency.setGame("Checkers");
+		persistency.setPlayers(players);
+		persistency.save(state, 1);
 
 		File file = new File("gameData.ser");
 		boolean savedFileFound = false;
