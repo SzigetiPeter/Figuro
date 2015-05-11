@@ -60,6 +60,13 @@ public interface IPlayer {
 	public void notify(BoardState counterMove);
 
 	/**
+	 * Tells the update of the latest move, applying move effects
+	 * 
+	 * @param state
+	 * */
+	public void update(BoardState state);
+	
+	/**
 	 * @return boolean if UI can call setup()
 	 */
 	public boolean needsSetup();

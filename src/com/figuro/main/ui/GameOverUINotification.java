@@ -13,7 +13,7 @@ public class GameOverUINotification implements IGameoverCallback {
 	private IBuilder builder;
 
 	public GameOverUINotification(){
-		
+		//TODO: REMOVE!!!!!!
 	}
 	
 	public GameOverUINotification(BorderPane scene,VBox mainScreenVBox,IBuilder builder) {

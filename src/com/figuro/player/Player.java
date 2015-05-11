@@ -38,6 +38,11 @@ public abstract class Player implements IPlayer {
 	public void setup(Group parent, Button okButton) {
 		// do nothing
 	}
+	
+	@Override
+	public void update(BoardState state) {
+		internalState = state;
+	}
 
 	@Override
 	public int getPrefferedOrder() {

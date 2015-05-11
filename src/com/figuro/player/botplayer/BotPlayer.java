@@ -53,7 +53,11 @@ public class BotPlayer implements IPlayer {
 	@Override
 	public void notify(BoardState counterMove) {
 		_board = counterMove;
+	}
 
+	@Override
+	public void update(BoardState state) {
+		_board = state;
 	}
 
 	@Override

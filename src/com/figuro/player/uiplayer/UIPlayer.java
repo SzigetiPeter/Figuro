@@ -88,8 +88,13 @@ public class UIPlayer implements IPlayer {
     @Override
     public void notify(BoardState counterMove) {
         internalState = counterMove;
-        setBoardState(internalState);
     }
+    
+	@Override
+	public void update(BoardState state) {
+		internalState = state;
+        setBoardState(internalState);
+	}
 
     private void setBoardState(BoardState state) {
         Platform.runLater(new Runnable() {

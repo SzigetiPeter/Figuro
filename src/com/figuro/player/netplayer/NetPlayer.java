@@ -204,6 +204,10 @@ public class NetPlayer implements IPlayer, IDialogDelegate, IThreadDelegate {
 	@Override
 	public void setProcessor(IProcessor processor) {
 		mProcessor = processor;
-	}	
+	}
 
+	@Override
+	public void update(BoardState state) {
+		mBoardState = state;
+	}	
 }

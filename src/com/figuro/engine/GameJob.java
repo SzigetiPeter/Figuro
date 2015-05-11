@@ -140,6 +140,14 @@ public class GameJob implements Runnable {
 			for (IPlayer player : spectators) {
 				player.notify(result);
 			}
+			
+			result = rules.applyMoveEffect(state, result, currentPlayerId);
+			
+			currentPlayer.update(result);
+			otherPlayer.update(result);
+			for (IPlayer player : spectators) {
+				player.update(result);
+			}
 
 			currentPlayerId = rules.getNextPlayer(state, result, currentPlayerId);
 			state = result;

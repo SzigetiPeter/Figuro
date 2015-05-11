@@ -75,6 +75,13 @@ public class CheckersRules implements IGameRules {
 
 		return isValidMove;
 	}
+	
+	public BoardState applyMoveEffect(BoardState oldState, BoardState newState,
+			int player) {
+		
+		//TODO: implement
+		return newState;
+	}
 
 	private void getMoveEndPoints(ICell[][] oldCells, ICell[][] newCells,
 			int player, Point beginPoint, Point endPoint) {

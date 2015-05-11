@@ -17,6 +17,9 @@ public interface IGameRules {
 
 	public boolean isValidMove(BoardState oldState, BoardState newState,
 			int player);
+	
+	public BoardState applyMoveEffect(BoardState oldState, BoardState newState,
+			int player);
 
 	public List<BoardState> getPossibleMoves(BoardState state, int player);
 

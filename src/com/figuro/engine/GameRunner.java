@@ -97,10 +97,13 @@ public class GameRunner implements IEngineHandler {
 				Game game = builder.createGame(gameType);
 				
 				List<String> playersType = persistency.getPlayers();
-				List<IPlayer> players = new ArrayList<IPlayer>();
 
 				for (String playerType : playersType) {
-					players.add(builder.createPlayer(playerType));
+					try {
+						job.addPlayer(builder.createPlayer(playerType));
+					} catch (Exception e) {
+						//no way this could happen
+					}
 				}
 
 				BoardState boardState = persistency.getBoardState();
