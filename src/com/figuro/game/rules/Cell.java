@@ -5,6 +5,7 @@
  */
 package com.figuro.game.rules;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import com.figuro.common.ICell;
@@ -14,7 +15,12 @@ import com.figuro.common.IUnit;
  *
  * @author Isti
  */
-public class Cell implements ICell {
+public class Cell implements ICell, Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4740787494449352750L;
 	private IUnit unit;
 
 	public Cell() {

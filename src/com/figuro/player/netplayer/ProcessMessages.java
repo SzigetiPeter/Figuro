@@ -4,17 +4,24 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
 
+import com.figuro.common.BoardState;
+import com.figuro.engine.IMoveComplete;
+
 import javafx.application.Platform;
 
-public class ProcessMessages extends Thread {
+public class ProcessMessages extends Thread implements IProcessor {
 
 	private Socket mSocket;
 	private SetupDialog mDialog;
-
+	private IMoveComplete mComplete;
 
 	public ProcessMessages(Socket socket, SetupDialog dialog) {
 		mSocket = socket;
 		mDialog = dialog;
+	}
+	
+	public void setCallback(IMoveComplete callback) {
+		mComplete = callback;
 	}
 
 	public void run() {
@@ -46,6 +53,13 @@ public class ProcessMessages extends Thread {
 							mDialog.connectedToPlayer(mSocket.getInetAddress()
 									.getHostAddress(), mSocket.getPort());
 
+						} else if (lineString.startsWith("NOTIFY ")) {
+							
+							String fromString = lineString.substring(7);
+							BoardState bs = (BoardState) BoardState.fromString(fromString);
+							
+							mComplete.setResult(bs);
+							
 						}
 					}
 				});

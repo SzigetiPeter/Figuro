@@ -220,5 +220,6 @@ class SetupDialog extends Group {
 		
 		Label startLabel = new Label("You are player " + mOrder);
 		gridPane.add(startLabel, 0, 3);
+		
 	}
 }

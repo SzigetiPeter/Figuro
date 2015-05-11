@@ -5,6 +5,7 @@
  */
 package com.figuro.game.rules;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import com.figuro.common.IUnit;
@@ -13,7 +14,11 @@ import com.figuro.common.IUnit;
  *
  * @author Isti
  */
-public class CheckersUnit implements IUnit {
+public class CheckersUnit implements IUnit, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6094344456342923773L;
 	private UnitEnum unit;
 	private int ownerId;
 

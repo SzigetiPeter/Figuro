@@ -39,7 +39,9 @@ public class ClientThread extends Thread {
 				}
 			});
 
-			(new ProcessMessages(mSocket, mDialog)).start();
+			ProcessMessages pro = new ProcessMessages(mSocket, mDialog);
+			mDelegate.setProcessor(pro);		
+			pro.start();
 
 		} catch (Exception e) {
 			System.out.println("ConnectTo error" + e.getMessage());

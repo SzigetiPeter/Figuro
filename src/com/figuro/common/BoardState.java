@@ -1,7 +1,12 @@
 package com.figuro.common;
 
 import java.awt.Point;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.*;
+import java.io.*;
 
 import com.figuro.game.rules.Cell;
 
@@ -142,7 +147,7 @@ public class BoardState implements Serializable {
 	public static Point getWhitePlayerRightClosestCell() {
 		return whitePlayerRightClosestCell;
 	}
-	
+
 	public String toString() {
 		String output = "";
 		for (int i = 0; i < this.board.length; ++i) {
@@ -157,5 +162,43 @@ public class BoardState implements Serializable {
 			output += "\n";
 		}
 		return output;
+	}
+
+	/** Read the object from Base64 string. */
+	public static Object fromString( String s ) {
+		byte [] data = Base64.getDecoder().decode(s);
+		ObjectInputStream ois;
+		Object o;
+		try {
+			ois = new ObjectInputStream( 
+					new ByteArrayInputStream(  data ) );
+			o  = ois.readObject();
+			ois.close();
+			
+		} catch (IOException | ClassNotFoundException e) {
+			
+			e.printStackTrace();
+			return null;
+		}
+		
+		return o;
+	}
+
+	/** Write the object to a Base64 string. */
+	public static String toString( Serializable o ) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ObjectOutputStream oos;
+		try {
+			oos = new ObjectOutputStream( baos );
+			oos.writeObject( o );
+			oos.close();
+			
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+			return null;
+		}
+		
+		return new String( Base64.getEncoder().encode( baos.toByteArray() ) );
 	}
 }

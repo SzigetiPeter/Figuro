@@ -32,6 +32,8 @@ public class NetPlayer implements IPlayer, IDialogDelegate, IThreadDelegate {
 
 	private int orderTemp = 0;
 	private int mPrefferedOrder = 0;
+	
+	private IProcessor mProcessor;
 
 	public NetPlayer(IMessageSender sender) {
 
@@ -49,7 +51,10 @@ public class NetPlayer implements IPlayer, IDialogDelegate, IThreadDelegate {
 	public void move(IMoveComplete callback) {
 
 		try {
-			callback.setResult(mBoardState);
+			
+			mProcessor.setCallback(callback);
+			//callback.setResult(mBoardState);
+			
 		} catch (NullPointerException e) {
 			System.out.println("Callback was null");
 		}
@@ -57,11 +62,7 @@ public class NetPlayer implements IPlayer, IDialogDelegate, IThreadDelegate {
 
 	@Override
 	public void wrongMoveResetTo(BoardState board) {
-		// throw exception here, nem kene ilyen megtortenjen, hogy rossz lepes
-		// van, nem tudom lekezelni
-		// IllegalMoveException exc = new IllegalMoveException();
-		// throw exc;
-
+		
 		mBoardState = board;
 	}
 
@@ -164,7 +165,8 @@ public class NetPlayer implements IPlayer, IDialogDelegate, IThreadDelegate {
 	@Override
 	public void notify(BoardState counterMove) {
 		mBoardState = counterMove;
-
+		String toString = BoardState.toString(counterMove);
+		(new SendMessage(mClientSocket, "NOTIFY " + toString)).start();
 	}
 
 	@Override
@@ -199,5 +201,10 @@ public class NetPlayer implements IPlayer, IDialogDelegate, IThreadDelegate {
 	public void setClientSocket(Socket socket) {
 		mClientSocket = socket;
 	}
+
+	@Override
+	public void setProcessor(IProcessor processor) {
+		mProcessor = processor;
+	}	
 
 }

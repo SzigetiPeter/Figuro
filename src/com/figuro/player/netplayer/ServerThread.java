@@ -67,7 +67,9 @@ public class ServerThread extends Thread {
 				}
 			});
 
-			(new ProcessMessages(mSocket, mDialog)).start();
+			ProcessMessages pro = new ProcessMessages(mSocket, mDialog);
+			mDelegate.setProcessor(pro);
+			pro.start();
 
 		} catch (UnknownHostException e) {
 
