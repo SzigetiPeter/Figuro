@@ -138,22 +138,25 @@ public class Animation implements IAnimation {
         @Override
         public void handle(MouseEvent event) {
             Group selected = ((Group) event.getSource());
-            Point startingPoint = getCheckerCoordinate(board, dragAnchor.getX(), dragAnchor.getY());
-            Point finalPoint = getCheckerCoordinate(board, event.getSceneX(), event.getSceneY());
+            Point startingPoint = getCheckerCoordinate(board, dragAnchor.getX(), board.getBoardPane().getHeight()
+                    - dragAnchor.getY());
+            Point finalPoint = getCheckerCoordinate(board, event.getSceneX(),
+                    board.getBoardPane().getHeight() - event.getSceneY());
             NumberBinding rectsAreaSize = Bindings.min(board.getBoardPane().heightProperty(), board.getBoardPane()
                     .widthProperty());
             selected.setTranslateX(finalPoint.x * rectsAreaSize.divide(board.getBoardSizeX()).floatValue());
-            selected.setTranslateY(finalPoint.y * rectsAreaSize.divide(board.getBoardSizeY()).floatValue());
-            
+            selected.setTranslateY((7 - finalPoint.y) * rectsAreaSize.divide(board.getBoardSizeY()).floatValue());
+
             if (finalPoint.equals(startingPoint)) {
                 return;
             }
-            BoardState newBoardState = new BoardState(this.currentState);
 
+            BoardState newBoardState = new BoardState(this.currentState);
             newBoardState.set(finalPoint, new Cell((IUnit) selected.getUserData()));
             newBoardState.set(startingPoint, new Cell());
             newBoardState.setLatestMoved(finalPoint);
             newBoardState.setLatestMovedFrom(startingPoint);
+            System.out.println(newBoardState.toString());
             // TODO: check if move is valid com.foguro.game.rules
             disableMove();
             movedCallback.setResult(newBoardState);
