@@ -149,8 +149,8 @@ class SetupDialog extends Group {
 				waitLabel = new Label("Waiting for player 2...");
 				gridPane.add(waitLabel, 0, 4);
 
-				mOrder = 1;
-				mDelegate.playerOrderRequest(1);
+				mOrder = 2;
+				mDelegate.playerOrderRequest(mOrder);
 			}
 		});
 
@@ -164,8 +164,8 @@ class SetupDialog extends Group {
 				waitLabel = new Label("Waiting for player 1...");
 				gridPane.add(waitLabel, 0, 4);
 
-				mOrder = 2;
-				mDelegate.playerOrderRequest(2);
+				mOrder = 1;
+				mDelegate.playerOrderRequest(mOrder);
 			}
 
 		});
@@ -179,7 +179,7 @@ class SetupDialog extends Group {
 		mDelegate.setOrderTemp(mOrder);
 		
 		gridPane.getChildren().removeAll(player1, player2);
-		confirmLabel = new Label("Do you accept to be player " + mOrder + "?");
+		confirmLabel = new Label("Do you accept to be player " + order + "?");
 		okButton = new Button("OK");
 		cancelButton = new Button("Cancel");
 
@@ -213,13 +213,13 @@ class SetupDialog extends Group {
 	}
 
 	public void startGame() {
+		
 		System.out.println("Game can be started");
 		
 		mDelegate.playerOrderOK(false);
 		gridPane.getChildren().removeAll(okButton, cancelButton, player1, player2, waitLabel, confirmLabel);
-		
-		Label startLabel = new Label("You are player " + mOrder);
+		int nOrder = (mOrder ==1 ? 2 : 1);
+		Label startLabel = new Label("You are player " + nOrder);
 		gridPane.add(startLabel, 0, 3);
-		
 	}
 }
