@@ -10,14 +10,7 @@ public class ProcessMessages extends Thread {
 
 	private Socket mSocket;
 	private SetupDialog mDialog;
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
-=======
->>>>>>> Stashed changes
-	@SuppressWarnings("unused")
-	private int orderTemp;
->>>>>>> origin/master
+
 
 	public ProcessMessages(Socket socket, SetupDialog dialog) {
 		mSocket = socket;
@@ -40,21 +33,8 @@ public class ProcessMessages extends Thread {
 
 						if (lineString.startsWith("player ")) {
 
-<<<<<<< Updated upstream
-							int index = Integer.parseInt(lineString
-									.substring(7));
-							orderTemp = (index == 1 ? 2 : 1);
-=======
-<<<<<<< HEAD
 							int index = Integer.parseInt(lineString.substring(7));
-							//int orderTemp = (index == 1? 2 : 1);
-=======
-							int index = Integer.parseInt(lineString
-									.substring(7));
-							orderTemp = (index == 1 ? 2 : 1);
->>>>>>> origin/master
->>>>>>> Stashed changes
-
+							
 							mDialog.playerOrderRequestReceived(index);
 
 						} else if (lineString.startsWith("OK")) {

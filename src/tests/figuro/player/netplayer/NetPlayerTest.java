@@ -25,12 +25,7 @@ import com.figuro.player.netplayer.NetPlayer;
  */
 public class NetPlayerTest {
 
-<<<<<<< Updated upstream
-	// @Rule public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
-	static boolean stop = false;
-=======
     static boolean stop = false;
->>>>>>> Stashed changes
 
 	public static class AsNonApp extends Application implements IMessageSender,
 			IMoveComplete {

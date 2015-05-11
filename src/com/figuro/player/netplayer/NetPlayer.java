@@ -132,7 +132,7 @@ public class NetPlayer implements IPlayer, IDialogDelegate, IThreadDelegate {
 		}
 
 		mSetupDialog = new SetupDialog(parent, this, mIP);
-
+	}
         
         
 	@Override
