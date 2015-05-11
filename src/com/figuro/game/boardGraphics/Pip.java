@@ -97,7 +97,7 @@ public class Pip implements IPip {
 			figure.getChildren().add(
 					createBoundCircle(board, pipSize, 2, 2.5, Color.BLACK));
 			figure.getChildren()
-					.add(createBoundCircle(board, pipSize / 3 * 2, 4, 3,
+					.add(createBoundCircle(board, pipSize / 3 * 2, 2, 3,
 							Color.WHITE));
 		}
 		if (unit.getType() == UnitEnum.KING
@@ -106,7 +106,7 @@ public class Pip implements IPip {
 			figure.getChildren().add(
 					createBoundCircle(board, pipSize, 2, 2.5, Color.WHITE));
 			figure.getChildren()
-					.add(createBoundCircle(board, pipSize / 3 * 2, 4, 3,
+					.add(createBoundCircle(board, pipSize / 3 * 2, 2, 3,
 							Color.BLACK));
 		}
 		figure.setId("PIP_" + unit.getType() + "_" + unit.getOwnerId());
