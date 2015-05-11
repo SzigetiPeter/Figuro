@@ -79,10 +79,59 @@ public class CheckersRules implements IGameRules {
 	public BoardState applyMoveEffect(BoardState oldState, BoardState newState,
 			int player) {
 		
-		//TODO: implement
+		ICell[][] oldCells = oldState.getBoard();
+		ICell[][] newCells = newState.getBoard();
+		
+		Point beginPoint = new Point();
+		Point endPoint = new Point();
+		getMoveEndPoints(oldCells, newCells, player, beginPoint, endPoint);
+		
+		int distance = getDistance(beginPoint, endPoint);
+		
+		if (distance == 1)
+		{
+			//check if reached the enemy base
+			if (unitReachedEnemyBase(newState, endPoint, player))
+			{
+				IUnit kingUnit = new CheckersUnit(UnitEnum.KING, player);
+				ICell kingCell = new Cell(kingUnit);
+				newState.set(endPoint, kingCell);
+			}
+		}
+		else if (distance == 2)
+		{
+			//remove the unit in between
+			ICell emptyCell = new Cell();
+			Point betweenPoint = getThePointInBetween(beginPoint, endPoint);
+			newState.set(betweenPoint, emptyCell);
+			//check if reached the enemy base
+			if (unitReachedEnemyBase(newState, endPoint, player))
+			{
+				IUnit kingUnit = new CheckersUnit(UnitEnum.KING, player);
+				ICell kingCell = new Cell(kingUnit);
+				newState.set(endPoint, kingCell);
+			}
+		}
+		else // something is wrong
+		{
+			return oldState;
+		}
+		
 		return newState;
 	}
-
+	
+	private boolean unitReachedEnemyBase(BoardState state, Point endPoint, int player)
+	{
+		Point enemyBaseRightCorner = getEnemyPlayerRightClosestPoint(player);
+		
+		if (endPoint.y == enemyBaseRightCorner.y)
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	
 	private void getMoveEndPoints(ICell[][] oldCells, ICell[][] newCells,
 			int player, Point beginPoint, Point endPoint) {
 		Point temp = getChange(oldCells, newCells, player);
@@ -214,6 +263,20 @@ public class CheckersRules implements IGameRules {
 			rightClosestCellPoint = BoardState.getBlackPlayerRightClosestCell();
 		} else if (player == PlayerEnum.WHITE) {
 			rightClosestCellPoint = BoardState.getWhitePlayerRightClosestCell();
+		}
+
+		return rightClosestCellPoint;
+	}
+	
+	private Point getEnemyPlayerRightClosestPoint(int playerId) {
+		Point rightClosestCellPoint = new Point();
+
+		PlayerEnum player = PlayerConverter.PlayerIdToPlayerEnum(playerId);
+
+		if (player == PlayerEnum.BLACK) {
+			rightClosestCellPoint = BoardState.getWhitePlayerRightClosestCell();
+		} else if (player == PlayerEnum.WHITE) {
+			rightClosestCellPoint = BoardState.getBlackPlayerRightClosestCell();
 		}
 
 		return rightClosestCellPoint;
