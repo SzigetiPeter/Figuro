@@ -68,6 +68,10 @@ public class CheckersRules implements IGameRules {
 			Point beginPoint = new Point();
 			Point endPoint = new Point();
 			getMoveEndPoints(oldCells, newCells, player, beginPoint, endPoint);
+			
+			if (beginPoint == null || endPoint == null) // cannot detect the change
+				return false;
+			
 			if (isValidMove(oldCells, beginPoint, endPoint, player)) {
 				isValidMove = true;
 			}
@@ -85,6 +89,9 @@ public class CheckersRules implements IGameRules {
 		Point beginPoint = new Point();
 		Point endPoint = new Point();
 		getMoveEndPoints(oldCells, newCells, player, beginPoint, endPoint);
+		
+		if (beginPoint == null || endPoint == null) // cannot detect the change
+			return oldState;
 		
 		int distance = getDistance(beginPoint, endPoint);
 		
@@ -135,10 +142,18 @@ public class CheckersRules implements IGameRules {
 	private void getMoveEndPoints(ICell[][] oldCells, ICell[][] newCells,
 			int player, Point beginPoint, Point endPoint) {
 		Point temp = getChange(oldCells, newCells, player);
+		
+		if (temp == null)
+			return;
+		
 		beginPoint.x = temp.x;
 		beginPoint.y = temp.y;
 
 		temp = getChange(newCells, oldCells, player);
+		
+		if (temp == null)
+			return;
+		
 		endPoint.x = temp.x;
 		endPoint.y = temp.y;
 	}
@@ -431,6 +446,9 @@ public class CheckersRules implements IGameRules {
 		ICell[][] oldCells = oldState.getBoard();
 		ICell[][] newCells = newState.getBoard();
 		getMoveEndPoints(oldCells, newCells, player, beginPoint, endPoint);
+		
+		if (beginPoint == null || endPoint == null) // cannot detect the change
+			return 0;
 
 		int distance = getDistance(beginPoint, endPoint);
 
