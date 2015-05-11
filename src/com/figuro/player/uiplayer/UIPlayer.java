@@ -107,7 +107,7 @@ public class UIPlayer implements IPlayer {
                             if (state.getBoard()[x][y] != null) {
                                 IPip p = boardGraphics.getFigureGraphic(state.getBoard()[x][y].getUnit());
                                 p.getPip().setTranslateX(x * boardSizeX / 8);
-                                p.getPip().setTranslateY(y * boardSizeY / 8);
+                                p.getPip().setTranslateY((7 - y) * boardSizeY / 8);
                                 boardGraphics.getBoardGraphic().getBoardPane().getChildren().add(p.getPip());
                             }
                         }

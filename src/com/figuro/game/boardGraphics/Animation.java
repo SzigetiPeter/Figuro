@@ -145,7 +145,7 @@ public class Animation implements IAnimation {
             NumberBinding rectsAreaSize = Bindings.min(board.getBoardPane().heightProperty(), board.getBoardPane()
                     .widthProperty());
             selected.setTranslateX(finalPoint.x * rectsAreaSize.divide(board.getBoardSizeX()).floatValue());
-            selected.setTranslateY((finalPoint.y) * rectsAreaSize.divide(board.getBoardSizeY()).floatValue());
+            selected.setTranslateY((7 - finalPoint.y) * rectsAreaSize.divide(board.getBoardSizeY()).floatValue());
 
             if (finalPoint.equals(startingPoint)) {
                 return;
@@ -173,7 +173,7 @@ public class Animation implements IAnimation {
                 boardPoint.x = i;
             }
             if (rectsAreaSize.divide(board.getBoardSizeY()).multiply(i).floatValue() < y) {
-                boardPoint.y = 7 - i;
+                boardPoint.y = i;
             }
         }
         return boardPoint;
