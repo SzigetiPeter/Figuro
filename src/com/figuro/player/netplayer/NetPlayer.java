@@ -66,6 +66,11 @@ public class NetPlayer implements IPlayer, IDialogDelegate, IThreadDelegate {
 	}
 
 	@Override
+	public void setOrderTemp(int orderTemp) {
+		this.orderTemp = orderTemp;
+	}
+	
+	@Override
 	public int getId() {
 		return mId;
 	}
@@ -127,10 +132,9 @@ public class NetPlayer implements IPlayer, IDialogDelegate, IThreadDelegate {
 		}
 
 		mSetupDialog = new SetupDialog(parent, this, mIP);
-		// mSetupDialog.sizeToScene();
-		// mSetupDialog.show();
-	}
 
+        
+        
 	@Override
 	public int getPrefferedOrder() {
 
@@ -172,11 +176,14 @@ public class NetPlayer implements IPlayer, IDialogDelegate, IThreadDelegate {
 	}
 
 	@Override
-	public void playerOrderOK() {
+	public void playerOrderOK(boolean needToSend) {
 
 		mPrefferedOrder = orderTemp;
-		(new SendMessage(mClientSocket, "OK")).start();
-		mSetupDialog.startGame();
+		
+		if (needToSend) {
+			(new SendMessage(mClientSocket, "OK")).start();
+			mSetupDialog.startGame();
+		}
 
 	}
 

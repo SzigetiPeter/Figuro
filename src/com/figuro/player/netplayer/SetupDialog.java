@@ -173,7 +173,18 @@ class SetupDialog extends Group {
 
 	public void playerOrderRequestReceived(int order) {
 		System.out.println("Order request: " + order);
+<<<<<<< Updated upstream
 		mOrder = (order == 1 ? 2 : 1);
+=======
+<<<<<<< HEAD
+		mOrder = (order == 1? 2 : 1);
+		
+		mDelegate.setOrderTemp(mOrder);
+		
+=======
+		mOrder = (order == 1 ? 2 : 1);
+>>>>>>> origin/master
+>>>>>>> Stashed changes
 		gridPane.getChildren().removeAll(player1, player2);
 		confirmLabel = new Label("Do you accept to be player " + mOrder + "?");
 		okButton = new Button("OK");
@@ -189,8 +200,16 @@ class SetupDialog extends Group {
 			public void handle(ActionEvent event) {
 				okButton.setDisable(true);
 				cancelButton.setDisable(true);
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+				
+				mDelegate.playerOrderOK(true);
+=======
+>>>>>>> Stashed changes
 
 				mDelegate.playerOrderOK();
+>>>>>>> origin/master
 			}
 
 		});
@@ -210,10 +229,23 @@ class SetupDialog extends Group {
 
 	public void startGame() {
 		System.out.println("Game can be started");
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+		
+		mDelegate.playerOrderOK(false);
+		gridPane.getChildren().removeAll(okButton, cancelButton, player1, player2, waitLabel, confirmLabel);
+		
+=======
+>>>>>>> Stashed changes
 
 		gridPane.getChildren().removeAll(okButton, cancelButton, player1,
 				player2, waitLabel, confirmLabel);
 
+<<<<<<< Updated upstream
+=======
+>>>>>>> origin/master
+>>>>>>> Stashed changes
 		Label startLabel = new Label("You are player " + mOrder);
 		gridPane.add(startLabel, 0, 3);
 	}

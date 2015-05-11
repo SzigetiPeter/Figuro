@@ -7,10 +7,9 @@ public interface IDialogDelegate {
 	public void stopListening();
 
 	public void connectToPlayer(String ipString, int portNumber);
-
+	
+	public void setOrderTemp(int order);
 	public void playerOrderRequest(int order);
-
-	public void playerOrderOK();
-
+	public void playerOrderOK(boolean needToSend);
 	public void playerOrderCancel();
 }
