@@ -63,7 +63,7 @@ public class MainWindowUI {
 			public void handle(ActionEvent event) {
 
 				IEngineHandler gameRunner = builder.createEngine();
-				gameRunner.resumeGame(new GameOverUINotification());
+				gameRunner.resumeGame(new GameOverUINotification(root, mainScreenVBox, builder));
 				root.setCenter(new GameBoardWindowUI(messageLabel));
 			}
 		});
