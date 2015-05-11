@@ -9,7 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
-class SetupDialog extends Group {
+class SetupDialog extends Group implements ISetupDialog {
 
 	private Label ipLbl, ipFld, portLbl, portFld, confirmLabel, waitLabel;
 	private Button listenButton, connectButton, okButton, cancelButton;

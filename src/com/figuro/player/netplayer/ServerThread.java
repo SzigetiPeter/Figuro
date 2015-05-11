@@ -14,11 +14,10 @@ public class ServerThread extends Thread {
 	private Socket mSocket;
 	private ServerSocket mServerSocket;
 	private IThreadDelegate mDelegate;
-	private SetupDialog mDialog;
+	private ISetupDialog mDialog;
 	private IMessageSender mSender;
 
-	public ServerThread(IThreadDelegate delegate, SetupDialog dialog,
-			IMessageSender sender) {
+	public ServerThread(IThreadDelegate delegate, ISetupDialog dialog, IMessageSender sender) {
 		mDelegate = delegate;
 		mDialog = dialog;
 

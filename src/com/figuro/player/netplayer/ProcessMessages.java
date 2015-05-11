@@ -12,10 +12,10 @@ import javafx.application.Platform;
 public class ProcessMessages extends Thread implements IProcessor {
 
 	private Socket mSocket;
-	private SetupDialog mDialog;
+	private ISetupDialog mDialog;
 	private IMoveComplete mComplete;
 
-	public ProcessMessages(Socket socket, SetupDialog dialog) {
+	public ProcessMessages(Socket socket, ISetupDialog dialog) {
 		mSocket = socket;
 		mDialog = dialog;
 	}

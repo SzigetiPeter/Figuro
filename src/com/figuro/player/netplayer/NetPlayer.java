@@ -53,7 +53,6 @@ public class NetPlayer implements IPlayer, IDialogDelegate, IThreadDelegate {
 		try {
 			
 			mProcessor.setCallback(callback);
-			//callback.setResult(mBoardState);
 			
 		} catch (NullPointerException e) {
 			System.out.println("Callback was null");

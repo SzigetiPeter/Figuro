@@ -9,11 +9,11 @@ public class ClientThread extends Thread {
 	String mIpString;
 	int mPortNumber;
 	Socket mSocket;
-	SetupDialog mDialog;
+	ISetupDialog mDialog;
 	IThreadDelegate mDelegate;
 
 	public ClientThread(IThreadDelegate delegate, String ipString,
-			int portNumber, SetupDialog dialog) {
+			int portNumber, ISetupDialog dialog) {
 		mIpString = ipString;
 		mPortNumber = portNumber;
 		mDialog = dialog;
