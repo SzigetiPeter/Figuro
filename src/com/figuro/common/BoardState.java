@@ -21,9 +21,9 @@ public class BoardState implements Serializable {
 
 	private ICell[][] board;
 
-	private static Point blackPlayerRightClosestCell = new Point(0, 7);
-	private static Point whitePlayerRightClosestCell = new Point(7, 0);
-
+	private static Point whitePlayerRightClosestCell = new Point(0, 7);
+	private static Point blackPlayerRightClosestCell = new Point(7, 0);
+	
 	private Point lastMove = null;
 	private Point lastMoveFrom = null;
 

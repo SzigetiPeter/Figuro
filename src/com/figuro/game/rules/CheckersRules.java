@@ -197,8 +197,8 @@ public class CheckersRules implements IGameRules {
 
 		Point rightClosestCellPoint = getPlayerRightClosestPoint(player);
 
-		if (abs(beginPoint.x - rightClosestCellPoint.x) < abs(endPoint.x
-				- rightClosestCellPoint.x)) {
+		if (abs(beginPoint.y - rightClosestCellPoint.y) < abs(endPoint.y
+				- rightClosestCellPoint.y)) {
 			isMovingAhead = true;
 		}
 
