@@ -156,7 +156,7 @@ public class BoardState implements Serializable {
 					IUnit unit = this.board[i][j].getUnit();
 					output += "[" + unit.getOwnerId() + "-" + unit.getType().toString() + "]\t";
 				} else {
-					output += "[\t]\t";
+					output += "[\t      ]\t";
 				}
 			}
 			output += "\n";

@@ -9,6 +9,7 @@ import static java.lang.Math.abs;
 import static java.lang.Math.max;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.figuro.common.BoardState;
@@ -75,6 +76,11 @@ public class CheckersRules implements IGameRules {
 			if (isValidMove(oldCells, beginPoint, endPoint, player)) {
 				isValidMove = true;
 			}
+		}
+		
+		if (isValidMove == true)
+		{
+			System.out.println("true");
 		}
 
 		return isValidMove;
@@ -369,6 +375,7 @@ public class CheckersRules implements IGameRules {
 		if (player == 0)
 			return null;
 
+		List<BoardState> validBoardStates = new ArrayList<BoardState>();
 		List<BoardState> boardStateCandidates = stepGenerator.getSteps(state,
 				player);
 
@@ -379,12 +386,13 @@ public class CheckersRules implements IGameRules {
 		for (int i = 0; i < boardStateCandidates.size(); ++i) {
 			BoardState currentState = boardStateCandidates.get(i);
 
-			if (!this.isValidMove(state, currentState, player)) {
-				boardStateCandidates.remove(i);
+			boolean isValidMove = this.isValidMove(state, currentState, player);
+			if (isValidMove == true) {
+				validBoardStates.add(currentState);
 			}
 		}
 
-		return boardStateCandidates;
+		return validBoardStates;
 	}
 
 	@Override
