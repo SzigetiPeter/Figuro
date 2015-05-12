@@ -34,6 +34,8 @@ public class NetPlayer implements IPlayer, IDialogDelegate, IThreadDelegate {
 	private int mPrefferedOrder = 0;
 	
 	private IProcessor mProcessor;
+	
+	private Button mButton;
 
 	public NetPlayer(IMessageSender sender) {
 
@@ -118,6 +120,9 @@ public class NetPlayer implements IPlayer, IDialogDelegate, IThreadDelegate {
 
 	@Override
 	public void setup(Group parent, Button okButton) {
+		
+		mButton = okButton;
+		
 		try {
 
 			mIP = getIp();
@@ -131,6 +136,8 @@ public class NetPlayer implements IPlayer, IDialogDelegate, IThreadDelegate {
 
 		}
 
+		okButton.setDisable(true);
+		
 		mSetupDialog = new SetupDialog(parent, this, mIP);
 	}
         
@@ -185,6 +192,8 @@ public class NetPlayer implements IPlayer, IDialogDelegate, IThreadDelegate {
 			(new SendMessage(mClientSocket, "OK")).start();
 			mSetupDialog.startGame();
 		}
+		
+		mButton.setDisable(false);
 
 	}
 
