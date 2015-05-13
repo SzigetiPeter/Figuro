@@ -117,6 +117,7 @@ public class GameJob implements Runnable {
 				&& !rules.isGameOver(state, currentPlayerId)) {
 			moveCompleteCallback = new MoveComplete(this.runningState);
 
+			setCurrentPlayer(currentPlayerId);
 			IPlayer currentPlayer = players.get(currentPlayerId);
 			currentPlayer.move(moveCompleteCallback);
 			moveCompleteCallback.listen();
