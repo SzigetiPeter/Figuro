@@ -50,11 +50,24 @@ public class NewGameScreen extends VBox {
 		final ComboBox<String> priorityComboBox = new ComboBox<String>();
 
 		String[] gameTypes = builder.getGameTypes();
-
+		
+		int comboBoxItems = 0;
+		String firstItem ="";
 		for (String string : gameTypes) {
+			comboBoxItems = comboBoxItems + 1 ;
+			if (comboBoxItems == 1 )
+			{
+				firstItem = string;
+			}
 			priorityComboBox.getItems().add(string);
 		}
-
+	
+		if (comboBoxItems > 0 && firstItem!="")
+		{
+			priorityComboBox.setValue(firstItem);
+		}
+		
+		
 		gridGameTypes.add(priorityComboBox, 0, 0);
 
 		final ToggleGroup group = new ToggleGroup();
@@ -74,10 +87,12 @@ public class NewGameScreen extends VBox {
 		radio.setUserData(PlayerSetupFactory.BOT_VS_BOT);
 		gridGameTypes.add(radio, 0, 3);
 		
-		radio = new RadioButton("Player vs. Player");
-		radio.setToggleGroup(group);
-		radio.setUserData(PlayerSetupFactory.PLAYER_VS_PLAYER);
-		gridGameTypes.add(radio, 0, 4);
+		RadioButton radioPlayerVsPlayer = new RadioButton("Player vs. Player");
+		radioPlayerVsPlayer.setToggleGroup(group);
+		radioPlayerVsPlayer.setUserData(PlayerSetupFactory.PLAYER_VS_PLAYER);
+		
+		radioPlayerVsPlayer.setSelected(true);
+		gridGameTypes.add(radioPlayerVsPlayer, 0, 4);
 
 		HBox btnBox = new HBox();
 		Button backButton = new Button();
