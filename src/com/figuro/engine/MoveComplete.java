@@ -1,7 +1,5 @@
 package com.figuro.engine;
 
-import java.util.concurrent.CountDownLatch;
-
 import com.figuro.common.BoardState;
 
 /**

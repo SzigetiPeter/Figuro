@@ -22,10 +22,10 @@ public class Persistency implements IPersistency, Serializable {
 	String game;
 	List<String> players;
 	BoardState boardState;
-
-	String fileName = "gameData.ser";
-
+	int currentPlayerId;
+	
 	IMessageSender messageSender;
+	String fileName = "gameData.ser";
 
 	public Persistency(IMessageSender messageSender) {
 		this.messageSender = messageSender;
@@ -43,7 +43,7 @@ public class Persistency implements IPersistency, Serializable {
 	
 	@Override
 	public void save(BoardState state, int currentPlayerId) {
-		GameData gameData = new GameData(game, players, state);
+		GameData gameData = new GameData(game, players, state, currentPlayerId);
 		try {
 			FileOutputStream fileOut = new FileOutputStream(fileName);
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
@@ -68,6 +68,7 @@ public class Persistency implements IPersistency, Serializable {
 			this.game = gameData.game;
 			this.players = gameData.players;
 			this.boardState = gameData.boardState;
+			this.currentPlayerId = gameData.currentPlayerId;
 
 			try {
 				File file = new File(fileName);
@@ -114,5 +115,10 @@ public class Persistency implements IPersistency, Serializable {
 	@Override
 	public BoardState getBoardState() {
 		return boardState;
+	}
+	
+	@Override
+	public int getCurrentPlayerId() {
+		return currentPlayerId;
 	}
 }

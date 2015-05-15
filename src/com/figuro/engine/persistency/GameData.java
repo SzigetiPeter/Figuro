@@ -15,10 +15,12 @@ public class GameData implements Serializable {
 	public String game;
 	public List<String> players;
 	public BoardState boardState;
+	public int currentPlayerId;
 
-	public GameData(String game, List<String> players, BoardState boardState) {
+	public GameData(String game, List<String> players, BoardState boardState, int currentPlayerId) {
 		this.game = game;
 		this.players = players;
 		this.boardState = boardState;
+		this.currentPlayerId = currentPlayerId;
 	}
 }

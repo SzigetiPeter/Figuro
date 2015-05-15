@@ -93,9 +93,6 @@ public class GameRunner implements IEngineHandler {
 	public void resumeGame(IGameoverCallback callback) {
 		if (isGameResumable()) {
 			if (persistency.load()) {
-				String gameType = persistency.getGame();
-				Game game = builder.createGame(gameType);
-				
 				List<String> playersType = persistency.getPlayers();
 
 				for (String playerType : playersType) {
@@ -106,10 +103,12 @@ public class GameRunner implements IEngineHandler {
 					}
 				}
 
+				String gameType = persistency.getGame();
+				Game game = builder.createGame(gameType);
 				BoardState boardState = persistency.getBoardState();
-
-				//TODO: load
-				startGame(game, callback, boardState, 1);
+				int currentPlayerId = persistency.getCurrentPlayerId();
+				
+				startGame(game, callback, boardState, currentPlayerId);
 			}
 		} else {
 			message.displayMessage("Cannot resume game, it was not saved!");
