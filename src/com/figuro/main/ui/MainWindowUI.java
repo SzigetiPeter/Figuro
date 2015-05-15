@@ -54,7 +54,7 @@ public class MainWindowUI {
 			@Override
 			public void handle(ActionEvent event) {
 				root.setCenter(new NewGameScreen(root, builder, mainScreenVBox,
-						messageLabel, uiMessage));
+						messageLabel, uiMessage, primaryStage));
 			}
 		});
 
@@ -63,7 +63,7 @@ public class MainWindowUI {
 			public void handle(ActionEvent event) {
 
 				IEngineHandler gameRunner = builder.createEngine();
-				gameRunner.resumeGame(new GameOverUINotification(root, mainScreenVBox, builder));
+				gameRunner.resumeGame(new GameOverUINotification(root, mainScreenVBox, builder,primaryStage));
 				root.setCenter(new GameBoardWindowUI(messageLabel));
 			}
 		});

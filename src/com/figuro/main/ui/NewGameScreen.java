@@ -23,6 +23,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import com.figuro.common.IBuilder;
+import com.figuro.engine.GameJob;
 import com.figuro.engine.IEngineHandler;
 import com.figuro.engine.IGameoverCallback;
 import com.figuro.player.IPlayer;
@@ -32,17 +33,20 @@ public class NewGameScreen extends VBox {
 	private IBuilder builder;
 	private BorderPane root;
 	private Label messageLabel;
-
+	private Stage primaryStage;
+	
 	public NewGameScreen(
 			BorderPane root,
 			IBuilder builder,
 			VBox mainScreenVBox,
 			Label messageLabel, 
-			UIMessage uiMessage) {
+			UIMessage uiMessage,
+			Stage primaryStage) {
 		this.root = root;
 		this.builder = builder;
 		this.messageLabel = messageLabel;
-
+		this.primaryStage = primaryStage;
+		
 		GridPane gridGameTypes = new GridPane();
 		gridGameTypes.setVgap(4);
 		gridGameTypes.setPadding(new Insets(5, 5, 5, 5));
@@ -133,7 +137,7 @@ public class NewGameScreen extends VBox {
 				boolean startGame = true;
 				
 				IEngineHandler gameRunner = builder.createEngine();
-				IGameoverCallback gameoverCallback = new GameOverUINotification(root, mainScreenVBox,builder);
+				IGameoverCallback gameoverCallback = new GameOverUINotification(root, mainScreenVBox,builder, primaryStage);
 				
 				IPlayer iplayer1 = gameRunner.addPlayer(player1);
 				IPlayer iplayer2 = gameRunner.addPlayer(player2);
@@ -149,7 +153,7 @@ public class NewGameScreen extends VBox {
 				
 				if (startGame) {
 					gameRunner.runGame(priorityComboBox.getValue().toString(),
-							gameoverCallback);
+							gameoverCallback);					
 				}
 			}
 		});
