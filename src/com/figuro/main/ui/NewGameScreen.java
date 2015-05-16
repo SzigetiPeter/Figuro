@@ -1,5 +1,6 @@
 package com.figuro.main.ui;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -21,6 +22,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import com.figuro.common.IBuilder;
 import com.figuro.engine.GameJob;
@@ -34,6 +36,7 @@ public class NewGameScreen extends VBox {
 	private BorderPane root;
 	private Label messageLabel;
 	private Stage primaryStage;
+	private boolean isGameStarted;
 	
 	public NewGameScreen(
 			BorderPane root,
@@ -46,6 +49,9 @@ public class NewGameScreen extends VBox {
 		this.builder = builder;
 		this.messageLabel = messageLabel;
 		this.primaryStage = primaryStage;
+		
+		
+		
 		
 		GridPane gridGameTypes = new GridPane();
 		gridGameTypes.setVgap(4);
@@ -152,8 +158,10 @@ public class NewGameScreen extends VBox {
 					startGame = false;
 				
 				if (startGame) {
+					//mainScreenVBox.setGameRunning(true);
+					isGameStarted = true;
 					gameRunner.runGame(priorityComboBox.getValue().toString(),
-							gameoverCallback);					
+							gameoverCallback);
 				}
 			}
 		});
@@ -170,6 +178,14 @@ public class NewGameScreen extends VBox {
 		this.getChildren().addAll(gameTypeGroup);
 	}
 
+	public boolean GetIsGameStarted(){
+		return isGameStarted;
+	}
+	
+	public void GameClosed(){
+		isGameStarted = false;
+	}
+	
 	private boolean SetupPlayerIfNeeded(IPlayer playerType,IEngineHandler gameRunner,IGameoverCallback gameoverCallback,String gameType) {
 		if (playerType.needsSetup()) {
 			BorderPane secondaryLayout = new BorderPane();

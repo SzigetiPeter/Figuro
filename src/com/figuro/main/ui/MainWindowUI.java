@@ -1,5 +1,6 @@
 package com.figuro.main.ui;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -7,8 +8,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import com.figuro.common.Builder;
+import com.figuro.common.IBuilder;
+import com.figuro.engine.GameJob;
 import com.figuro.engine.IEngineHandler;
 import com.figuro.engine.IGameoverCallback;
 import com.figuro.engine.persistency.IPersistency;
@@ -26,6 +30,8 @@ public class MainWindowUI {
 	private UIMessage uiMessage;
 
 	private Label messageLabel;
+	
+	private NewGameScreen ngs;
 
 	public MainWindowUI(Stage primaryStage) {
 		super();
@@ -53,8 +59,9 @@ public class MainWindowUI {
 		this.mainScreenVBox.setNewGameAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				root.setCenter(new NewGameScreen(root, builder, mainScreenVBox,
-						messageLabel, uiMessage, primaryStage));
+				ngs = new NewGameScreen(root, builder, mainScreenVBox,
+						messageLabel, uiMessage, primaryStage);
+				root.setCenter(ngs);
 			}
 		});
 
@@ -79,7 +86,23 @@ public class MainWindowUI {
 	}
 
 	public void StartGameMenu() {
+		Platform.setImplicitExit(false);
+
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		    @Override
+		    public void handle(WindowEvent event) {
+		    	if (ngs != null && ngs.GetIsGameStarted()==true)
+		    	{   
+		    		// itt persistencia segitsegevel kene menteni
+		    		ngs.GameClosed();
+			    	builder.free();
+					root.setCenter(mainScreenVBox);
+					primaryStage.setScene(root.getScene());		    	
+					event.consume();
+		    	}
+		    }
+		});
+		
 		this.primaryStage.show();
 	}
-
 }
