@@ -10,6 +10,7 @@ import static java.lang.Math.max;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.figuro.common.BoardState;
@@ -459,6 +460,8 @@ public class CheckersRules implements IGameRules {
 			return 0;
 
 		int distance = getDistance(beginPoint, endPoint);
+		
+		boolean canRemoveEnemyUnit = canRemoveEnemyUnit(newState, endPoint, player);
 
 		if (distance == 1) {
 			PlayerEnum playerEnum = PlayerConverter
@@ -471,11 +474,69 @@ public class CheckersRules implements IGameRules {
 				nextPlayerId = PlayerConverter
 						.PlayerEnumToPlayerId(PlayerEnum.BLACK);
 			}
-		} else {
+		} else if (distance == 2 && canRemoveEnemyUnit) {
 			nextPlayerId = player;
+		} else if (distance == 2 && !canRemoveEnemyUnit) {
+			PlayerEnum playerEnum = PlayerConverter
+					.PlayerIdToPlayerEnum(player);
+
+			if (playerEnum == PlayerEnum.BLACK) {
+				nextPlayerId = PlayerConverter
+						.PlayerEnumToPlayerId(PlayerEnum.WHITE);
+			} else if (playerEnum == PlayerEnum.WHITE) {
+				nextPlayerId = PlayerConverter
+						.PlayerEnumToPlayerId(PlayerEnum.BLACK);
+			}
 		}
 
 		return nextPlayerId;
+	}
+	
+	private boolean canRemoveEnemyUnit(BoardState state, Point actualPosition, int playerId)
+	{
+		boolean canRemoveEnemyUnit = false;
+		
+		ICell[][] oldCells = state.getBoard();
+		ICell[][] newCells = null;
+		
+		List<BoardState> possibleSteps = stepGenerator.getDiagonalSteps(state, actualPosition, playerId);
+		
+		List<BoardState> validSteps = new ArrayList<BoardState>();
+		
+		for (int i = 0; i < possibleSteps.size(); ++i) {
+			BoardState currentState = possibleSteps.get(i);
+
+			boolean isValidMove = this.isValidMove(state, currentState, playerId);
+			if (isValidMove == true) {
+				validSteps.add(currentState);
+			}
+		}
+		
+		for (Iterator<BoardState> it = validSteps.iterator(); it.hasNext();)
+		{
+			BoardState newState = it.next();
+			
+			if (newState == null)
+				continue;
+			
+			newCells = newState.getBoard();
+			
+			if (newCells == null)
+				continue;
+			
+			Point beginPoint = new Point();
+			Point endPoint = new Point();
+			getMoveEndPoints(oldCells, newCells, playerId, beginPoint, endPoint);
+			
+			
+			if (isEnemyInBetween(newCells, playerId, beginPoint, endPoint))
+			{
+				canRemoveEnemyUnit = true;
+				break;
+			}
+		}
+		
+		return canRemoveEnemyUnit;
 	}
 
 }

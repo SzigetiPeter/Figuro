@@ -300,4 +300,69 @@ public class StepGenerator implements IStepGenerator {
 
 		return steps;
 	}
+
+	@Override
+	public List<BoardState> getDiagonalSteps(BoardState state, Point actualPosition, int player) {
+		
+		if (state == null)
+			return null;
+		if (actualPosition == null)
+			return null;
+		if (player == 0)
+			return null;
+
+		ICell[][] cells = state.getBoard();
+		if (cells == null)
+			return null;
+		
+		ICell actualCell = state.get(actualPosition);
+		if (actualCell == null || !actualCell.hasUnit()) {
+			return null;
+		}
+
+		List<BoardState> steps = new ArrayList<BoardState>();
+		ICell emptyCell = new Cell();
+		ICell neighbourCell = null;
+		
+		Point point = null;
+		
+		point = new Point(actualPosition.x - 2, actualPosition.y + 2);
+		neighbourCell = state.get(point);
+		if (neighbourCell != null && !neighbourCell.hasUnit()) {
+			BoardState newState = new BoardState(state);
+			newState.set(actualPosition, emptyCell);
+			newState.set(point, actualCell);
+			steps.add(newState);
+		}
+		
+		point = new Point(actualPosition.x + 2, actualPosition.y + 2);
+		neighbourCell = state.get(point);
+		if (neighbourCell != null && !neighbourCell.hasUnit()) {
+			BoardState newState = new BoardState(state);
+			newState.set(actualPosition, emptyCell);
+			newState.set(point, actualCell);
+			steps.add(newState);
+		}
+		
+		point = new Point(actualPosition.x - 2, actualPosition.y - 2);
+		neighbourCell = state.get(point);
+		if (neighbourCell != null && !neighbourCell.hasUnit()) {
+			BoardState newState = new BoardState(state);
+			newState.set(actualPosition, emptyCell);
+			newState.set(point, actualCell);
+			steps.add(newState);
+		}
+		
+		point = new Point(actualPosition.x + 2, actualPosition.y + 2);
+		neighbourCell = state.get(point);
+		if (neighbourCell != null && !neighbourCell.hasUnit()) {
+			BoardState newState = new BoardState(state);
+			newState.set(actualPosition, emptyCell);
+			newState.set(point, actualCell);
+			steps.add(newState);
+		}
+		
+		
+		return steps;
+	}
 }

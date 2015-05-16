@@ -5,6 +5,7 @@
  */
 package com.figuro.game.rules;
 
+import java.awt.Point;
 import java.util.List;
 
 import com.figuro.common.BoardState;
@@ -15,4 +16,5 @@ import com.figuro.common.BoardState;
  */
 public interface IStepGenerator {
 	public List<BoardState> getSteps(BoardState state, int player);
+	public List<BoardState> getDiagonalSteps(BoardState state, Point actualPosition, int player);
 }
