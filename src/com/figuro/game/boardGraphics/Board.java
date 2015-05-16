@@ -155,7 +155,7 @@ public class Board implements IBoard {
 			}
 		}
 		board.setId("BOARD");
-		boarderPane.getChildren().add(board);
+		boarderPane.setCenter(board);
 		return board;
 	}
 

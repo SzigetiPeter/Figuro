@@ -5,11 +5,22 @@
  */
 package com.figuro.common;
 
+import javafx.scene.control.Label;
+
 /**
  * @author Aszalos Gyorgy
  */
 public interface IMessageSender {
-	public void displayMessage(String message);
+    public void displayMessage(String message);
 
-	public void updateGameState(String gameStatus);
+    public void updateGameState(String gameStatus);
+
+    public Label getMessage();
+
+    public void setMessage(Label message);
+
+    public Label getScore();
+
+    public void setScore(Label score);
+
 }

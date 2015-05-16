@@ -37,7 +37,7 @@ public class Builder implements IBuilder {
 
 	public IEngineHandler createEngine() {
 		IPersistency persistency = new Persistency(messages);
-		GameJob gameJob = new GameJob(persistency);
+		GameJob gameJob = new GameJob(persistency, messages);
 		return new GameRunner(gameJob, this, messages, persistency);
 	}
 
@@ -71,7 +71,7 @@ public class Builder implements IBuilder {
 		switch (type) {
 		case IBuilder.UI_PLAYER:
 			if (! stuff.containsKey(type)) {
-				stuff.put(type, new UIPlayer(stage));
+				stuff.put(type, new UIPlayer(stage, messages));
 			}
 			player = (IPlayer)stuff.get(type);
 			break;

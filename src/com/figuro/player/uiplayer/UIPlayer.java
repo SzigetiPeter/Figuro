@@ -1,12 +1,14 @@
 package com.figuro.player.uiplayer;
 
 import javafx.application.Platform;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 import com.figuro.common.BoardState;
+import com.figuro.common.IMessageSender;
 import com.figuro.engine.IMoveComplete;
 import com.figuro.game.boardGraphics.BoardGraphics;
 import com.figuro.game.boardGraphics.IBoardGraphics;
@@ -23,6 +25,7 @@ public class UIPlayer implements IPlayer {
     private int boardSizeY = 500;
 
     private Stage stage;
+    private Double topSize;
 
     public UIPlayer(Stage stage) {
         this.stage = stage;
@@ -35,6 +38,27 @@ public class UIPlayer implements IPlayer {
                 stage.setScene(new Scene(boardGraphics.getBoardGraphic().getBoardPane(), boardSizeX, boardSizeY));
             }
         });
+    }
+
+    public UIPlayer(Stage stage, IMessageSender messages) {
+        this.stage = stage;
+
+        this.boardGraphics = new BoardGraphics(8, 8);
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Group header = new Group();
+                header.setId("HEADER");
+                // header.getChildren().add(messages.getScore());
+                header.getChildren().add(messages.getMessage());
+                boardGraphics.getBoardGraphic().getBoardPane().setTop(header);
+                stage.setScene(new Scene(boardGraphics.getBoardGraphic().getBoardPane(), boardSizeX, boardSizeY));
+                topSize = boardGraphics.getBoardGraphic().getBoardPane().getTop().getLayoutBounds().getHeight();
+                stage.setHeight(stage.getHeight() + topSize);
+            }
+        });
+
     }
 
     @Override
@@ -89,12 +113,12 @@ public class UIPlayer implements IPlayer {
     public void notify(BoardState counterMove) {
         internalState = counterMove;
     }
-    
-	@Override
-	public void update(BoardState state) {
-		internalState = state;
+
+    @Override
+    public void update(BoardState state) {
+        internalState = state;
         setBoardState(internalState);
-	}
+    }
 
     private void setBoardState(BoardState state) {
         Platform.runLater(new Runnable() {
@@ -106,8 +130,8 @@ public class UIPlayer implements IPlayer {
                         if (state.getBoard()[x][y].hasUnit()) {
                             if (state.getBoard()[x][y] != null) {
                                 IPip p = boardGraphics.getFigureGraphic(state.getBoard()[x][y].getUnit());
-                                p.getPip().setTranslateX(x * boardSizeX / 8);
-                                p.getPip().setTranslateY((7 - y) * boardSizeY / 8);
+                                p.getPip().setTranslateX((x * boardSizeX / 8));
+                                p.getPip().setTranslateY(((7 - y) * boardSizeY / 8) + topSize);
                                 boardGraphics.getBoardGraphic().getBoardPane().getChildren().add(p.getPip());
                             }
                         }
@@ -117,6 +141,6 @@ public class UIPlayer implements IPlayer {
     }
 
     private void clearPips() {
-        boardGraphics.getBoardGraphic().getBoardPane().getChildren().removeIf(item -> item.getId() != "BOARD");
+        boardGraphics.getBoardGraphic().getBoardPane().getChildren().removeIf(item -> item.getId().contains("PIP"));
     }
 }

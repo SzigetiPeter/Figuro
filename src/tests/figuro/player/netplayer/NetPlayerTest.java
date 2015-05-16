@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -87,6 +88,30 @@ public class NetPlayerTest {
 		public void updateGameState(String gameStatus) {
 			mGameStatus = gameStatus;
 		}
+
+        @Override
+        public Label getMessage() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public void setMessage(Label message) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public Label getScore() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public void setScore(Label score) {
+            // TODO Auto-generated method stub
+            
+        }
 	}
 
 	@BeforeClass
