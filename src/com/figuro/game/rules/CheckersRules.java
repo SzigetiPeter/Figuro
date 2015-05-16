@@ -74,6 +74,14 @@ public class CheckersRules implements IGameRules {
 			if (beginPoint == null || endPoint == null) // cannot detect the change
 				return false;
 			
+			boolean isMandatoryJumpPerformed = isMandatoryJumpPerformed(oldState, newState, player);
+			
+			if (!isMandatoryJumpPerformed)
+			{
+				isValidMove = false;
+				return isValidMove;
+			}
+			
 			if (isValidMove(oldCells, beginPoint, endPoint, player)) {
 				isValidMove = true;
 			}
@@ -85,6 +93,81 @@ public class CheckersRules implements IGameRules {
 		}
 
 		return isValidMove;
+	}
+	
+	private boolean isMandatoryJumpPerformed(BoardState oldState, BoardState newState, int playerId)
+	{
+		boolean isMandatoryJumpPerformed = false;
+		
+		if (oldState == null) // first step
+			return true;
+		
+		boolean isMandatoryToJump = isMandatoryToJump(oldState, playerId);
+		
+		if (isMandatoryToJump)
+		{
+			boolean isJumpPerformed = isJumpPerformed(oldState, newState, playerId);
+			
+			if(isJumpPerformed)
+			{
+				isMandatoryJumpPerformed = true;
+			}
+		}
+		else
+		{
+			isMandatoryJumpPerformed = true;
+		}
+		
+		return isMandatoryJumpPerformed;
+	}
+	
+	private boolean isMandatoryToJump(BoardState oldState, int playerId)
+	{
+		boolean isMandatoryToJump = false;
+		
+		Point firstPoint = oldState.getLastMoveFrom();
+		Point secondPoint = oldState.getLastMove();
+		
+		if (firstPoint == null || secondPoint == null) // cannot detect the change
+			return false;
+		
+		ICell secondCell = oldState.get(secondPoint);
+		
+		if (secondCell.getUnit() == null)
+		{
+			return false;
+		}
+		if (secondCell.getUnit().getOwnerId() == playerId)
+		{
+			isMandatoryToJump = true;
+		}
+		
+		return isMandatoryToJump;
+	}
+	
+	private boolean isJumpPerformed(BoardState oldState, BoardState newState, int playerId)
+	{
+		boolean isJumpPerformed = false;
+		
+		ICell[][] oldCells = oldState.getBoard();
+		ICell[][] newCells = newState.getBoard();
+		
+		Point beginPoint = new Point();
+		Point endPoint = new Point();
+		
+		getMoveEndPoints(oldCells, newCells, playerId, beginPoint, endPoint);
+		
+		if (beginPoint == null || endPoint == null) // cannot detect the change
+			return false;
+		
+		int secondDistance = getDistance(beginPoint, endPoint);
+		
+		if (secondDistance == 2)
+		{
+			isJumpPerformed = true;
+		}
+		
+		return isJumpPerformed;
 	}
 	
 	public BoardState applyMoveEffect(BoardState oldState, BoardState newState,
