@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import com.figuro.common.BoardState;
 import com.figuro.common.IMessageSender;
 import com.figuro.common.PlayerConverter;
+import com.figuro.common.PlayerEnum;
 import com.figuro.engine.persistency.IPersistency;
 import com.figuro.game.Game;
 import com.figuro.game.rules.IGameRules;
@@ -19,7 +20,10 @@ import com.figuro.player.IPlayer;
  */
 
 public class GameJob implements Runnable {
-    private RunningState runningState;
+    private static final String RESULT_UNKNOWN_TEXT = "Unknown result";
+	private static final String RESULT_TIE_TEXT = "The game resultet in a tie";
+	private static final String RESULT_WINNER = " wins the game";
+	private RunningState runningState;
     private Map<Integer, IPlayer> players;
     private List<IPlayer> spectators;
     private Game game;
@@ -165,7 +169,7 @@ public class GameJob implements Runnable {
         }
 
         if (rules.isGameOver(state, currentPlayerId)) {
-            String score = Integer.toString(rules.getFinalState(state, currentPlayerId));
+            String score = getFinalScoreText(rules.getFinalState(state, currentPlayerId));
             this.gameoverCallback.gameFinishedWith(score);
         } else {
             if (!this.runningState.isRunning()) {
@@ -174,7 +178,19 @@ public class GameJob implements Runnable {
         }
     }
 
-    public void terminate() {
+    private String getFinalScoreText(int winnerPlayer) {
+    	String result = GameJob.RESULT_UNKNOWN_TEXT;
+    	
+    	if (winnerPlayer == 0) {
+    		result = GameJob.RESULT_TIE_TEXT;
+    	} else {
+    		PlayerEnum playerName = PlayerConverter.PlayerIdToPlayerEnum(winnerPlayer);
+    		result = playerName.toString() + GameJob.RESULT_WINNER;
+    	}
+		return "(" + winnerPlayer + ") " + result;
+	}
+
+	public void terminate() {
         this.runningState.terminate();
     }
 }
