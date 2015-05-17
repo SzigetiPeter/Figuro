@@ -115,11 +115,13 @@ class SetupDialog extends Group implements ISetupDialog {
 
 	}
 
+	@Override
 	public void startedListening(int portNumber) {
 		portFld.setText(Integer.toString(portNumber));
 		listenButton.setDisable(true);
 	}
 
+	@Override
 	public void connectedToPlayer(String ipString, int portNumber) {
 
 		gridPane.getChildren().removeAll(player1, player2, waitLabel,
@@ -171,6 +173,7 @@ class SetupDialog extends Group implements ISetupDialog {
 		});
 	}
 
+	@Override
 	public void playerOrderRequestReceived(int order) {
 		System.out.println("Order request: " + order);
 
@@ -212,6 +215,7 @@ class SetupDialog extends Group implements ISetupDialog {
 		});
 	}
 
+	@Override
 	public void startGame() {
 		
 		System.out.println("Game can be started");

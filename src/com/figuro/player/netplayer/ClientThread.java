@@ -40,7 +40,7 @@ public class ClientThread extends Thread {
 			});
 
 			ProcessMessages pro = new ProcessMessages(mSocket, mDialog);
-			mDelegate.setProcessor(pro);		
+			mDelegate.setProcessor(pro);
 			pro.start();
 
 		} catch (Exception e) {

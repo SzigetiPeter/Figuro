@@ -21,7 +21,7 @@ public class NetPlayer implements IPlayer, IDialogDelegate, IThreadDelegate {
 	private String mIP;
 	private int mPort;
 
-	private SetupDialog mSetupDialog;
+	private ISetupDialog mSetupDialog;
 
 	private Socket mClientSocket;
 
