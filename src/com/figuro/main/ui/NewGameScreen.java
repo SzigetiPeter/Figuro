@@ -37,6 +37,7 @@ public class NewGameScreen extends VBox {
 	private Label messageLabel;
 	private Stage primaryStage;
 	private boolean isGameStarted;
+	private IEngineHandler gameRunner;
 	
 	public NewGameScreen(
 			BorderPane root,
@@ -142,7 +143,7 @@ public class NewGameScreen extends VBox {
 				
 				boolean startGame = true;
 				
-				IEngineHandler gameRunner = builder.createEngine();
+				gameRunner = builder.createEngine();
 				IGameoverCallback gameoverCallback = new GameOverUINotification(root, mainScreenVBox,builder, primaryStage);
 				
 				IPlayer iplayer1 = gameRunner.addPlayer(player1);
@@ -184,6 +185,7 @@ public class NewGameScreen extends VBox {
 	
 	public void GameClosed(){
 		isGameStarted = false;
+		gameRunner.exit();
 	}
 	
 	private boolean SetupPlayerIfNeeded(IPlayer playerType,IEngineHandler gameRunner,IGameoverCallback gameoverCallback,String gameType) {

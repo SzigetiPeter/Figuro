@@ -13,6 +13,7 @@ import javafx.stage.WindowEvent;
 import com.figuro.common.Builder;
 import com.figuro.common.IBuilder;
 import com.figuro.engine.GameJob;
+import com.figuro.engine.GameRunner;
 import com.figuro.engine.IEngineHandler;
 import com.figuro.engine.IGameoverCallback;
 import com.figuro.engine.persistency.IPersistency;
@@ -93,8 +94,7 @@ public class MainWindowUI {
 		    public void handle(WindowEvent event) {
 		    	if (ngs != null && ngs.GetIsGameStarted()==true)
 		    	{   
-		    		// itt persistencia segitsegevel kene menteni
-		    		ngs.GameClosed();
+		    		ngs.GameClosed();		    		
 			    	builder.free();
 					root.setCenter(mainScreenVBox);
 					primaryStage.setScene(root.getScene());		    	
