@@ -5,7 +5,7 @@ import com.figuro.game.rules.IGameRules;
 import com.figuro.game.stepEvaluator.IStepEvaluator;
 
 public class Checkers extends Game {
-	final static String NAME = "Checkers";
+	final static String NAME = "game.checkers";
 
 	public Checkers(IGameRules rules, IStepEvaluator evaluator,
 			IBoardGraphics graphics) {
