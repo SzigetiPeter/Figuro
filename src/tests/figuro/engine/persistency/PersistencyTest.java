@@ -31,7 +31,7 @@ public class PersistencyTest {
 
 		BoardState state = new BoardState(8, 8);
 
-		persistency.setGame("Checkers");
+		persistency.setGame("game.checkers");
 		persistency.setPlayers(players);
 		persistency.save(state, 1);
 
@@ -57,7 +57,7 @@ public class PersistencyTest {
 		boolean loaded = persistency.load();
 
 		if (loaded) {
-			assertEquals("Checkers", persistency.getGame());
+			assertEquals("game.checkers", persistency.getGame());
 			assertEquals(players, persistency.getPlayers());
 		}
 	}
